@@ -1,0 +1,13 @@
+[package]
+org= "ballerinax"
+name= "microsoft.teams"
+version= "0.1.0"
+authors = ["Ballerina"]
+keywords = ["Microsoft", "Teams", "Communication"]
+repository = ""
+license = ["Apache-2.0"]
+
+[build-options]
+observability-included=true
+taintCheck = true
+
