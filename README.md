@@ -27,7 +27,7 @@ Connects to Microsoft Teams using Ballerina.
 ## What is Microsoft Teams?
 [Microsoft Teams](https://www.microsoft.com/en-ww/microsoft-teams/group-chat-software) is a chat-based collaboration 
 platform complete with document sharing, online meetings, and many more extremely useful features for business 
-communications. It’s included totally free with Microsoft 365 and Office 365. It’s designed to be used by local, remote 
+communications. It’s included totally free with Microsoft 365 and Office 365. It has designed to be used by local, remote 
 and distributed work groups—anyone in any company. 
 The true power of MS Teams comes with its rich set of features for collaboration. MS Teams API supports actions such as 
 `Chats`, `Channels`, `Meetings` and `Calling`.
@@ -57,16 +57,15 @@ Ballerina connector for Microsoft Teams is connecting to MS Teams platform API i
 language easily. It provides capability to perform basic functionalities provided in MS Teams such as Sending messages, 
 Viewing messages, Creating Teams, Channels and Chats, deleting and updating resources etc programmatically. 
 
-The connector is developed on top of Microsoft Graph is a REST web API that empowers you to access Microsoft Cloud 
+The connector has developed on top of Microsoft Graph is a REST web API that empowers you to access Microsoft Cloud 
 service resources. This version of the connector only supports the access to the resources and information of a specific 
-account (currently logged in user).
+account (currently logged-in user).
 
 # Prerequisites
 - Microsoft Account
 - Access to Azure Portal
 - Java 11 installed - Java Development Kit (JDK) with version 11 is required
 - [Ballerina SL Beta 1](https://ballerina.io/learn/user-guide/getting-started/setting-up-ballerina/installation-options/) installed 
-    - Ballerina Swan Lake Beta 1 is required
 
 ## Obtaining tokens
 - Create an account in MS Teams
@@ -74,15 +73,15 @@ account (currently logged in user).
 
 - Obtaining OAuth2 credentials <br/>
     To get an access token you need to register your app with microsoft identity platform via Azure Portal. <br/>
-    **(The access token contains information about your app and the permissions it has for the resources and APIs 
+    **(The access token contains information about your app, and the permissions it has for the resources and APIs 
     available through Microsoft Graph. To get an access token, your app must be registered with the Microsoft 
-    identity platform and be authorized by either a user or an administrator for access to the Microsoft Graph 
+    identity platform and be authorized by either a user or an administrator to access the Microsoft Graph 
     resources it needs.)**
 
     Before your app can get a token from the Microsoft identity platform, it must be registered in the Azure portal. 
     Registration integrates your app with the Microsoft identity platform and establishes the information that it 
     uses to get tokens
-    1. App Id
+    1. App ID
     2. Redirect URL
     3. App Secret <br/>
 
@@ -125,13 +124,13 @@ account (currently logged in user).
         https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=<MS_CLIENT_ID>&response_type=code&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&response_mode=query&scope=openid offline_access https://graph.microsoft.com/Files.ReadWrite.All
         ```
     
-    - This will prompt you to enter the username and password for signing into the Azure Portal App.
-    - Once the username and password pair is successfully entered, this will give a URL as follows on the browser address 
+    - This will prompt you to enter the username and password for sign in to the Azure Portal App.
+    - Once the username and password pair has successfully entered, this will give a URL as follows on the browser address 
     bar.
         ```
         https://login.microsoftonline.com/common/oauth2/nativeclient?code=M95780001-0fb3-d138-6aa2-0be59d402f32
         ```
-    - Copy the code parameter (M95780001-0fb3-d138-6aa2-0be59d402f32 in the above example) and in a new terminal, enter 
+    - Copy the code parameter (M95780001-0fb3-d138-6aa2-0be59d402f32 in the above example). In a new terminal, enter 
     the following cURL command by replacing the <MS_CODE> with the code received from the above step. The <MS_CLIENT_ID> 
     and <MS_CLIENT_SECRET> parameters are the same as above.
         ```
@@ -175,12 +174,12 @@ scopes = [<MS_NECESSARY_SCOPES>]
 | Java Development Kit (JDK)                                                         | 11                    |
 
 ## Limitations
-- Only chat related functions are supported for this version
+- Only communication related functions are supported for this version
 
 # Quickstart(s)
 ## Create a Channel and send messages
 ### Step 1: Import MS Teams Package
-First, import the ballerinax/microsoft.onedrive module into the Ballerina project.
+First, import the ballerinax/microsoft.teams module into the Ballerina project.
 ```ballerina
 import ballerinax/microsoft.teams;
 ```
@@ -234,7 +233,6 @@ if (channelInfo is teams:ChannelData) {
 }
 
 ```
-
 ### Step 5: Send message to channel
 ```
 string teamId = "<TEAM_ID>";
@@ -254,101 +252,153 @@ if (channelMessage is teams:MessageData) {
 }
 
 ```
-
 # Samples
 ## Create a team
-Team is a collection of people, content, and tools surrounding different projects and outcomes within an organization. Teams do not exist out there in space by itself. It is part of a Microsoft 365 Group (formerly Office 365 Group). So when you create a new Team, it creates a Microsoft 365 Group and other assets that are part of the Group (SharePoint site, Plan in Planner, Outlook Calendar, etc.)
+Team is a collection of people, content, and tools surrounding different projects and outcomes within an organization. 
+Teams do not exist out there in space by itself. It is part of a Microsoft 365 Group (formerly Office 365 Group). 
+So when you create a new Team, it creates a Microsoft 365 Group and other assets that are part of the Group 
+(SharePoint site, Plan in Planner, Outlook Calendar, etc.)
 
 **Notes**    
-- Teams can be created to be private to only invited users.
-- Teams can also be created to be public and open and anyone within the organization can join (up to 10,000 members).
+- Teams can create to be private to only invited users.
+- Teams can also create to be public and open and anyone within the organization can join (up to 10,000 members).
 
 This sample contains how to create a new team using the connector.
 - [Sample](/teams/samples/create_team.bal)
 
 ## Get team info
-This operations gets the information about an already existing team. 
+This operation gets the information about an already existing team. This information mainly contains the properties and 
+relationships of the specified team.
+
+This sample contains how to get the data of a team by using its team ID. 
 - [Sample](/teams/samples/get_team.bal)
 
 ## Update team info
+This operation will update the properties of the specified team.
 
+This sample contains how to update the `Display name` of the existing team.
 - [Sample](/teams/samples/update_team.bal)
 
 ## Add team member
+This operation will add a conversation member to an already existing team. The users ID and the role will be provided 
+along with several other optional parameters. When adding members who are already a part of your team's organization we 
+have to provide the role as owner. If the user is not a part of your organization, add them as guests to a team.
 
+This sample shows how to add a user how is already in our organization to a team.
 - [Sample](/teams/samples/add_member_to_team.bal)
 
 ## Delete team
+This operation shows how to delete an existing team by its ID.
 
 - [Sample](/teams/samples/delete_team.bal)
 
-## Get channels in a team
-
-- [Sample](/teams/samples/get_channels_in_team.bal)
-
 ## Create channel
+Every team starts with a General channel. Use this channel as the name implies—to discuss general topics related to the 
+team’s purpose. For every other topic ie: Projects—create a new channel. It’s an efficient way to bundle all related 
+content into one location. Currently, there’s a limit of 200 channels per team, including deleted channels.
 
+This sample shows how to create a new channel in a team.
 - [Sample](/teams/samples/create_channel.bal)
 
-## Get channel info
+## Get channels in a team
+Team can comprised of several channels up-to 200 channels. In situations where you want to obtain the channels which 
+belong to a specific team this operation comes in handy.
 
+This sample shows how to get a list of channels once the ID of the team is available.
+- [Sample](/teams/samples/get_channels_in_team.bal)
+
+## Get channel info
+There are a bunch of information about a channel you want to obtain and for that this operation comes useful. 
+Can be used to retrieve the properties and relationships of a channel.
+
+This sample shows how to obtain information about a channel once the channel ID and the team ID is available.
 - [Sample](/teams/samples/get_channel.bal)
 
 ## Update channel info
+From this operation we can update the properties of the specified channel. 
 
+**Note** You cannot update the `membershipType` value for an existing channel.
+
+This sample shows how to update the `Display name` and the `Description` of a channel.
 - [Sample](/teams/samples/update_channel.bal)
 
 ## Add channel member
+You can use this operation to add a conversation member to a channel. 
 
+**Note** 
+- This operation allows only for channels with a `membershipType` value of private.
+
+This sample shows how to add a member as an `owner` to a channel.
 - [Sample](/teams/samples/add_member_to_channel.bal)
 
 ## List channel members
+you can retrieve a list of conversation members from a channel.
 
+**Note**
+- The `membership ID` values in result of this operation should be treated as opaque strings. The client should not 
+try to parse or make any assumptions about these resource IDs.
+-  The members of channel can map to users of different tenants.
+
+This sample shows how to get information about members in a specific channel.
 - [Sample](/teams/samples/list_channel_members.bal)
 
 ## Delete a channel member
+This operation can be used to delete a conversation member from a channel. 
 
+**Note**
+- This operation allows only for channels with a `membershipType` value of private.
+- The ID which is used to identify the user is the membership ID of the user in that specific channel. It is not the 
+object ID of the user from Azure AD.
+
+This sample shows how to delete a member from a channel.
 - [Sample](/teams/samples/delete_channel_member.bal)
 
 ## Send channel message
+Send a new message in the specified channel.
 
 - [Sample](/teams/samples/send_channel_message.bal)
 
 ## Send reply to channel message
+Send a new reply to a message in a specified channel.
 
 - [Sample](/teams/samples/send_reply_channel_message.bal)
 
 ## Create chat
+Create a new chat object.
 
 - [Sample](/teams/samples/create_chat.bal)
 
 ## Get chat info
+Retrieve information about a single chat (without its messages).
 
 - [Sample](/teams/samples/get_chat.bal)
 
 ## Update chat info
+Update the properties of a chat object.
 
 - [Sample](/teams/samples/update_chat.bal)
 
 ## List chat members
+List all conversation members in a chat.
 
 - [Sample](/teams/samples/list_chat_members.bal)
 
 ## Add chat member
-
+Add a conversation member to a chat.
 - [Sample](/teams/samples/add_member_to_chat.bal)
 
-
 ## Remove chat member
-
+Remove a conversation member from a chat.
 - [Sample](/teams/samples/remove_member_from_chat.bal)
 
 ## Send chat message
+Send a new chatMessage in the specified chat. This operation cannot create a new chat; you must use the list chats 
+method to retrieve the ID of an existing chat before creating a chat message.
 
 - [Sample](/teams/samples/send_chat_message.bal)
 
-## Get chat message
-
+## Get chat/chat message
+Retrieve a single message or a message reply in a channel or a chat.
 - [Sample](#)
 
 # Building from the Source
