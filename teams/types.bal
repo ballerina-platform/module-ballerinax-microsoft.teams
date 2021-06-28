@@ -1,3 +1,19 @@
+// Copyright (c) 2021 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+//
+// WSO2 Inc. licenses this file to you under the Apache License,
+// Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
 import ballerina/http;
 
 # Represents configuration parameters to create Microsoft Teams client.
@@ -126,7 +142,6 @@ public type TeamsAsyncOperation record {
     int attemptsCount;
     string targetResourceId;
     string targetResourceLocation;
-    //json? 'error?;
 };
 
 # Represents a user in a team, a channel, or a chat.
@@ -188,28 +203,16 @@ public type ChannelData record {
 
 # Represents an individual chat message within a channel or chat.
 #
-# + messageType - The type of chat message  
-# + subject - The subject of the chat message, in plaintext  
 # + body - Plaintext/HTML representation of the content of the chat message  
-# + summary - Summary text of the chat message that could be used for push notifications and summary views or fall back 
-#             views  
-# + locale - Locale of the chat message set by the client. Always set to en-us.  
+# + subject - The subject of the chat message, in plaintext  
 # + importance - The importance of the chat message. The possible values are: `normal`, `high`, `urgent`  
 # + mentions - List of entities mentioned in the chat message. Currently supports user, bot, team, channel.  
-# + reactions - collection 	Reactions for this chat message (for example, Like)  
-# + createdDateTime - Timestamp of when the chat message was created  
-# + 'from - Details of the sender of the chat message  
+
 public type Message record {|
-    string messageType = "message";
-    string? subject?;
     ItemBody body;
-    string? summary?;
-    string locale = "en-us";   
+    string? subject?;
     MessageImportance importance?;
     MessageMention[] mentions?;
-    MessageReaction[] reactions?;
-    string createdDateTime?;
-    IdentitySet 'from?;
 |};
 
 # Represents properties of the body of an item, such as a message, event or group post
@@ -280,6 +283,12 @@ public type Identity record {
 # + webUrl - Link to the message in Microsoft Teams
 # + policyViolation - Defines the properties of a policy violation set by a data loss prevention (DLP) application
 # + channelIdentity - If the message was sent in a channel, represents identity of the channel
+# + messageType - The type of chat message  
+# + summary - Summary text of the chat message that could be used for push notifications and summary views or fall back 
+#             views  
+# + locale - Locale of the chat message set by the client. Always set to en-us.  
+# + 'from - Details of the sender of the chat message  
+# + reactions - Collection 	Reactions for this chat message (for example, Like)  
 public type MessageData record {
     string id;
     string etag;
@@ -293,6 +302,11 @@ public type MessageData record {
     string? webUrl;
     MessagePolicyViolation? policyViolation;
     ChannelIdentity? channelIdentity;
+    string messageType;
+    string? summary?;
+    string locale;
+    IdentitySet 'from?; 
+    MessageReaction[] reactions?;
 };
 
 # Contains basic identification information about a channel in Microsoft Teams
@@ -332,17 +346,16 @@ public type PolicyTip record {
     string[]? matchedConditionDescriptions;
 };
 
-
 # A chat is a collection of chatMessages between one or more participants. Participants can be users or apps.
 #
-# + topic - Subject or topic for the chat. (Only available for group chats)
-# + chatType - Specifies the type of chat 
+# + chatType - Specifies the type of chat `oneOnOne` or `group`
 # + members - List of conversation members that should be added. Every single user, including the user initiating the 
 #             create request, who will participate in the chat must be specified in this list.
+# + topic - Subject or topic for the chat. (Only available for group chats)
 public type Chat record {|
-    string? topic?;
     ChatType chatType;
     Member[] members;
+    string? topic?;
 |};
 
 # The readonly data for a chat. 

@@ -43,7 +43,7 @@ jobs:
                       build -c ./teams
               env:
                 JAVA_HOME: /usr/lib/jvm/default-jvm
-                TOKEN_ENDPOINT: ${{ secrets.TOKEN_ENDPOINT }}
+                REFRESH_URL: ${{ secrets.REFRESH_URL }}
                 REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
                 CLIENT_ID: ${{ secrets.CLIENT_ID }}
                 CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}

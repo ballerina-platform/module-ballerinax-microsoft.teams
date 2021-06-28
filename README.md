@@ -41,7 +41,7 @@ The true power of MS Teams comes with its rich set of features for collaboration
   connected through one single, reliable connection.
 
     <p align="center">
-    <img src="./docs/images/MS_Teams.png?raw=true" alt="MS Teams"/>
+    <img src="./docs/images/MS_Teams.png?raw=true" alt="MS Teams" width="500"/>
     </p>
 
 ## Key features of Microsoft Teams
@@ -87,9 +87,9 @@ account (currently logged-in user).
 
     **Step 1:** Register a new application in your Azure AD tenant.<br/>
     - In the App registrations page, click **New registration** and enter a meaningful name in the name field.
-    - In the **Supported account types** section, select Accounts in any organizational directory (Any Azure AD 
-    directory - Multi-tenant). Click Register to 
-    create the application.
+    - In the **Supported account types** section, select **Accounts in this organizational directory only (Single-tenant)** 
+    or **Accounts in any organizational directory (Any Azure AD directory - Multi-tenant)**. Click Register to create 
+    the application.
     - Provide a **Redirect URI** if necessary.
 
         ![Obtaining Credentials Step 1](docs/images/s1.png)
@@ -121,27 +121,27 @@ account (currently logged-in user).
     - In a new browser, enter the below URL by replacing the <MS_CLIENT_ID> with the application ID.
 
         ```
-        https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=<MS_CLIENT_ID>&response_type=code&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&response_mode=query&scope=openid offline_access https://graph.microsoft.com/Files.ReadWrite.All
+        https://login.microsoftonline.com/<TENENT_ID>/oauth2/v2.0/authorize?client_id=<MS_CLIENT_ID>&response_type=code&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&response_mode=query&scope=openid offline_access <SPACE_SEPERATED_LIST_OF_SCOPES>
         ```
     
     - This will prompt you to enter the username and password for sign in to the Azure Portal App.
     - Once the username and password pair has successfully entered, this will give a URL as follows on the browser address 
     bar.
         ```
-        https://login.microsoftonline.com/common/oauth2/nativeclient?code=M95780001-0fb3-d138-6aa2-0be59d402f32
+        https://login.microsoftonline.com/<TENENT_ID>/oauth2/nativeclient?code=M95780001-0fb3-d138-6aa2-0be59d402f32
         ```
     - Copy the code parameter (M95780001-0fb3-d138-6aa2-0be59d402f32 in the above example). In a new terminal, enter 
     the following cURL command by replacing the <MS_CODE> with the code received from the above step. The <MS_CLIENT_ID> 
     and <MS_CLIENT_SECRET> parameters are the same as above.
         ```
-        curl -X POST --header "Content-Type: application/x-www-form-urlencoded" --header "Host:login.microsoftonline.com" -d "client_id=<MS_CLIENT_ID>&client_secret=<MS_CLIENT_SECRET>&grant_type=authorization_code&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient&code=<MS_CODE>&scope=Files.ReadWrite openid User.Read Mail.Send Mail.ReadWrite offline_access" https://login.microsoftonline.com/common/oauth2/v2.0/token
+        curl -X POST --header "Content-Type: application/x-www-form-urlencoded" --header "Host:login.microsoftonline.com" -d "client_id=<MS_CLIENT_ID>&client_secret=<MS_CLIENT_SECRET>&grant_type=authorization_code&redirect_uri=https://login.microsoftonline.com/<TENENT_ID>/oauth2/nativeclient&code=<MS_CODE>&scope=Files.ReadWrite openid User.Read Mail.Send Mail.ReadWrite offline_access" https://login.microsoftonline.com/<TENENT_ID>/oauth2/v2.0/token
         ```
         
     - The above cURL command should result in a response as follows.
         ```
         {
             "token_type": "Bearer",
-            "scope": "Files.ReadWrite openid User.Read Mail.Send Mail.ReadWrite",
+            "scope": "openid <LIST_OF_PERMISSIONS>",
             "expires_in": 3600,
             "ext_expires_in": 3600,
             "access_token": "<MS_ACCESS_TOKEN>",
@@ -259,25 +259,24 @@ Teams do not exist out there in space by itself. It is part of a Microsoft 365 G
 So when you create a new Team, it creates a Microsoft 365 Group and other assets that are part of the Group 
 (SharePoint site, Plan in Planner, Outlook Calendar, etc.)
 
+This sample contains how to create a new team using the connector.
+</br> [Sample](/teams/samples/create_team.bal)
+
 **Notes**    
 - Teams can create to be private to only invited users.
 - Teams can also create to be public and open and anyone within the organization can join (up to 10,000 members).
-
-This sample contains how to create a new team using the connector.
-- [Sample](/teams/samples/create_team.bal)
 
 ## Get team info
 This operation gets the information about an already existing team. This information mainly contains the properties and 
 relationships of the specified team.
 
 This sample contains how to get the data of a team by using its team ID. 
-- [Sample](/teams/samples/get_team.bal)
+</br> [Sample](/teams/samples/get_team.bal)
 
 ## Update team info
-This operation will update the properties of the specified team.
-
-This sample contains how to update the `Display name` of the existing team.
-- [Sample](/teams/samples/update_team.bal)
+This operation will update the properties of the specified team. This sample contains how to update the `Display name` 
+of the existing team.
+</br> [Sample](/teams/samples/update_team.bal)
 
 ## Add team member
 This operation will add a conversation member to an already existing team. The users ID and the role will be provided 
@@ -285,12 +284,11 @@ along with several other optional parameters. When adding members who are alread
 have to provide the role as owner. If the user is not a part of your organization, add them as guests to a team.
 
 This sample shows how to add a user how is already in our organization to a team.
-- [Sample](/teams/samples/add_member_to_team.bal)
+</br> [Sample](/teams/samples/add_member_to_team.bal)
 
 ## Delete team
 This operation shows how to delete an existing team by its ID.
-
-- [Sample](/teams/samples/delete_team.bal)
+</br> [Sample](/teams/samples/delete_team.bal)
 
 ## Create channel
 Every team starts with a General channel. Use this channel as the name implies—to discuss general topics related to the 
@@ -298,108 +296,121 @@ team’s purpose. For every other topic ie: Projects—create a new channel. It�
 content into one location. Currently, there’s a limit of 200 channels per team, including deleted channels.
 
 This sample shows how to create a new channel in a team.
-- [Sample](/teams/samples/create_channel.bal)
+</br> [Sample](/teams/samples/create_channel.bal)
 
 ## Get channels in a team
 Team can comprised of several channels up-to 200 channels. In situations where you want to obtain the channels which 
 belong to a specific team this operation comes in handy.
 
 This sample shows how to get a list of channels once the ID of the team is available.
-- [Sample](/teams/samples/get_channels_in_team.bal)
+</br> [Sample](/teams/samples/get_channels_in_team.bal)
 
 ## Get channel info
 There are a bunch of information about a channel you want to obtain and for that this operation comes useful. 
 Can be used to retrieve the properties and relationships of a channel.
 
 This sample shows how to obtain information about a channel once the channel ID and the team ID is available.
-- [Sample](/teams/samples/get_channel.bal)
+</br> [Sample](/teams/samples/get_channel.bal)
 
 ## Update channel info
 From this operation we can update the properties of the specified channel. 
+This sample shows how to update the `Display name` and the `Description` of a channel.
+</br> [Sample](/teams/samples/update_channel.bal)
 
 **Note** You cannot update the `membershipType` value for an existing channel.
 
-This sample shows how to update the `Display name` and the `Description` of a channel.
-- [Sample](/teams/samples/update_channel.bal)
-
 ## Add channel member
-You can use this operation to add a conversation member to a channel. 
+You can use this operation to add a conversation member to a channel. This sample shows how to add a member as an 
+`owner` to a channel.
+</br> [Sample](/teams/samples/add_member_to_channel.bal)
 
 **Note** 
 - This operation allows only for channels with a `membershipType` value of private.
 
-This sample shows how to add a member as an `owner` to a channel.
-- [Sample](/teams/samples/add_member_to_channel.bal)
-
 ## List channel members
-you can retrieve a list of conversation members from a channel.
+You can retrieve a list of conversation members from a channel.This sample shows how to get information about members 
+in a specific channel.
+</br> [Sample](/teams/samples/list_channel_members.bal)
 
 **Note**
 - The `membership ID` values in result of this operation should be treated as opaque strings. The client should not 
 try to parse or make any assumptions about these resource IDs.
 -  The members of channel can map to users of different tenants.
 
-This sample shows how to get information about members in a specific channel.
-- [Sample](/teams/samples/list_channel_members.bal)
-
-## Delete a channel member
-This operation can be used to delete a conversation member from a channel. 
+## Remove a channel member
+This operation can be used to delete a conversation member from a channel. This sample shows how to delete a member 
+from a channel.
+</br> [Sample](/teams/samples/delete_channel_member.bal)
 
 **Note**
-- This operation allows only for channels with a `membershipType` value of private.
-- The ID which is used to identify the user is the membership ID of the user in that specific channel. It is not the 
+- This operation allows only for channels with a `membershipType` value of `private`.
+- The ID which is used to identify the user is the `membership ID` of the user in that specific channel. It is not the 
 object ID of the user from Azure AD.
 
-This sample shows how to delete a member from a channel.
-- [Sample](/teams/samples/delete_channel_member.bal)
-
 ## Send channel message
-Send a new message in the specified channel.
-
-- [Sample](/teams/samples/send_channel_message.bal)
+Channels are dedicated sections within a team to keep conversations organized by specific topics, projects, disciplines 
+etc.This opeartion can be use to send a new message in the specified channel. The user must provide the parameters of 
+message body to send a message. 
+</br> [Sample](/teams/samples/send_channel_message.bal)
 
 ## Send reply to channel message
-Send a new reply to a message in a specified channel.
-
-- [Sample](/teams/samples/send_reply_channel_message.bal)
+There are cases where we need to send reply message for a specific message. This operation can be used to send a new 
+reply to a message in a specified channel. You need to know the ID of the message wen intend to reply to.
+</br> [Sample](/teams/samples/send_reply_channel_message.bal)
 
 ## Create chat
-Create a new chat object.
+There are different ways to start a chat with users. The connector allows to create chats of two different types.
+1. A one-on-one chat (so with one other person) 
+2. A group chat (so with a few people at once, but outside of a channel)
+</br> [Sample](/teams/samples/create_chat.bal)
 
-- [Sample](/teams/samples/create_chat.bal)
+**Note** 
+- To create a new chat, atleast two members should be added to the member array.
+- The members who are added to the chat should be provided with the role `owner`.
+- Only 200 members at a time can be added to a group chat
 
 ## Get chat info
-Retrieve information about a single chat (without its messages).
-
-- [Sample](/teams/samples/get_chat.bal)
+You can use this operation to retrieve information about a single chat (without its messages). The chat infromation will 
+contain only the metadata related to the chat such as the `id`, `created date time`, `relationships` and other metadata.
+</br> [Sample](/teams/samples/get_chat.bal)
 
 ## Update chat info
-Update the properties of a chat object.
+You can use the following operation to update the properties of a chat. 
+</br> [Sample](/teams/samples/update_chat.bal)
 
-- [Sample](/teams/samples/update_chat.bal)
-
+**Note** 
+- You can update only the topic of the chat with this operation.
 ## List chat members
-List all conversation members in a chat.
-
-- [Sample](/teams/samples/list_chat_members.bal)
+There may be instances you wnat to list all conversation members in a chat. This operation can be used for that purpose. 
+It will return an array of members in the specified chat. 
+</br> [Sample](/teams/samples/list_chat_members.bal)
 
 ## Add chat member
-Add a conversation member to a chat.
-- [Sample](/teams/samples/add_member_to_chat.bal)
-
+This operation can be used to add a conversation member to a chat after the initial creation of the chat.
+</br> [Sample](/teams/samples/add_member_to_chat.bal)
 ## Remove chat member
-Remove a conversation member from a chat.
-- [Sample](/teams/samples/remove_member_from_chat.bal)
+You can use the following operation to remove a conversation member from a chat.
+</br> [Sample](/teams/samples/remove_member_from_chat.bal)
+
+**Note**
+- The ID which is used to identify the user is the `membership ID` of the user in that specific chat. It is not the 
+object ID of the user from Azure AD.
 
 ## Send chat message
 Send a new chatMessage in the specified chat. This operation cannot create a new chat; you must use the list chats 
 method to retrieve the ID of an existing chat before creating a chat message.
+</br> [Sample](/teams/samples/send_chat_message.bal)
 
-- [Sample](/teams/samples/send_chat_message.bal)
+**Note**
+- The chat size (message size) should be approximately equal to 28KB including the message itself (text, image links, e
+tc.), @-mentions, and reactions.
 
 ## Get chat/chat message
 Retrieve a single message or a message reply in a channel or a chat.
-- [Sample](#)
+</br> [Sample](#)
+
+### Notes
+**For all the above operations [this](https://docs.microsoft.com/en-us/microsoftteams/limits-specifications-teams) limits and specifications apply**
 
 # Building from the Source
 ## Setting Up the Prerequisites
