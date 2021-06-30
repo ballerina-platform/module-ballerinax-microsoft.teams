@@ -409,8 +409,8 @@ tc.), @-mentions, and reactions.
 Retrieve a single message or a message reply in a channel or a chat.
 </br> [Sample](#)
 
-### Notes
-**For all the above operations [this](https://docs.microsoft.com/en-us/microsoftteams/limits-specifications-teams) limits and specifications apply**
+# Limits and Specifications
+- **For all the above operations [this](https://docs.microsoft.com/en-us/microsoftteams/limits-specifications-teams) limits and specifications apply**
 
 # Building from the Source
 ## Setting Up the Prerequisites
