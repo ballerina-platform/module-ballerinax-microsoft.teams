@@ -19,43 +19,13 @@ import ballerina/http;
 isolated function createChatResource(http:Client httpClient, string url, Chat data) returns ChatData|Error {
     http:Request request = new;
     json payload = check createChatDataPayload(data);
-    http:Response response = check httpClient->post(url, payload);
-    map<json>? handledResponse = check handleResponse(response);
-    if (handledResponse is map<json>) {
-        return check handledResponse.cloneWithType(ChatData);        
-    } else {
-        return error PayloadValidationError(INVALID_RESPONSE);
-    }
-}
-
-isolated function getChatResource(http:Client httpClient, string url) returns ChatData|Error {
-    http:Response response = check httpClient->get(url);
-    map<json>? handledResponse = check handleResponse(response);
-    if (handledResponse is map<json>) {
-        return check handledResponse.cloneWithType(ChatData);        
-    } else {
-        return error PayloadValidationError(INVALID_RESPONSE);
-    }
-}
-
-isolated function updateChatResource(http:Client httpClient, string url, string topic) returns ChatData|Error {
-    http:Response response = check httpClient->patch(url, {topic: topic});
-    map<json>? handledResponse = check handleResponse(response);
-    if (handledResponse is map<json>) {
-        return check handledResponse.cloneWithType(ChatData);        
-    } else {
-        return error PayloadValidationError(INVALID_RESPONSE);
-    }
+    return check httpClient->post(url, payload, targetType = ChatData);
 }
 
 isolated function lisChatResourceMembers(http:Client httpClient, string url) returns MemberData[]|Error {
     http:Response response = check httpClient->get(url);
-    map<json>? handledResponse = check handleResponse(response);
-    if (handledResponse is map<json>) {
-        return check mapJsonToMemberDataArray(handledResponse);
-    } else {
-        return error PayloadValidationError(INVALID_RESPONSE);
-    }
+    map<json> handledResponse = check handleResponse(response);
+    return check mapJsonToMemberDataArray(handledResponse);
 }
 
 isolated function addMemberToChatResource(http:Client httpClient, string url, Member data) returns 
@@ -80,40 +50,24 @@ isolated function addMemberToChatResource(http:Client httpClient, string url, Me
 
 isolated function deleteMemberFromChatResource(http:Client httpClient, string url) returns Error? {
     http:Response response = check httpClient->delete(url);
-    map<json>? handledResponse = check handleResponse(response);
-    if (handledResponse is ()) {
-        return handledResponse;
-    } else {
-        return error PayloadValidationError(INVALID_RESPONSE);
-    } 
+    _ =  check handleResponse(response);
 }
 
 isolated function sendMessageToChatResource(http:Client httpClient, string url, Message data) returns 
                                             MessageData|Error {
     http:Request request = new;
     json payload = check data.cloneWithType(json);
-
-    http:Response response = check httpClient->post(url, payload);
-    map<json>? handledResponse = check handleResponse(response);
-    if (handledResponse is map<json>) {
-        return check handledResponse.cloneWithType(MessageData);
-    } else {
-        return error PayloadValidationError(INVALID_RESPONSE);
-    }
+    return check httpClient->post(url, payload, targetType = MessageData);
 }
 
 isolated function getMessagesFromChatResource(http:Client httpClient, string url) returns 
                                               MessageData|MessageData[]|Error {
     http:Response response = check httpClient->get(url);
-    map<json>? handledResponse = check handleResponse(response);
+    map<json> handledResponse = check handleResponse(response);
 
-    if (handledResponse is map<json>) {
-        if (handledResponse.get("@odata.count") is int) {
-            return check mapJsonToMessageDataArray(handledResponse);
-        } else {
-            return check handledResponse.cloneWithType(MessageData);
-        }
+    if (handledResponse.get("@odata.count") is int) {
+        return check mapJsonToMessageDataArray(handledResponse);
     } else {
-        return error PayloadValidationError(INVALID_RESPONSE);
-    }  
+        return check handledResponse.cloneWithType(MessageData);
+    }
 }

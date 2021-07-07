@@ -80,12 +80,12 @@ isolated function validateOdataSystemQueryOption(string queryOptionName, string 
     return isValid;
 }
 
-isolated function handleResponse(http:Response httpResponse) returns map<json>|Error? {
+isolated function handleResponse(http:Response httpResponse) returns map<json>|Error {
     if (httpResponse.statusCode is http:STATUS_ACCEPTED|http:STATUS_OK|http:STATUS_CREATED) {
         json jsonResponse = check httpResponse.getJsonPayload();
         return <map<json>>jsonResponse;
     } else if (httpResponse.statusCode is http:STATUS_NO_CONTENT) {
-        return;
+        return {};
     }
     json errorPayload = check httpResponse.getJsonPayload();
     string message = errorPayload.toString();
