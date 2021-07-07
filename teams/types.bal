@@ -26,22 +26,22 @@ public type Configuration record {|
     http:ClientSecureSocket secureSocketConfig?;
 |};
 
-# A collection of channel objects. A channel represents a topic, and therefore a logical isolation of discussion, 
-# within a team.
+# Generic information about a team.
 #
 # + displayName - The name of the team
-# + description - An optional description for the team. Maximum length: 1024 characters.  
+# + description - An optional description for the team. Maximum length: 1024 characters.
 # + classification - Describes the data or business sensitivity of the team
 # + specialization - Indicates whether the team is intended for a particular use case 
 # + visibility - The visibility of the group and team 
 # + funSettings - Settings to configure use of Giphy, memes, and stickers in the team 
-# + guestSettings - Settings to configure whether guests can create, update, or delete channels in the team  
-# + memberSettings - A unique ID for the team that has been used in a few places such as the audit log
-# + messagingSettings - Settings to configure messaging and mentions in the team  
-# + isArchived - Whether this team is in read-only mode  
+# + guestSettings - Settings to configure whether guests can create, update, or delete channels in the team
+# + memberSettings - Settings to configure whether members can perform certain actions, for example, create channels and 
+#                    add bots, in the team
+# + messagingSettings - Settings to configure messaging and mentions in the team
+# + isArchived - represent whether this team is in read-only mode
 public type Team record {|
     string displayName?;
-    string description?; //validate
+    string description?;
     string? classification?;
     TeamSpecialization specialization?;
     TeamVisibility visibility?;
@@ -52,12 +52,12 @@ public type Team record {|
     boolean isArchived?;
 |};
 
-# Settings to configure use of Giphy, memes, and stickers in the team
+# Settings to configure use of Giphy, memes, and stickers in the team.
 #
 # + allowGiphy - If set to true, enables Giphy use
 # + giphyContentRating - Giphy content rating. Possible values are: `moderate`, `strict`
 # + allowStickersAndMemes - If set to true, enables users to include stickers and memes
-# + allowCustomMemes - If set to true, enables users to include custom memes  
+# + allowCustomMemes - If set to true, enables users to include custom memes
 public type TeamFunSettings record {|
     boolean allowGiphy?;
     GiphyContentRating giphyContentRating?;
@@ -77,8 +77,8 @@ public type TeamGuestSettings record {|
 # Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the 
 # team.
 #
-# + allowCreatePrivateChannels - If set to true, members can add and update private channels  
-# + allowAddRemoveApps - f set to true, members can add and remove apps  
+# + allowCreatePrivateChannels - If set to true, members can add and update private channels
+# + allowAddRemoveApps - f set to true, members can add and remove apps
 # + allowCreateUpdateRemoveTabs - If set to true, members can add, update, and remove tabs 
 # + allowCreateUpdateRemoveConnectors - If set to true, members can add, update, and remove connectors
 public type TeamMemberSettings record {|
@@ -95,7 +95,7 @@ public type TeamMemberSettings record {|
 # + allowUserDeleteMessages - If set to true, users can delete their messages
 # + allowOwnerDeleteMessages - If set to true, owners can delete any message
 # + allowTeamMentions - If set to true, @team mentions are allowed 
-# + allowChannelMentions - If set to true, @channel mentions are allowed  
+# + allowChannelMentions - If set to true, @channel mentions are allowed
 public type TeamMessagingSettings record {|
     boolean allowUserEditMessages?;
     boolean allowUserDeleteMessages?;
@@ -104,34 +104,33 @@ public type TeamMessagingSettings record {|
     boolean allowChannelMentions?;
 |};
 
-# The readonly data for the team
+# All the information about a team
 #
-# + id - ID of the team  
+# + id - ID of the team 
 # + webUrl - A hyperlink that will go to the team in the Microsoft Teams client 
-# + createdDateTime -  	Timestamp at which the team was created
+# + createdDateTime - Timestamp at which the team was created
 # + internalId - The internal ID of the team
 # + operations - The async operations that ran or are running on this team
 public type TeamData record {
     *Team;
-    string id;
-    string webUrl;
-    string createdDateTime;
+    string id?;
+    string webUrl?;
+    string createdDateTime?;
     string internalId?;
     // Relationships
     TeamsAsyncOperation[] operations?;
-    // Instance attributes
 };
 
 # Information about an operation that transcends the lifetime of a single API request.
 #
-# + id - Unique operation ID  
-# + operationType - Denotes which type of operation is being described  
-# + createdDateTime - Time when the operation was created  
+# + id - Unique operation ID
+# + operationType - Denotes which type of operation is being described
+# + createdDateTime - Time when the operation was created
 # + status - Operation status 
 # + lastActionDateTime - Time when the async operation was last updated
 # + attemptsCount - Number of times the operation was attempted before being marked successful or failed 
 # + targetResourceId - The ID of the object that's created or modified as result of this async operation, typically a 
-#                      team  
+#                      team
 # + targetResourceLocation - The location of the object that's created or modified as result of this async operation
 public type TeamsAsyncOperation record {
     string id;
@@ -144,81 +143,100 @@ public type TeamsAsyncOperation record {
     string targetResourceLocation;
 };
 
-# Represents a user in a team, a channel, or a chat.
+# Generic data for a user in a team, a channel, or a chat.
 #
-# + roles - The roles for the user 
 # + visibleHistoryStartDateTime - The timestamp denoting how far back a conversation's history is shared with the 
 #                                 conversation member
 # + email - The email address of the user
 # + displayName - The display name of the user
 # + userId - The guid of the user
-public type Member record {|
-    string[] roles; // make an enum
+public type MemberBaseData record {|
     string? visibleHistoryStartDateTime?;
     string? email?;
     string displayName?;
-    string userId;
+    string userId?;
 |};
 
-# Represents readonly data for a user in a team, a channel, or a chat.
+# A user in a team, a channel, or a chat.
+#
+# + roles - The roles for the user 
+public type Member record {|
+    Role[] roles;
+    *MemberBaseData;
+|};
+
+# All information about a user in a team, a channel, or a chat.
 #
 # + id - Unique ID of the user 
-# + tenantId - TenantId which the Azure AD user belongs to 
+# + roles - The roles for the user 
+# + tenantId - TenantId which the Azure AD user belongs to
+# + userId - The guid of the user
 public type MemberData record {
-    *Member;
-    string id;
+    string id?;
+    Role[] roles?;
     string tenantId?;
+    *MemberBaseData;
 };
 
-# Teams are made up of channels, which are the conversations you have with your teammates. Each channel is dedicated to 
-# a specific topic, department, or project. 
-#
+# Generic information for a channel.
+# 
 # + description - Optional textual description for the channel
-# + displayName - Channel name as it will appear to the user in Microsoft Teams
 # + isFavoriteByDefault - Indicates whether the channel should automatically be marked 'favorite' for all members of the 
-#                         team  
-# + membershipType - The type of the channel Possible values are: 
-#                    `standard` - Channel inherits the list of members of the parent team
-#                    `private` - Channel can have members that are a subset of all the members on the parent team
-public type Channel record {|
+#                         team
+# + membershipType - The type of the channel
+public type ChannelBaseData record {|
     string? description?;
-    string displayName;
     boolean? isFavoriteByDefault?;
     ChannelMemberhipType membershipType?;
 |};
 
-# Description
+# A channel in a Microsoft Team.
+#
+# + displayName - Channel name as it will appear to the user in Microsoft Teams
+public type Channel record {|
+    string displayName;
+    *ChannelBaseData;
+|};
+
+# All information about a channel.
 #
 # + id - The channel ID 
-# + email - The email address for sending messages to the channel  
+# + displayName - Channel name as it will appear to the user in Microsoft Teams
+# + email - The email address for sending messages to the channel
 # + webUrl - A hyperlink that will go to the channel in Microsoft Teams
 # + createdDateTime - Timestamp at which the channel was created 
 public type ChannelData record {
-    *Channel;
-    string id;
-    string email;
-    string webUrl;
-    string createdDateTime;
+    string id?;
+    string displayName?;
+    string email?;
+    string webUrl?;
+    string createdDateTime?;
+    *ChannelBaseData;
 };
 
-# Represents an individual chat message within a channel or chat.
-#
-# + body - Plaintext/HTML representation of the content of the chat message  
-# + subject - The subject of the chat message, in plaintext  
-# + importance - The importance of the chat message. The possible values are: `normal`, `high`, `urgent`  
-# + mentions - List of entities mentioned in the chat message. Currently supports user, bot, team, channel.  
-
-public type Message record {|
-    ItemBody body;
+# Generic information for an individual chat message within a channel or chat.
+# 
+# + subject - The subject of the chat message, in plaintext
+# + importance - The importance of the chat message. The possible values are: `normal`, `high`, `urgent`
+# + mentions - List of entities mentioned in the chat message. Currently supports user, bot, team, channel.
+public type MessageBaseData record {|
     string? subject?;
     MessageImportance importance?;
     MessageMention[] mentions?;
 |};
 
+# An individual chat message within a channel or chat.
+#
+# + body - Plaintext/HTML representation of the content of the chat message
+public type Message record {|
+    ItemBody body;
+    *MessageBaseData;
+|};
+
 # Represents properties of the body of an item, such as a message, event or group post
 #
-# + content -  	The content of the item 
-# + contentType - The type of the content. Possible values are `text` and `html`  
+# + content - The content of the item 
+# + contentType - The type of the content. Possible values are `text` and `html`
 public type ItemBody record {|
     string content;
     MessageContentType contentType?;
@@ -227,8 +245,8 @@ public type ItemBody record {|
 # Represents a mention in a chatMessage entity. The mention can be to a user, team, bot, or channel.
 #
 # + id - Index of an entity being mentioned in the specified Message
-# + mentionText - String used to represent the mention. For example, a user's display name, a team name  
-# + mentioned - The entity (user, application, team, or channel) that was mentioned  
+# + mentionText - String used to represent the mention. For example, a user's display name, a team name
+# + mentioned - The entity (user, application, team, or channel) that was mentioned
 public type MessageMention record {|
     int:Unsigned32 id?;
     string mentionText;
@@ -243,7 +261,7 @@ public type MessageMention record {|
 # + user - The user who reacted to the message 
 public type MessageReaction record {|
     string createdDateTime;
-    string reactionType;//enum
+    ReactionType reactionType;
     IdentitySet user;
 |};
 
@@ -253,7 +271,6 @@ public type MessageReaction record {|
 # + device - The device associated with this action 
 # + user - The user associated with this action 
 public type IdentitySet record {
-    //one more field conversation is there
     Identity? application?;
     Identity? device?;
     Identity user;
@@ -268,50 +285,52 @@ public type Identity record {
     string? displayName?;
 };
 
-# Represents an individual chat message within a channel or chat.
+# All information for an individual chat message within a channel or chat.
 #
 # + id - Message ID
+# + body - Plaintext/HTML representation of the content of the chat message
 # + etag - Version number of the chat message 
-# + replyToId -  Id of the parent chat message or root chat message of the thread  
+# + replyToId - Id of the parent chat message or root chat message of the thread
 # + lastModifiedDateTime - Timestamp when the chat message is created (initial setting) or modified, including when a 
 #                          reaction is added or removed.
-# + createdDateTime - Timestamp of when the chat message was created  
+# + createdDateTime - Timestamp of when the chat message was created
 # + lastEditedDateTime - Timestamp when edits to the chat message were made. Triggers an "Edited" flag in the Teams UI. 
 #                        If no edits are made the value is null.
-# + deletedDateTime - Timestamp at which the chat message was deleted, or null if not deleted  
+# + deletedDateTime - Timestamp at which the chat message was deleted, or null if not deleted
 # + chatId - If the message was sent in a chat, represents the identity of the chat 
 # + webUrl - Link to the message in Microsoft Teams
 # + policyViolation - Defines the properties of a policy violation set by a data loss prevention (DLP) application
 # + channelIdentity - If the message was sent in a channel, represents identity of the channel
-# + messageType - The type of chat message  
+# + messageType - The type of chat message
 # + summary - Summary text of the chat message that could be used for push notifications and summary views or fall back 
-#             views  
-# + locale - Locale of the chat message set by the client. Always set to en-us.  
-# + 'from - Details of the sender of the chat message  
-# + reactions - Collection 	Reactions for this chat message (for example, Like)  
+#             views
+# + locale - Locale of the chat message set by the client. Always set to en-us.
+# + 'from - Details of the sender of the chat message
+# + reactions - Collection 	Reactions for this chat message (for example, Like)
 public type MessageData record {
-    string id;
-    string etag;
-    string? replyToId;
-    string lastModifiedDateTime;
-    string createdDateTime;
-    string? lastEditedDateTime;
-    string? deletedDateTime;
-    *Message;
-    string? chatId; //check this in channels
-    string? webUrl;
-    MessagePolicyViolation? policyViolation;
-    ChannelIdentity? channelIdentity;
-    string messageType;
+    string id?;
+    ItemBody body?;
+    string etag?;
+    string? replyToId?;
+    string lastModifiedDateTime?;
+    string createdDateTime?;
+    string? lastEditedDateTime?;
+    string? deletedDateTime?;
+    string? chatId?;
+    string? webUrl?;
+    MessagePolicyViolation? policyViolation?;
+    ChannelIdentity? channelIdentity?;
+    string messageType?;
     string? summary?;
-    string locale;
+    string locale?;
     IdentitySet 'from?; 
     MessageReaction[] reactions?;
+    *MessageBaseData;
 };
 
 # Contains basic identification information about a channel in Microsoft Teams
 #
-# + teamId - The identity of the channel in which the message was posted  
+# + teamId - The identity of the channel in which the message was posted
 # + channelId - The identity of the team in which the message was posted
 public type ChannelIdentity record {
     string teamId;
@@ -326,11 +345,11 @@ public type ChannelIdentity record {
 # + userAction - Indicates the action taken by the user on a message blocked by the DLP provider
 # + verdictDetails - Indicates what actions the sender may take in response to the policy violation
 public type MessagePolicyViolation record {
-    string dlpAction; //enum
+    string dlpAction;
     string justificationText;
     PolicyTip? policyTip;
-    string userAction; //enum
-    string verdictDetails; //enum
+    string userAction;
+    string verdictDetails;
 };
 
 # Represents the properties of a policy tip on a `MessagePolicyViolation` object.Policy tips provide the sender with 
@@ -342,13 +361,13 @@ public type MessagePolicyViolation record {
 #                                  prevention app
 public type PolicyTip record {
     string? complianceUrl;
-    string? generalText;    
+    string? generalText;
     string[]? matchedConditionDescriptions;
 };
 
 # A chat is a collection of chatMessages between one or more participants. Participants can be users or apps.
 #
-# + chatType - Specifies the type of chat `oneOnOne` or `group`
+# + chatType - Specifies the type of chat
 # + members - List of conversation members that should be added. Every single user, including the user initiating the 
 #             create request, who will participate in the chat must be specified in this list.
 # + topic - Subject or topic for the chat. (Only available for group chats)
@@ -365,12 +384,12 @@ public type Chat record {|
 # + chatType - Specifies the type of chat
 # + createdDateTime - Date and time at which the chat was created
 # + lastUpdatedDateTime - Date and time at which the chat was renamed or list of members were last changed
-# + members - The list of members in the conversation  
+# + members - The list of members in the conversation
 public type ChatData record {
-    string id;
-    string? topic;
-    ChatType chatType;    
-    string createdDateTime;
-    string? lastUpdatedDateTime;
+    string id?;
+    string? topic?;
+    ChatType chatType?;
+    string createdDateTime?;
+    string? lastUpdatedDateTime?;
     Member[] members?;
 };

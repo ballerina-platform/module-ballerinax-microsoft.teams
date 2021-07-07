@@ -29,16 +29,14 @@ public function main() returns error? {
             refreshUrl: refreshUrl,
             refreshToken : refreshToken,
             clientId : clientId,
-            clientSecret : clientSecret,
-            scopes: ["openid", "offline_access","https://graph.microsoft.com/.default"]
+            clientSecret : clientSecret
         }
     };
     teams:Client teamsClient = check new(configuration);
 
     log:printInfo("Remove member from chat"); /////////////// test
-
-    string chatId = "19:994846dd2e5340b49dd5a5e8fb90fa60@thread.v2";
-    string membershipId = "";
+    string chatId = "<CHAT_ID>";
+    string membershipId = "<MEMBERSHIP_ID>";
 
     teams:Error? chatMember = teamsClient->removeMemberFromChat(chatId, membershipId);
     if (chatMember is ()) {

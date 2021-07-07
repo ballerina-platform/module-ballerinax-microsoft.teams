@@ -29,15 +29,14 @@ public function main() returns error? {
             refreshUrl: refreshUrl,
             refreshToken : refreshToken,
             clientId : clientId,
-            clientSecret : clientSecret,
-            scopes: ["openid", "offline_access","https://graph.microsoft.com/.default"]
+            clientSecret : clientSecret
         }
     };
     teams:Client teamsClient = check new(configuration);
 
     log:printInfo("Create chat");
-    string owner1 = "b3bbe751-6c6c-4614-81b8-5e569130eb8b";
-    string owner2 = "73a77e1e-31c0-4a99-ac1d-733053b16cbe";
+    string owner1 = "<OWNER1_ID>";
+    string owner2 = "<OWNER2_ID>";
     teams:Chat data = {
         chatType: "group",
         members: [
