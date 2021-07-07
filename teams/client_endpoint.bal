@@ -73,7 +73,7 @@ public client class Client {
                                      @display {label: "Query Parameters"} string[] queryParams = []) 
                                      returns TeamData|Error {
         string path = check createUrl([TEAMS_RESOURCE,teamId], queryParams);
-        return check getTeamResource(self.httpClient, path);
+        return check self.httpClient->get(path, targetType = TeamData);
     }
 
     # Update the properties of the specified team.
@@ -159,7 +159,7 @@ public client class Client {
                                         @display {label: "Query Parameters"} string[] queryParams = []) 
                                         returns ChannelData|Error {
         string path = check createUrl([TEAMS_RESOURCE,teamId, CHANNELS_RESOURCE, channelId], queryParams);
-        return check getChannelResource(self.httpClient, path);
+        return check self.httpClient->get(path, targetType = ChannelData);
     }
 
     # Create a new channel in a team.
@@ -218,7 +218,6 @@ public client class Client {
                                                  @display {label: "Channel ID"} string channelId, 
                                                  @display {label: "Membership ID"} string membershipId) returns Error? { 
         // This operation is allowed only for channels with a membershipType value of private.
-        // Make delete operation common
         string path = check createUrl([TEAMS_RESOURCE,teamId, CHANNELS_RESOURCE, channelId, MEMBERS_RESOURCE, 
             membershipId]);
         return check deleteChannelMemberResource(self.httpClient, path);
@@ -290,7 +289,7 @@ public client class Client {
     @display {label: "Get Chat"}
     remote isolated function getChat(@display {label: "Chat ID"} string chatId) returns ChatData|Error {
         string path = check createUrl([CHATS_RESOURCE, chatId]);
-        return check getChatResource(self.httpClient, path);
+        return check self.httpClient->get(path, targetType = ChatData);
     }
 
     # Update the properties of a chat object.
@@ -302,7 +301,7 @@ public client class Client {
     remote isolated function updateChat(@display {label: "Chat ID"}  string chatId, 
                                         @display {label: "New Topic"}  string topic) returns ChatData|Error {
         string path = check createUrl([CHATS_RESOURCE, chatId]);
-        return check updateChatResource(self.httpClient, path, topic);
+        return check self.httpClient->patch(path, {topic: topic}, targetType = ChatData);
     }
 
     # List all conversation members in a chat.
