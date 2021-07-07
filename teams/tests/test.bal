@@ -29,6 +29,8 @@ configurable string & readonly clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string & readonly chatOwner = os:getEnv("USER_ID_1");
 configurable string & readonly chatUser2 = os:getEnv("USER_ID_2");
 configurable string & readonly chatUser3 = os:getEnv("USER_ID_3");
+//configurable string & readonly aadGroupId = os:getEnv("AAD_GROUP_ID");
+
 
 Configuration configuration = {
     clientConfig: {
@@ -74,6 +76,28 @@ function testCreateTeam() {
     if (newTeamId is string) {
         teamId = newTeamId;
         log:printInfo("New team id" + teamId.toString());
+    } else {
+        test:assertFail(msg = newTeamId.message());
+    }
+    io:println("\n\n");
+}
+
+@test:Config {
+    enable: false
+}
+function testCreateTeamFromGroup() {
+    log:printInfo("client->createTeamFromGroup()");
+
+    Team info = {
+        displayName: teamDisplayName,
+        description: teamDescription
+    };
+    //string groupId = aadGroupId;
+    string groupId = "aadGroupId";
+
+    string|Error newTeamId = teamsClient->createTeamFromGroup(groupId, info);
+    if (newTeamId is string) {
+        log:printInfo("New team id" + newTeamId.toString());
     } else {
         test:assertFail(msg = newTeamId.message());
     }

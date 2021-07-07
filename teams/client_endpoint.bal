@@ -31,8 +31,7 @@ public client class Client {
         http:ClientSecureSocket? socketConfig = config?.secureSocketConfig;
         self.httpClient = check new (BASE_URL, {
             auth: clientConfig,
-            secureSocket: socketConfig,
-            followRedirects: {enabled: true, maxCount: 5}
+            secureSocket: socketConfig
         });
     }
 
@@ -47,6 +46,18 @@ public client class Client {
     remote isolated function createTeam(@display {label: "Team Information"} Team info) returns string|Error {
         string path = check createUrl([TEAMS_RESOURCE]);
         return check createTeamResource(self.httpClient, path, info);
+    }
+
+    # Create a new from Azure AD group. **Note** In order to create a team, the group must have a least one owner.
+    # 
+    # + groupId - The Azure AD group ID
+    # + info - The information for creating team
+    # + return - A `string` which contains the ID of the team
+    @display {label: "Create a Team from Azure AD group"}
+    remote isolated function createTeamFromGroup(@display {label: "Azure AD Group ID"} string groupId, 
+                                        @display {label: "Team Information"} Team? info = ()) returns string|Error {
+        string path = check createUrl([GROUPS_RESOURCE, groupId, TEAM_RESOURCE]);
+        return check createTeamResourceFromGroup(self.httpClient, path, info);
     }
 
     # Retrieve the properties and relationships of the specified team.

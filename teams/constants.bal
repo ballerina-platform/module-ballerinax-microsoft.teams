@@ -90,6 +90,7 @@ const QUESTION_MARK = "?";
 
 # Resources
 const TEAMS_RESOURCE = "teams";
+const TEAM_RESOURCE = "team";
 const GROUPS_RESOURCE = "groups";
 const MEMBERS_RESOURCE = "members";
 const CHANNELS_RESOURCE = "channels";
