@@ -29,14 +29,13 @@ public function main() returns error? {
             refreshUrl: refreshUrl,
             refreshToken : refreshToken,
             clientId : clientId,
-            clientSecret : clientSecret,
-            scopes: ["openid", "offline_access","https://graph.microsoft.com/.default"]
+            clientSecret : clientSecret
         }
     };
     teams:Client teamsClient = check new(configuration);
 
     log:printInfo("Update chat");
-    string chatId = "19:994846dde5340b49dd5a5e8fb90fa60@thread.v2";
+    string chatId = "<CHAT_ID>";
     string topic  = "Our new Chat";
     teams:ChatData|teams:Error chat = teamsClient->updateChat(chatId, topic);
     if (chat is teams:ChatData) {

@@ -29,8 +29,7 @@ public function main() returns error? {
             refreshUrl: refreshUrl,
             refreshToken : refreshToken,
             clientId : clientId,
-            clientSecret : clientSecret,
-            scopes: ["openid", "offline_access","https://graph.microsoft.com/.default"]
+            clientSecret : clientSecret
         }
     };
     teams:Client teamsClient = check new(configuration);

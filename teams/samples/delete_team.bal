@@ -29,15 +29,14 @@ public function main() returns error? {
             refreshUrl: refreshUrl,
             refreshToken : refreshToken,
             clientId : clientId,
-            clientSecret : clientSecret,
-            scopes: ["openid", "offline_access","https://graph.microsoft.com/.default"]
+            clientSecret : clientSecret
         }
     };
     teams:Client teamsClient = check new(configuration);
 
     log:printInfo("Delete team"); //////////test
 
-    string teamId = "0377f416-f978-475d-831c-eba35f2c90f9";
+    string teamId = "<TEAM_ID>";
 
     teams:Error? teamInfo = teamsClient->deleteTeam(teamId);
     if (teamInfo is ()) {

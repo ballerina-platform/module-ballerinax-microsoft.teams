@@ -31,14 +31,12 @@ configurable string & readonly chatUser2 = os:getEnv("USER_ID_2");
 configurable string & readonly chatUser3 = os:getEnv("USER_ID_3");
 //configurable string & readonly aadGroupId = os:getEnv("AAD_GROUP_ID");
 
-
 Configuration configuration = {
     clientConfig: {
         refreshUrl: refreshUrl,
         refreshToken : refreshToken,
         clientId : clientId,
-        clientSecret : clientSecret,
-        scopes: ["openid", "offline_access","https://graph.microsoft.com/.default"]
+        clientSecret : clientSecret
     }
 };
 
@@ -93,7 +91,7 @@ function testCreateTeamFromGroup() {
         description: teamDescription
     };
     //string groupId = aadGroupId;
-    string groupId = "aadGroupId";
+    string groupId = "<GROUP_ID>";
 
     string|Error newTeamId = teamsClient->createTeamFromGroup(groupId, info);
     if (newTeamId is string) {
@@ -114,6 +112,24 @@ function testGetTeamById() {
     string tid = teamId;
 
     TeamData|Error teamInfo = teamsClient->getTeam(tid);
+    if (teamInfo is TeamData) {
+        log:printInfo("Team info " + teamInfo.toString());
+    } else {
+        test:assertFail(msg = teamInfo.message());
+    }
+    io:println("\n\n");
+}
+
+@test:Config {
+    enable: true,
+    dependsOn: [testCreateTeam]
+}
+function testGetTeamByIdWithQuery() {
+    log:printInfo("client->getTeamByIdQueryParams()");
+
+    string tid = teamId;
+    string[] params = ["$select=displayName,funSettings,memberSettings,classification"];
+    TeamData|Error teamInfo = teamsClient->getTeam(tid, params);
     if (teamInfo is TeamData) {
         log:printInfo("Team info " + teamInfo.toString());
     } else {
@@ -174,7 +190,7 @@ function testCreateChannel() {
 
     string tid = teamId;
     Channel data = {
-        displayName: channelName, //Channel should have unique names
+        displayName: channelName, // Channel should have unique names
         description: channelDescription,
         membershipType: "standard"
     };
@@ -182,7 +198,7 @@ function testCreateChannel() {
     ChannelData|Error channelInfo = teamsClient->createChannel(tid, data);
     if (channelInfo is ChannelData) {
         log:printInfo("New channel info " + channelInfo.toString());
-        channelId = channelInfo.id;
+        channelId = channelInfo?.id.toString();
     } else {
         test:assertFail(msg = channelInfo.message());
     }
@@ -256,11 +272,11 @@ function testUpdateChannel() {
 function testAddMemberToChannel() {
     // This operation is allowed only for channels with a membershipType value of private
     string userId = chatUser3;
-    string role = "owner"; //member should be owner
+    string role = "owner"; // member should be owner
     string tid = teamId;
 
     Channel data = {
-        displayName: channelName+"_private", //Channel should have unique names
+        displayName: channelName+"_private", // Channel should have unique names
         description: channelDescription,
         membershipType: "private"
     };
@@ -269,7 +285,7 @@ function testAddMemberToChannel() {
     ChannelData|Error channelInfo = teamsClient->createChannel(tid, data);
     if (channelInfo is ChannelData) {
         log:printInfo("Private channel info " + channelInfo.toString());
-        privateChannelId = channelInfo.id;
+        privateChannelId = channelInfo?.id.toString();
     } else {
         test:assertFail(msg = channelInfo.message());
     }
@@ -278,7 +294,7 @@ function testAddMemberToChannel() {
     MemberData|Error memberInfo = teamsClient->addMemberToChannel(tid, privateChannelId, userId, role);
     if (memberInfo is MemberData) {
         log:printInfo(memberInfo.toString());
-        channelmembershipId = memberInfo.id;
+        channelmembershipId = memberInfo?.id.toString();
     } else {
         test:assertFail(msg = memberInfo.message());
     }
@@ -322,7 +338,7 @@ function testSendChannelMessage() {
     MessageData|Error channelMessage = teamsClient->sendChannelMessage(tid, cid, message);
     if (channelMessage is MessageData) {
         log:printInfo("New channel message " + channelMessage.toString());
-        channelMessageId = channelMessage.id;
+        channelMessageId = channelMessage?.id.toString();
     } else {
         test:assertFail(msg = channelMessage.message());
     }
@@ -398,7 +414,7 @@ function testCreateChat() {
     ChatData|Error chatData = teamsClient->createChat(data);
     if (chatData is ChatData) {
         log:printInfo("Chat created" + chatData.toString());
-        chatId = chatData.id;
+        chatId = chatData?.id.toString();
     } else {
         test:assertFail(msg = chatData.message());
     }
@@ -477,7 +493,7 @@ function testAddMemberToChat() {
     MemberData|Error chatMember = teamsClient->addMemberToChat(chatId, data);
     if (chatMember is MemberData) {
         log:printInfo("Member added to chat" + chatMember.toString());
-        chatMembershipId = chatMember.id;
+        chatMembershipId = chatMember?.id.toString();
     } else {
         test:assertFail(msg = chatMember.message());
     }
