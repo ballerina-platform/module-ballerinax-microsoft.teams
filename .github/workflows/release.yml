@@ -12,7 +12,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: Ballerina Build
-              uses: ballerina-platform/ballerina-action/@master
+              uses: ballerina-platform/ballerina-action/@slalpha5
               with:
                   args:
                       build -c ./teams
@@ -25,10 +25,11 @@ jobs:
                   USER_ID_2: ${{ secrets.USER_ID_2 }}
                   USER_ID_3: ${{ secrets.USER_ID_3 }}
             - name: Ballerina Push
-              uses: ballerina-platform/ballerina-action/@master
+              uses: ballerina-platform/ballerina-action/@slalpha5
               with:
                   args:
                       push
               env:
+                  WORKING_DIR: ./teams
                   BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_ACCESS_TOKEN }}
                   
