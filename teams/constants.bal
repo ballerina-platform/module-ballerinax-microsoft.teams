@@ -55,7 +55,7 @@ public enum GiphyContentRating {
 
 # The type of the channel.
 #
-# + STANDARD_CHANNEL - hannel inherits the list of members of the parent team
+# + STANDARD_CHANNEL - Channel inherits the list of members of the parent team
 # + PRIVATE_CHANNEL - Channel can have members that are a subset of all the members on the parent team
 public enum ChannelMemberhipType {
     STANDARD_CHANNEL = "standard",
@@ -143,6 +143,7 @@ const CHANNELS_RESOURCE = "channels";
 const MESSAGES_RESOURCE = "messages";
 const CHATS_RESOURCE = "chats";
 const REPLIES_RESOURCE = "replies";
+const VALUE_ARRAY = "value";
 
 # Util file enums
 enum SystemQueryOption {
@@ -189,3 +190,7 @@ enum AsyncOperationStatus {
     SUCCEEDED = "succeeded",
     FAILED = "failed"
 }
+
+# error messages
+const INVALID_RESPONSE = "Invalid response";
+const INVALID_QUERY_PARAMETER = "Invalid query parameter";

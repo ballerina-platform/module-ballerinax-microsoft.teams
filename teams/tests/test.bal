@@ -70,7 +70,7 @@ function testCreateTeam() {
         description: teamDescription
     };
 
-    string|Error newTeamId = teamsClient->createTeam(info);
+    string|error newTeamId = teamsClient->createTeam(info);
     if (newTeamId is string) {
         teamId = newTeamId;
         log:printInfo("New team id" + teamId.toString());
@@ -93,7 +93,7 @@ function testCreateTeamFromGroup() {
     //string groupId = aadGroupId;
     string groupId = "<GROUP_ID>";
 
-    string|Error newTeamId = teamsClient->createTeamFromGroup(groupId, info);
+    string|error newTeamId = teamsClient->createTeamFromGroup(groupId, info);
     if (newTeamId is string) {
         log:printInfo("New team id" + newTeamId.toString());
     } else {
@@ -111,7 +111,7 @@ function testGetTeamById() {
 
     string tid = teamId;
 
-    TeamData|Error teamInfo = teamsClient->getTeam(tid);
+    TeamData|error teamInfo = teamsClient->getTeam(tid);
     if (teamInfo is TeamData) {
         log:printInfo("Team info " + teamInfo.toString());
     } else {
@@ -129,7 +129,7 @@ function testGetTeamByIdWithQuery() {
 
     string tid = teamId;
     string[] params = ["$select=displayName,funSettings,memberSettings,classification"];
-    TeamData|Error teamInfo = teamsClient->getTeam(tid, params);
+    TeamData|error teamInfo = teamsClient->getTeam(tid, params);
     if (teamInfo is TeamData) {
         log:printInfo("Team info " + teamInfo.toString());
     } else {
@@ -150,7 +150,7 @@ function updateTeam() {
         displayName: "Alice in Wonderland"
     };
 
-    Error? teamInfo = teamsClient->updateTeam(tid, info);
+    error? teamInfo = teamsClient->updateTeam(tid, info);
     if (teamInfo is ()) {
         log:printInfo("Team update successful");
     } else {
@@ -172,7 +172,7 @@ function testAddMemberToTeam() {
         userId: chatUser3
     };
 
-    MemberData|Error teamMemberInfo = teamsClient-> addMemberToTeam(tid, data);
+    MemberData|error teamMemberInfo = teamsClient-> addMemberToTeam(tid, data);
     if (teamMemberInfo is MemberData) {
         log:printInfo("New team member info ", info = teamMemberInfo.toString());
     } else {
@@ -195,7 +195,7 @@ function testCreateChannel() {
         membershipType: "standard"
     };
 
-    ChannelData|Error channelInfo = teamsClient->createChannel(tid, data);
+    ChannelData|error channelInfo = teamsClient->createChannel(tid, data);
     if (channelInfo is ChannelData) {
         log:printInfo("New channel info " + channelInfo.toString());
         channelId = channelInfo?.id.toString();
@@ -214,7 +214,7 @@ function getChannelsInTeam() {
 
     string tid = teamId;
 
-    ChannelData[]|Error channelArray = teamsClient->getChannelsInTeam(tid);
+    ChannelData[]|error channelArray = teamsClient->getChannelsInTeam(tid);
     if (channelArray is ChannelData[]) {
         log:printInfo("Channels " + channelArray.toString());
     } else {
@@ -233,7 +233,7 @@ function getChannel() {
     string tid = teamId;
     string cid = channelId;
 
-    ChannelData|Error channelInfo = teamsClient->getChannel(tid, cid);
+    ChannelData|error channelInfo = teamsClient->getChannel(tid, cid);
     if (channelInfo is ChannelData) {
         log:printInfo("Channel info " + channelInfo.toString());
     } else {
@@ -256,7 +256,7 @@ function testUpdateChannel() {
         description: "Alices' army"
     };
 
-    Error? channelInfo = teamsClient->updateChannel(tid, cid, data);
+    error? channelInfo = teamsClient->updateChannel(tid, cid, data);
     if (channelInfo is ()) {
         log:printInfo("Sucessfully updated the channel");
     } else {
@@ -282,7 +282,7 @@ function testAddMemberToChannel() {
     };
     
     log:printInfo("Step 1 - Create private channel");
-    ChannelData|Error channelInfo = teamsClient->createChannel(tid, data);
+    ChannelData|error channelInfo = teamsClient->createChannel(tid, data);
     if (channelInfo is ChannelData) {
         log:printInfo("Private channel info " + channelInfo.toString());
         privateChannelId = channelInfo?.id.toString();
@@ -291,7 +291,7 @@ function testAddMemberToChannel() {
     }
 
     log:printInfo("client->addMemberToChannel()");
-    MemberData|Error memberInfo = teamsClient->addMemberToChannel(tid, privateChannelId, userId, role);
+    MemberData|error memberInfo = teamsClient->addMemberToChannel(tid, privateChannelId, userId, role);
     if (memberInfo is MemberData) {
         log:printInfo(memberInfo.toString());
         channelmembershipId = memberInfo?.id.toString();
@@ -311,7 +311,7 @@ function testListChannelMembers() {
     string tid = teamId;
     string cid = channelId;
 
-    MemberData[]|Error memberInfo = teamsClient->listChannelMembers(tid, cid);
+    MemberData[]|error memberInfo = teamsClient->listChannelMembers(tid, cid);
     if (memberInfo is MemberData[]) {
         log:printInfo("Members ", info = memberInfo.toString());
     } else {
@@ -335,7 +335,7 @@ function testSendChannelMessage() {
         }
     };
 
-    MessageData|Error channelMessage = teamsClient->sendChannelMessage(tid, cid, message);
+    MessageData|error channelMessage = teamsClient->sendChannelMessage(tid, cid, message);
     if (channelMessage is MessageData) {
         log:printInfo("New channel message " + channelMessage.toString());
         channelMessageId = channelMessage?.id.toString();
@@ -361,7 +361,7 @@ function sendReplyToChannelMessage() {
         }
     };
 
-    MessageData|Error channelReply = teamsClient->sendReplyMessage(tid, cid, mid, body);
+    MessageData|error channelReply = teamsClient->sendReplyMessage(tid, cid, mid, body);
     if (channelReply is MessageData) {
         log:printInfo("Reply message " + channelReply.toString());
     } else {
@@ -381,7 +381,7 @@ function deleteChannelMember() {
     string cid = privateChannelId;
     string mid = channelmembershipId;
 
-    Error? channelInfo = teamsClient->deleteChannelMember(tid, cid, mid);
+    error? channelInfo = teamsClient->deleteChannelMember(tid, cid, mid);
     if (channelInfo is ()) {
         log:printInfo("Sucessfully deleted the member");
     } else {
@@ -411,7 +411,7 @@ function testCreateChat() {
         ]
     };
 
-    ChatData|Error chatData = teamsClient->createChat(data);
+    ChatData|error chatData = teamsClient->createChat(data);
     if (chatData is ChatData) {
         log:printInfo("Chat created" + chatData.toString());
         chatId = chatData?.id.toString();
@@ -430,7 +430,7 @@ function getChat() {
 
     string cid = chatId;
 
-    ChatData|Error chatData = teamsClient->getChat(chatId);
+    ChatData|error chatData = teamsClient->getChat(chatId);
     if (chatData is ChatData) {
         log:printInfo("Chat created" + chatData.toString());
     } else {
@@ -449,7 +449,7 @@ function updateChat() {
     string cid = chatId;
     string topic =  "Advices from a Caterpillar";
 
-    ChatData|Error chatData = teamsClient->updateChat(chatId, topic);
+    ChatData|error chatData = teamsClient->updateChat(chatId, topic);
     if (chatData is ChatData) {
         log:printInfo("Chat created" + chatData.toString());
     } else {
@@ -467,7 +467,7 @@ function listChatMembers() {
 
     string cid = chatId;
 
-    MemberData[]|Error chatMembers = teamsClient->listChatMembers(chatId);
+    MemberData[]|error chatMembers = teamsClient->listChatMembers(chatId);
     if (chatMembers is MemberData[]) {
         log:printInfo("Chat member list" + chatMembers.toString());
     } else {
@@ -490,7 +490,7 @@ function testAddMemberToChat() {
         visibleHistoryStartDateTime: "2019-04-18T23:51:43.255Z"
     };
 
-    MemberData|Error chatMember = teamsClient->addMemberToChat(chatId, data);
+    MemberData|error chatMember = teamsClient->addMemberToChat(chatId, data);
     if (chatMember is MemberData) {
         log:printInfo("Member added to chat" + chatMember.toString());
         chatMembershipId = chatMember?.id.toString();
@@ -510,8 +510,8 @@ function removeMemberFromChat() {
     string cid = chatId;
     string membershipId = chatMembershipId;
 
-    Error? chatMember = teamsClient->removeMemberFromChat(cid, membershipId);
-    if (chatMember is Error) {
+    error? chatMember = teamsClient->removeMemberFromChat(cid, membershipId);
+    if (chatMember is error) {
         test:assertFail(msg = chatMember.message());
 
     } else {
@@ -535,7 +535,7 @@ function testSendChatMessage() {
         }
     };
 
-    MessageData|Error chatMessage = teamsClient->sendChatMessage(cid, message);
+    MessageData|error chatMessage = teamsClient->sendChatMessage(cid, message);
     if (chatMessage is MessageData) {
         log:printInfo("New message " + chatMessage.toString());
     } else {
@@ -554,7 +554,7 @@ function getChatMessage() {
     string cid = chatId;
     string cmid = chatMessageId;
 
-    MessageData|MessageData[]|Error chatMessages = teamsClient->getChatMessage(chatId, cmid);
+    MessageData|MessageData[]|error chatMessages = teamsClient->getChatMessage(chatId, cmid);
     if (chatMessages is MessageData) {
         log:printInfo("New chat message " + chatMessages.toString());
     } else if (chatMessages is MessageData[]) {
@@ -572,14 +572,14 @@ function testDeleteTeamsChatsChannels() {
     string tid = teamId;
     string cid = channelId;
 
-    Error? channelInfo = teamsClient->deleteChannel(tid, cid);
+    error? channelInfo = teamsClient->deleteChannel(tid, cid);
     if (channelInfo is ()) {
         log:printInfo("Sucessfully deleted the channel");
     } else {
         test:assertFail(msg = channelInfo.message());
     }
 
-    Error? teamInfo = teamsClient->deleteTeam(tid);
+    error? teamInfo = teamsClient->deleteTeam(tid);
     if (teamInfo is ()) {
         log:printInfo("Sucessfully deleted the team");
     } else {

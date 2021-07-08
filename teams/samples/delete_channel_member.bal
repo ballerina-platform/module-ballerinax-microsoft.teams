@@ -15,13 +15,12 @@
 // under the License.
 
 import ballerina/log;
-import ballerina/os;
 import ballerinax/microsoft.teams;
 
-configurable string & readonly refreshUrl = os:getEnv("REFRESH_URL");
-configurable string & readonly refreshToken = os:getEnv("REFRESH_TOKEN");
-configurable string & readonly clientId = os:getEnv("CLIENT_ID");
-configurable string & readonly clientSecret = os:getEnv("CLIENT_SECRET");
+configurable string & readonly refreshUrl = ?;
+configurable string & readonly refreshToken = ?;
+configurable string & readonly clientId = ?;
+configurable string & readonly clientSecret = ?;
 
 public function main() returns error? {
     teams:Configuration configuration = {
@@ -40,7 +39,7 @@ public function main() returns error? {
     string channelId = "<CHANNEL_ID>";
     string membershipId = "<MEMBERSHIP_ID>";
     
-    Error? channelInfo = teamsClient->deleteChannelMember(teamId, channelId, membershipId);    
+    error? channelInfo = teamsClient->deleteChannelMember(teamId, channelId, membershipId);    
     if (channelInfo is ()) {
         log:printInfo("CSucessfully deleted");
         log:printInfo("Success!");

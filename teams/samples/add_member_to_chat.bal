@@ -15,13 +15,12 @@
 // under the License.
 
 import ballerina/log;
-import ballerina/os;
 import ballerinax/microsoft.teams;
 
-configurable string & readonly refreshUrl = os:getEnv("REFRESH_URL");
-configurable string & readonly refreshToken = os:getEnv("REFRESH_TOKEN");
-configurable string & readonly clientId = os:getEnv("CLIENT_ID");
-configurable string & readonly clientSecret = os:getEnv("CLIENT_SECRET");
+configurable string & readonly refreshUrl = ?;
+configurable string & readonly refreshToken = ?;
+configurable string & readonly clientId = ?;
+configurable string & readonly clientSecret = ?;
 
 public function main() returns error? {
     teams:Configuration configuration = {
@@ -43,9 +42,9 @@ public function main() returns error? {
         visibleHistoryStartDateTime: "2019-04-18T23:51:43.255Z"
     };
 
-    teams:MemberData|teams:Error chatMember = teamsClient->addMemberToChat(chatId, data);
+    teams:MemberData|error chatMember = teamsClient->addMemberToChat(chatId, data);
     if (chatMember is teams:MemberData) {
-        log:printInfo("Member Added to the chat " + chatMember.id.toString());
+        log:printInfo("Member Added to the chat " + chatMember?.id.toString());
         log:printInfo("Success!");
     } else {
         log:printError(chatMember.message());

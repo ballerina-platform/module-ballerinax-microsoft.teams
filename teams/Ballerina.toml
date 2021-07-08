@@ -1,10 +1,10 @@
 [package]
 org= "ballerinax"
 name= "microsoft.teams"
-version= "0.1.0"
+version= "0.1.1-SNAPSHOT"
 authors = ["Ballerina"]
 keywords = ["Microsoft", "Teams", "Communication"]
-repository = ""
+repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.teams"
 license = ["Apache-2.0"]
 
 [build-options]

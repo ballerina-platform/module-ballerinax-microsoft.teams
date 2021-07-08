@@ -16,28 +16,26 @@
 
 import ballerina/http;
 
-isolated function getChannelResources(http:Client httpClient, string url) returns ChannelData[]|Error {
+isolated function getChannelResources(http:Client httpClient, string url) returns ChannelData[]|error {
     http:Response response = check httpClient->get(url);
     map<json> handledResponse = check handleResponse(response);
-    return check mapJsonToChannelDataArray(handledResponse);
+    return check handledResponse[VALUE_ARRAY].cloneWithType(ChannelDataArray);
 }
 
 isolated function createChannelResource(http:Client httpClient, string url, Channel info) returns 
-                                        ChannelData|Error {
-    http:Request request = new;
+                                        ChannelData|error {
     json payload = check info.cloneWithType(json);
     return check httpClient->post(url, payload, targetType = ChannelData);
 }
 
-isolated function updateChannelResource(http:Client httpClient, string url, Channel info) returns Error? {
+isolated function updateChannelResource(http:Client httpClient, string url, Channel info) returns error? {
     json payload = check info.cloneWithType(json);
     http:Response response = check httpClient->patch(url, payload);
     _ = check handleResponse(response);
 }
 
-isolated function addChannelMember(http:Client httpClient, string url, string userId, string role) returns @tainted
-                                   MemberData|Error {
-    http:Request request = new;
+isolated function addChannelMember(http:Client httpClient, string url, string userId, string role) returns 
+                                   MemberData|error {
     json payload = {
         "@odata.type": "#microsoft.graph.aadUserConversationMember",
         roles: [role],
@@ -46,31 +44,30 @@ isolated function addChannelMember(http:Client httpClient, string url, string us
     return check httpClient->post(url, payload, targetType = MemberData);
 }
 
-isolated function listChannelMembersResource(http:Client httpClient, string url) returns MemberData[]|Error {
+isolated function listChannelMembersResource(http:Client httpClient, string url) returns MemberData[]|error {
     http:Response response = check httpClient->get(url);
     map<json> handledResponse = check handleResponse(response);
-    return check mapJsonToMemberDataArray(handledResponse);
+    return check handledResponse[VALUE_ARRAY].cloneWithType(MemberDataArray);
 }
 
-isolated function deleteChannelMemberResource(http:Client httpClient, string url) returns Error? {
+isolated function deleteChannelMemberResource(http:Client httpClient, string url) returns error? {
     http:Response response = check httpClient->delete(url);
     _ = check handleResponse(response);
 }
 
 isolated function sendMessageToChannel(http:Client httpClient, string url, Message message) returns 
-                                       MessageData|Error {
+                                       MessageData|error {
     json payload = check message.cloneWithType(json);
     return check httpClient->post(url, payload, targetType = MessageData);
 }
 
 isolated function sendReplyToChannel(http:Client httpClient, string url, Message reply) returns 
-                                     MessageData|Error {
-    http:Request request = new;
+                                     MessageData|error {
     json payload = check reply.cloneWithType(json);
     return check httpClient->post(url, payload, targetType = MessageData);       
 }
 
-isolated function deleteChannelResource(http:Client httpClient, string url) returns Error? {
+isolated function deleteChannelResource(http:Client httpClient, string url) returns error? {
     http:Response response = check httpClient->delete(url);
     _ = check handleResponse(response);
 }

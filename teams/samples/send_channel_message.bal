@@ -15,13 +15,12 @@
 // under the License.
 
 import ballerina/log;
-import ballerina/os;
 import ballerinax/microsoft.teams;
 
-configurable string & readonly refreshUrl = os:getEnv("REFRESH_URL");
-configurable string & readonly refreshToken = os:getEnv("REFRESH_TOKEN");
-configurable string & readonly clientId = os:getEnv("CLIENT_ID");
-configurable string & readonly clientSecret = os:getEnv("CLIENT_SECRET");
+configurable string & readonly refreshUrl = ?;
+configurable string & readonly refreshToken = ?;
+configurable string & readonly clientId = ?;
+configurable string & readonly clientSecret = ?;
 
 public function main() returns error? {
     teams:Configuration configuration = {
@@ -43,9 +42,9 @@ public function main() returns error? {
         }
     };
 
-    teams:MessageData|teams:Error channelMessage = teamsClient->sendChannelMessage(teamId, channelId, message);    
+    teams:MessageData|error channelMessage = teamsClient->sendChannelMessage(teamId, channelId, message);    
     if (channelMessage is teams:MessageData) {
-        log:printInfo("Message ID " + channelMessage.id.toString());
+        log:printInfo("Message ID " + channelMessage?.id.toString());
         log:printInfo("Success!");
     } else {
         log:printError(channelMessage.message());

@@ -170,7 +170,6 @@ public type Member record {|
 # + id - Unique ID of the user 
 # + roles - The roles for the user 
 # + tenantId - TenantId which the Azure AD user belongs to
-# + userId - The guid of the user
 public type MemberData record {
     string id?;
     Role[] roles?;
@@ -393,3 +392,7 @@ public type ChatData record {
     string? lastUpdatedDateTime?;
     Member[] members?;
 };
+
+type ChannelDataArray ChannelData[];
+type MemberDataArray MemberData[];
+type MessageDataArray MessageData[];
