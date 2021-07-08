@@ -16,7 +16,7 @@
 
 import ballerina/http;
 
-isolated function createTeamResource(http:Client httpClient, string url, Team data) returns string|Error {
+isolated function createTeamResource(http:Client httpClient, string url, Team data) returns string|error {
     json payload = check data.cloneWithType(json);
     _ = check payload.mergeJson({"template@odata.bind": "https://graph.microsoft.com/v1.0/teamsTemplates('standard')"});
     http:Response response = check httpClient->post(url, payload);
@@ -24,36 +24,35 @@ isolated function createTeamResource(http:Client httpClient, string url, Team da
     if (handledResponse is string) {
         return handledResponse;
     } else {
-        return error PayloadValidationError(INVALID_RESPONSE);
+        return error(INVALID_RESPONSE);
     } 
 }
 
-isolated function createTeamResourceFromGroup(http:Client httpClient, string url, Team? data) returns string|Error {
+isolated function createTeamResourceFromGroup(http:Client httpClient, string url, Team? data) returns string|error {
     json payload = check data.cloneWithType(json);
     http:Response response = check httpClient->put(url, payload);
-    map<json>|string handledResponse = check handleResponse(response);
+    map<json>|string handledResponse = check handleResponse(response); //
     if (handledResponse is map<json>) {
         json teamId = check handledResponse.id;
         return teamId.toString();
     } else {
-        return error PayloadValidationError(INVALID_RESPONSE);
+        return error(INVALID_RESPONSE);
     } 
 }
 
-isolated function updateTeamResource(http:Client httpClient, string url, Team data) returns Error? {
-    http:Request request = new;
+isolated function updateTeamResource(http:Client httpClient, string url, Team data) returns error? {
     json payload = check data.cloneWithType(json);
     http:Response response = check httpClient->patch(url, payload);
     _ = check handleResponse(response);
 }
 
 isolated function addMemberToTeamResource(http:Client httpClient, string url, Member data) returns 
-                                          MemberData|Error {
+                                          MemberData|error {
     json payload = check createMemberPayload(data);
     return check httpClient->post(url, payload, targetType = MemberData);
 }
 
-isolated function deleteTeamResource(http:Client httpClient, string url) returns Error? {
+isolated function deleteTeamResource(http:Client httpClient, string url) returns error? {
     http:Response response = check httpClient->delete(url);
     _ = check handleResponse(response);
 }

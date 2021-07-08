@@ -16,58 +16,48 @@
 
 import ballerina/http;
 
-isolated function createChatResource(http:Client httpClient, string url, Chat data) returns ChatData|Error {
-    http:Request request = new;
+isolated function createChatResource(http:Client httpClient, string url, Chat data) returns ChatData|error {
     json payload = check createChatDataPayload(data);
     return check httpClient->post(url, payload, targetType = ChatData);
 }
 
-isolated function lisChatResourceMembers(http:Client httpClient, string url) returns MemberData[]|Error {
+isolated function lisChatResourceMembers(http:Client httpClient, string url) returns MemberData[]|error {
     http:Response response = check httpClient->get(url);
     map<json> handledResponse = check handleResponse(response);
-    return check mapJsonToMemberDataArray(handledResponse);
+    return check handledResponse[VALUE_ARRAY].cloneWithType(MemberDataArray);
 }
 
 isolated function addMemberToChatResource(http:Client httpClient, string url, Member data) returns 
-                                          MemberData|Error {
-    http:Request request = new;
+                                          MemberData|error {
     json payload = check createMemberPayload(data);
     http:Response response = check httpClient->post(url, payload);
     if (response.statusCode is http:STATUS_CREATED) {
         string locationHeader = check response.getHeader(http:LOCATION);
-        http:Response addResponse = check httpClient->get(<@untainted>locationHeader);
-        map<json>? finalResponse = check handleResponse(addResponse); 
-        if (finalResponse is map<json>) {
-            return check finalResponse.cloneWithType(MemberData);        
-        } else {
-            return error PayloadValidationError(INVALID_RESPONSE);
-        }
+        return check httpClient->get(locationHeader, targetType = MemberData);
     }
     json errorPayload = check response.getJsonPayload();
-    string message = errorPayload.toString(); // Error should be defined as a user defined object
-    return error PayloadValidationError(message);
+    string message = errorPayload.toString();
+    return error(message);
 }
 
-isolated function deleteMemberFromChatResource(http:Client httpClient, string url) returns Error? {
+isolated function deleteMemberFromChatResource(http:Client httpClient, string url) returns error? {
     http:Response response = check httpClient->delete(url);
     _ =  check handleResponse(response);
 }
 
 isolated function sendMessageToChatResource(http:Client httpClient, string url, Message data) returns 
-                                            MessageData|Error {
-    http:Request request = new;
+                                            MessageData|error {
     json payload = check data.cloneWithType(json);
     return check httpClient->post(url, payload, targetType = MessageData);
 }
 
-isolated function getMessagesFromChatResource(http:Client httpClient, string url) returns 
-                                              MessageData|MessageData[]|Error {
+isolated function getMessagesFromChatResource(http:Client httpClient, string url) returns MessageData[]|error {
     http:Response response = check httpClient->get(url);
     map<json> handledResponse = check handleResponse(response);
 
     if (handledResponse.get("@odata.count") is int) {
-        return check mapJsonToMessageDataArray(handledResponse);
+        return check handledResponse[VALUE_ARRAY].cloneWithType(MessageDataArray);
     } else {
-        return check handledResponse.cloneWithType(MessageData);
+        return [check handledResponse.cloneWithType(MessageData)];
     }
 }

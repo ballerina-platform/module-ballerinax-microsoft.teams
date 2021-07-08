@@ -35,7 +35,7 @@ isolated function createUrl(string[] pathParameters, string[] queryParameters = 
     return url;
 }
 
-isolated function appendQueryOption(string queryParameter, string connectingString) returns string|Error {
+isolated function appendQueryOption(string queryParameter, string connectingString) returns string|error {
     string url = EMPTY_STRING;
     int? indexOfEqual = queryParameter.indexOf(EQUAL_SIGN);
     if (indexOfEqual is int) {
@@ -45,14 +45,14 @@ isolated function appendQueryOption(string queryParameter, string connectingStri
             if (validateOdataSystemQueryOption(queryOptionName.substring(1), queryOptionValue)) {
                 url += connectingString + queryParameter;
             } else {
-                return error QueryParameterValidationError(INVALID_QUERY_PARAMETER);
+                return error(INVALID_QUERY_PARAMETER);
             }
         } else {
             // non odata query parameters
             url += connectingString + queryParameter;
         }
     } else {
-        return error QueryParameterValidationError(INVALID_QUERY_PARAMETER);
+        return error(INVALID_QUERY_PARAMETER);
     }
     return url;
 }
@@ -78,7 +78,7 @@ isolated function validateOdataSystemQueryOption(string queryOptionName, string 
     return isValid;
 }
 
-isolated function handleResponse(http:Response httpResponse) returns map<json>|Error {
+isolated function handleResponse(http:Response httpResponse) returns map<json>|error {
     if (httpResponse.statusCode is http:STATUS_ACCEPTED|http:STATUS_OK|http:STATUS_CREATED) {
         json jsonResponse = check httpResponse.getJsonPayload();
         return <map<json>>jsonResponse;
@@ -87,20 +87,20 @@ isolated function handleResponse(http:Response httpResponse) returns map<json>|E
     }
     json errorPayload = check httpResponse.getJsonPayload();
     string message = errorPayload.toString();
-    return error PayloadValidationError(message);
+    return error(message);
 }
 
-isolated function handleAsyncResponse(http:Client httpClient, http:Response httpResponse) returns string|Error {
+isolated function handleAsyncResponse(http:Client httpClient, http:Response httpResponse) returns string|error {
     if (httpResponse.statusCode is http:STATUS_ACCEPTED) {
         string locationHeader = check httpResponse.getHeader(http:LOCATION);
-        return check getasyncJobStatus(httpClient, <@untainted>locationHeader); 
+        return check getasyncJobStatus(httpClient, locationHeader); 
     }
     json errorPayload = check httpResponse.getJsonPayload();
-    string message = errorPayload.toString(); // Error should be defined as a user defined object
-    return error PayloadValidationError(message);
+    string message = errorPayload.toString();
+    return error(message);
 }
 
-isolated function getasyncJobStatus(http:Client httpClient, string monitorUrl) returns string|Error {
+isolated function getasyncJobStatus(http:Client httpClient, string monitorUrl) returns string|error {
     http:Response response = check httpClient->get(monitorUrl);
     if (response.statusCode is http:STATUS_OK|http:STATUS_ACCEPTED|http:REDIRECT_SEE_OTHER_303) {
         json jsonResponse = check response.getJsonPayload();
@@ -108,14 +108,14 @@ isolated function getasyncJobStatus(http:Client httpClient, string monitorUrl) r
         if (asyncStatus.status == SUCCEEDED) {
             return asyncStatus.targetResourceId;
         } else if (asyncStatus.status == FAILED) {
-            return error AsyncRequestFailedError("", code = "");
+            return error("", code = "");
         } else {
             return check getasyncJobStatus(httpClient, monitorUrl);
         }
     }
     json errorPayload = check response.getJsonPayload();
-    string message = errorPayload.toString(); // Error should be defined as a user defined object
-    return error PayloadValidationError(message);
+    string message = errorPayload.toString();
+    return error(message);
 }
 
 isolated function matchOpening(string value) returns boolean {
