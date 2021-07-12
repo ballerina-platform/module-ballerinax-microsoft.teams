@@ -1,14 +1,15 @@
 Connects to Microsoft Teams from Ballerina
 
-#### Compatibility
-|                               | Version                       |
-|-------------------------------|-------------------------------|
-| Ballerina Language Version    | **Swan Lake Beta 2**          |
-| API Version                   | **Microsoft Graph API v1.0**  |
-
 ### Package Overview
 The `ballerinax/microsoft.teams` is a [Ballerina](https://ballerina.io/) connector for Microsoft Teams.
 This package provides the capability to easily access Microsoft Teams.
+
+#### Compatibility
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language Version    | **Swan Lake Beta2**           |
+| API Version                   | **Microsoft Graph API v1.0**  |
+
 ### Report Issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina connector repository](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams)
 ### Useful Links

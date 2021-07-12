@@ -1,9 +1,12 @@
 Ballerina Microsoft Teams Connector
 ===================
+[![Build Status](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/workflows/CI/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-msgraph-teams/actions?query=workflow%3ACI)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-microsoft.teams.svg)](https://github.com/ballerina-platform/module-ballerinax-msgraph-teams/commits/master)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
  
 [Microsoft Teams](https://www.microsoft.com/en-ww/microsoft-teams/group-chat-software) is a chat-based collaboration 
 platform complete with document sharing, online meetings, and many more extremely useful features for business 
-communications. 
+communications.
 
 Ballerina connector for Microsoft Teams has developed on top of Microsoft Graph is a REST web API that empowers you to 
 access Microsoft Cloud service resources. This version of the connector only supports the access to the resources and 
@@ -32,11 +35,11 @@ Execute the commands below to build from the source.
  
 1. To build the package:
    ```   
-   bal build -c
+   bal build -c ./teams
    ```
 2. To run the without tests:
    ```
-   bal build -c --skip-tests
+   bal build -c --skip-tests ./teams
    ```
 ## Contributing to Ballerina
  
