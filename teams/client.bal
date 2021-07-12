@@ -28,7 +28,8 @@ public client class Client {
 
     # Initializes the Microsoft Teams connector client endpoint.
     #
-    # +  config - Configurations required to initialize the `Client` endpoint
+    # + config - Configurations required to initialize the `Client` endpoint
+    # + return -  Error at failure of client initialization
     public isolated function init(Configuration config) returns error? { 
         http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig clientConfig = config.clientConfig;
         http:ClientSecureSocket? socketConfig = config?.secureSocketConfig;
@@ -76,7 +77,7 @@ public client class Client {
     # + return - A record of type `TeamData` if success. Else `error`
     @display {label: "Get Team Info"}
     remote isolated function getTeam(@display {label: "Team ID"} string teamId, 
-                                     @display {label: "Query Parameters"} string[] queryParams = [])
+                                     @display {label: "Query Parameters"} string? queryParams = ())
                                      returns TeamData|error {
         string path = check createUrl([TEAMS_RESOURCE,teamId], queryParams);
         return check self.httpClient->get(path, targetType = TeamData);
@@ -132,7 +133,7 @@ public client class Client {
     # + return - An array of type `Channel` if success. Else `error`
     @display {label: "Get Channels in Team"}
     remote isolated function getChannelsInTeam(@display {label: "Team ID"} string teamId, 
-                                               @display {label: "Query Parameters"} string[] queryParams = []) 
+                                               @display {label: "Query Parameters"} string? queryParams = ()) 
                                                returns ChannelData[]|error {
         string path = check createUrl([TEAMS_RESOURCE,teamId, CHANNELS_RESOURCE], queryParams);
         return check getChannelResources(self.httpClient, path);
@@ -164,7 +165,7 @@ public client class Client {
     @display {label: "Get Channel"}
     remote isolated function getChannel(@display {label: "Team ID"} string teamId, 
                                         @display {label: "Channel ID"} string channelId, 
-                                        @display {label: "Query Parameters"} string[] queryParams = []) 
+                                        @display {label: "Query Parameters"} string? queryParams = ()) 
                                         returns ChannelData|error {
         string path = check createUrl([TEAMS_RESOURCE,teamId, CHANNELS_RESOURCE, channelId], queryParams);
         return check self.httpClient->get(path, targetType = ChannelData);

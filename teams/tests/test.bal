@@ -129,7 +129,7 @@ function testGetTeamByIdWithQuery() {
     log:printInfo("client->getTeamByIdQueryParams()");
 
     string tid = teamId;
-    string[] params = ["$select=displayName,funSettings,memberSettings,classification"];
+    string? params = "$select=displayName,funSettings,memberSettings,classification";
     TeamData|error teamInfo = teamsClient->getTeam(tid, params);
     if (teamInfo is TeamData) {
         log:printInfo("Team info " + teamInfo.toString());
