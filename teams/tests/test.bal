@@ -90,6 +90,7 @@ function testCreateTeamFromGroup() {
         displayName: teamDisplayName,
         description: teamDescription
     };
+        
     //string groupId = aadGroupId;
     string groupId = "<GROUP_ID>";
 
