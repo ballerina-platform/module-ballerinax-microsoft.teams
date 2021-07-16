@@ -1,10 +1,10 @@
 ## Overview
-Ballerina connector for Microsoft Teams is connecting to MS Teams platform API in Microsoft Graph via Ballerina
-language easily. It provides capability to perform basic functionalities provided in MS Teams such as Sending messages,
-Viewing messages, Creating Teams, Channels and Chats, deleting and updating resources etc programmatically.
+Ballerina connector for Microsoft Teams is connecting to MS Teams platform API in Microsoft Graph via Ballerina 
+language easily. It provides capability to perform basic functionalities provided in MS Teams such as Sending messages, 
+Viewing messages, Creating Teams, Channels and Chats, deleting and updating resources etc programmatically. 
 
 This module supports [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/overview) v1.0 version.
-## Configuring connector
+ ## Configuring connector
 ### Prerequisites
 - Microsoft Office365 Work or School account
 - Access to register an application in Azure portal
@@ -17,11 +17,11 @@ Follow the following steps below to obtain the configurations.
 2. In the App registrations page, click **New registration** and enter a meaningful name in the name field.
 
 3. In the **Supported account types** section, select **Accounts in this organizational directory only (Single-tenant)** or **Accounts in any organizational directory (Any Azure AD directory - Multi-tenant)**. Click **Register** to create the application.
-
+    
 4. Copy the Application (client) ID (`<CLIENT_ID>`). This is the unique identifier for your app.
-
+    
 5. In the application's list of pages (under the **Manage** tab in left hand side menu), select **Authentication**.
-   Under **Platform configurations**, click **Add a platform**.
+    Under **Platform configurations**, click **Add a platform**.
 
 6. Under **Configure platforms**, click **Web** located under **Web applications**.
 
@@ -32,7 +32,7 @@ Follow the following steps below to obtain the configurations.
 8. Under **Certificates & Secrets**, create a new client secret (`<CLIENT_SECRET>`). This requires providing a description and a period of expiry. Next, click **Add**.
 
 9. Next, you need to obtain an access token and a refresh token to invoke the Microsoft Graph API.
-   First, in a new browser, enter the below URL by replacing the `<CLIENT_ID>` with the application ID.
+First, in a new browser, enter the below URL by replacing the `<CLIENT_ID>` with the application ID. 
 
 - Here you need to provide a space seperated list of necessary scope names for `<SCOPES>`. The necessary scopes are shown below.
 
@@ -96,7 +96,7 @@ Follow the following steps below to obtain the configurations.
     clientId = <MS_CLIENT_ID>
     clientSecret = <MS_CLIENT_SECRET>
     ```
-
+ 
 ## Quickstart
 ## Create a Channel and send messages
 ### Step 1: Import MS Teams Package
