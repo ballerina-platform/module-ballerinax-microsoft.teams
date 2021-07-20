@@ -15,7 +15,7 @@ jobs:
               uses: ballerina-platform/ballerina-action/@slalpha5
               with:
                   args:
-                      build -c ./teams
+                      build -c --skip-tests ./teams
               env:
                   REFRESH_URL: ${{ secrets.REFRESH_URL }}
                   REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
