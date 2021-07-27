@@ -102,7 +102,7 @@ public enum Role {
     MEMBER = "member"
 }
 
-# The reaction type
+# The reaction type.
 #
 # + LIKE - Like
 # + ANGRY - Angry
