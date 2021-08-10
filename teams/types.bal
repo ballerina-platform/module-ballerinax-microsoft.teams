@@ -16,7 +16,7 @@
 
 import ballerina/http;
 
-# Represents configuration parameters to create Microsoft Teams client.
+# Configuration parameters to create Microsoft Teams client.
 #
 # + clientConfig - OAuth client configuration
 # + secureSocketConfig - SSH configuration
@@ -104,7 +104,7 @@ public type TeamMessagingSettings record {|
     boolean allowChannelMentions?;
 |};
 
-# All the information about a team
+# All the information about a team.
 #
 # + id - ID of the team 
 # + webUrl - A hyperlink that will go to the team in the Microsoft Teams client 
@@ -232,7 +232,7 @@ public type Message record {|
     *MessageBaseData;
 |};
 
-# Represents properties of the body of an item, such as a message, event or group post
+# Properties of the body of an item, such as a message, event or group post.
 #
 # + content - The content of the item 
 # + contentType - The type of the content. Possible values are `text` and `html`
@@ -241,7 +241,7 @@ public type ItemBody record {|
     MessageContentType contentType?;
 |};
 
-# Represents a mention in a chatMessage entity. The mention can be to a user, team, bot, or channel.
+# A mention in a chatMessage entity. <br/> The mention can be to a user, team, bot, or channel.
 #
 # + id - Index of an entity being mentioned in the specified Message
 # + mentionText - String used to represent the mention. For example, a user's display name, a team name
@@ -252,7 +252,7 @@ public type MessageMention record {|
     IdentitySet mentioned;
 |};
 
-# Represents a reaction to a chatMessage entity
+# A reaction to a chatMessage entity.
 #
 # + createdDateTime - The Timestamp type represents date and time information using ISO 8601 format and is always in UTC 
 #                     time. eg: `midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z`
@@ -264,7 +264,7 @@ public type MessageReaction record {|
     IdentitySet user;
 |};
 
-# represent a set of identities associated with various events for an item.
+# A set of identities associated with various events for an item.
 #
 # + application - The application associated with this action
 # + device - The device associated with this action 
@@ -275,7 +275,7 @@ public type IdentitySet record {
     Identity user;
 };
 
-# Represents an identity of a user, device, or application. 
+# An identity of a user, device, or application. 
 #
 # + displayName - The identity's display name
 # + id - Unique identifier for the identity
@@ -327,7 +327,7 @@ public type MessageData record {
     *MessageBaseData;
 };
 
-# Contains basic identification information about a channel in Microsoft Teams
+# Basic identification information about a channel in Microsoft Teams.
 #
 # + teamId - The identity of the channel in which the message was posted
 # + channelId - The identity of the team in which the message was posted
@@ -336,7 +336,7 @@ public type ChannelIdentity record {
     string channelId;
 };
 
-# Represents a policy violation on a chat message.
+# A policy violation on a chat message.
 #
 # + dlpAction - The action taken by the DLP provider on the message with sensitive content
 # + justificationText -Justification text provided by the sender of the message when overriding a policy violation
@@ -351,7 +351,7 @@ public type MessagePolicyViolation record {
     string verdictDetails;
 };
 
-# Represents the properties of a policy tip on a `MessagePolicyViolation` object.Policy tips provide the sender with 
+# The properties of a policy tip on a `MessagePolicyViolation` object. <br/> Policy tips provide the sender with 
 # information about the policy violation.
 #
 # + complianceUrl - The URL a user can visit to read about the data loss prevention policies for the organization
@@ -364,7 +364,7 @@ public type PolicyTip record {
     string[]? matchedConditionDescriptions;
 };
 
-# A chat is a collection of chatMessages between one or more participants. Participants can be users or apps.
+# A chat which is a collection of chatMessages between one or more participants. <br/> Participants can be users or apps.
 #
 # + chatType - Specifies the type of chat
 # + members - List of conversation members that should be added. Every single user, including the user initiating the 
@@ -376,7 +376,7 @@ public type Chat record {|
     string? topic?;
 |};
 
-# The readonly data for a chat. 
+# Readonly data for a chat. 
 #
 # + id - Chat ID 
 # + topic - Subject or topic for the chat. (Only available for group chats)
