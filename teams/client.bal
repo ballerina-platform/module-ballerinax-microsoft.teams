@@ -20,8 +20,8 @@ import ballerina/http;
 #
 # + httpClient - the HTTP Client
 @display {
-    label: "Microsoft Teams Client",
-    iconPath: "MSTeamsLogo.svg"
+    label: "Microsoft Teams",
+    iconPath: "resources/microsoft.teams.svg"
 }
 public isolated client class Client {
     final http:Client httpClient;
@@ -31,15 +31,10 @@ public isolated client class Client {
     # and obtain tokens following [this guide](https://docs.microsoft.com/en-us/graph/auth-register-app-v2). Configure the Access token to 
     # have the [required permission](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-configure-app-expose-web-apis#add-a-scope).
     #
-    # + config - Configurations required to initialize the `Client` endpoint
+    # + config - ConnectionConfig required to initialize the `Client` endpoint
     # + return -  Error at failure of client initialization
-    public isolated function init(Configuration config) returns error? { 
-        http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig clientConfig = config.clientConfig;
-        http:ClientSecureSocket? socketConfig = config?.secureSocketConfig;
-        self.httpClient = check new (BASE_URL, {
-            auth: clientConfig,
-            secureSocket: socketConfig
-        });
+    public isolated function init(ConnectionConfig config) returns error? { 
+        self.httpClient = check new (BASE_URL, config);
     }
 
     // *************************************** Operations on Team resource *********************************************

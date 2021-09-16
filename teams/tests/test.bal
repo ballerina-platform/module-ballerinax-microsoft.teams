@@ -31,8 +31,8 @@ configurable string & readonly chatUser2 = os:getEnv("USER_ID_2");
 configurable string & readonly chatUser3 = os:getEnv("USER_ID_3");
 //configurable string & readonly aadGroupId = os:getEnv("AAD_GROUP_ID");
 
-Configuration configuration = {
-    clientConfig: {
+ConnectionConfig configuration = {
+    auth: {
         refreshUrl: refreshUrl,
         refreshToken : refreshToken,
         clientId : clientId,
