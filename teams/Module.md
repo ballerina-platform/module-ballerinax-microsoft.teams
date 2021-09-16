@@ -4,6 +4,7 @@ It provides capability to perform basic functionalities provided in MS Teams suc
 Viewing messages, Creating Teams, Channels and Chats, deleting and updating resources etc programmatically. 
 
 This module supports [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/overview) `v1.0`.
+
 ## Prerequisites
 Before using this connector in your Ballerina application, complete the following:
 
@@ -42,8 +43,8 @@ import ballerinax/microsoft.teams;
 ### Step 2 - Create a new connector instance
 You can now make the connection configuration using the OAuth2 refresh token grant config.
 ```ballerina
-onedrive:Configuration configuration = {
-    clientConfig: {
+teams:ConnectionConfig configuration = {
+    auth: {
         refreshUrl: <REFRESH_URL>,
         refreshToken : <REFRESH_TOKEN>,
         clientId : <CLIENT_ID>,
