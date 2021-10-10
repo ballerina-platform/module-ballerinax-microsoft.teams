@@ -1,9 +1,9 @@
 [package]
 org= "ballerinax"
 name= "microsoft.teams"
-version= "0.1.1-SNAPSHOT"
+version= "2.0.0"
 authors = ["Ballerina"]
-keywords = ["communication/team chat", "cost/paid", "vendor/microsoft"]
+keywords = ["Communication/Team Chat", "Cost/Paid", "Vendor/Microsoft"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.teams"
 license = ["Apache-2.0"]
 
