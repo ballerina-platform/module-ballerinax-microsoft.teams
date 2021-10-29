@@ -27,11 +27,11 @@ Execute the following commands to build from the source:
  
 - To build the package:
    ```   
-   bal build -c ./teams
+   bal pack --with-tests ./teams
    ```
 - To build the package without tests:
    ```
-   bal build -c --skip-tests ./teams
+   bal pack ./teams
    ```
 ## Contributing to ballerina
  
