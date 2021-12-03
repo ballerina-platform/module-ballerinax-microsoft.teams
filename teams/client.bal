@@ -21,7 +21,7 @@ import ballerina/http;
 # + httpClient - the HTTP Client
 @display {
     label: "Microsoft Teams",
-    iconPath: "resources/microsoft.teams.svg"
+    iconPath: "icon.png"
 }
 public isolated client class Client {
     final http:Client httpClient;
