@@ -428,8 +428,6 @@ function testCreateChat() {
 function getChat() {
     log:printInfo("client->getChat()");
 
-    string cid = chatId;
-
     ChatData|error chatData = teamsClient->getChat(chatId);
     if (chatData is ChatData) {
         log:printInfo("Chat created" + chatData.toString());
@@ -446,9 +444,7 @@ function getChat() {
 function updateChat() {
     log:printInfo("client->updateChat()");
 
-    string cid = chatId;
     string topic =  "Advices from a Caterpillar";
-
     ChatData|error chatData = teamsClient->updateChat(chatId, topic);
     if (chatData is ChatData) {
         log:printInfo("Chat created" + chatData.toString());
@@ -464,8 +460,6 @@ function updateChat() {
 }
 function listChatMembers() {
     log:printInfo("client->listChatMembers()");
-
-    string cid = chatId;
 
     MemberData[]|error chatMembers = teamsClient->listChatMembers(chatId);
     if (chatMembers is MemberData[]) {
@@ -483,7 +477,6 @@ function listChatMembers() {
 function testAddMemberToChat() {
     log:printInfo("client->addMemberToChat()");
 
-    string cid = chatId;
     Member data = {
         roles: ["owner"],
         userId: chatUser3,
@@ -551,7 +544,6 @@ function testSendChatMessage() {
 function getChatMessage() {
     log:printInfo("client->getChatMessage()");
 
-    string cid = chatId;
     string cmid = chatMessageId;
 
     MessageData|MessageData[]|error chatMessages = teamsClient->getChatMessage(chatId, cmid);
