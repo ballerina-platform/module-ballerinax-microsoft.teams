@@ -348,7 +348,7 @@ public type MessageData record {
     string messageType?;
     string? summary?;
     string locale?;
-    IdentitySet 'from?; 
+    IdentitySet? 'from?; 
     MessageReaction[] reactions?;
     *MessageBaseData;
 };
