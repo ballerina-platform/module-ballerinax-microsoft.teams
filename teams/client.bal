@@ -34,7 +34,24 @@ public isolated client class Client {
     # + config - ConnectionConfig required to initialize the `Client` endpoint
     # + return -  Error at failure of client initialization
     public isolated function init(ConnectionConfig config) returns error? { 
-        self.httpClient = check new (BASE_URL, config);
+        http:ClientConfiguration httpClientConfig = {
+            auth: config.auth,
+            httpVersion: config.httpVersion,
+            http1Settings: {...config.http1Settings},
+            http2Settings: config.http2Settings,
+            timeout: config.timeout,
+            forwarded: config.forwarded,
+            poolConfig: config.poolConfig,
+            cache: config.cache,
+            compression: config.compression,
+            circuitBreaker: config.circuitBreaker,
+            retryConfig: config.retryConfig,
+            responseLimits: config.responseLimits,
+            secureSocket: config.secureSocket,
+            proxy: config.proxy,
+            validation: config.validation
+        };
+        self.httpClient = check new (BASE_URL, httpClientConfig);
     }
 
     // *************************************** Operations on Team resource *********************************************
