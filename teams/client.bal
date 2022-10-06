@@ -15,6 +15,7 @@
 // under the License.
 
 import ballerina/http;
+import ballerinax/'client.config;
 
 # This is connecting to the Microsoft Graph RESTful web API that enables you to access Microsoft Cloud service resources.
 #
@@ -34,23 +35,7 @@ public isolated client class Client {
     # + config - ConnectionConfig required to initialize the `Client` endpoint
     # + return -  Error at failure of client initialization
     public isolated function init(ConnectionConfig config) returns error? { 
-        http:ClientConfiguration httpClientConfig = {
-            auth: let var authConfig = config.auth in (authConfig is BearerTokenConfig ? authConfig : {...authConfig}),
-            httpVersion: config.httpVersion,
-            http1Settings: {...config.http1Settings},
-            http2Settings: config.http2Settings,
-            timeout: config.timeout,
-            forwarded: config.forwarded,
-            poolConfig: config.poolConfig,
-            cache: config.cache,
-            compression: config.compression,
-            circuitBreaker: config.circuitBreaker,
-            retryConfig: config.retryConfig,
-            responseLimits: config.responseLimits,
-            secureSocket: config.secureSocket,
-            proxy: config.proxy,
-            validation: config.validation
-        };
+        http:ClientConfiguration httpClientConfig = check config:constructHTTPClientConfig(config);
         self.httpClient = check new (BASE_URL, httpClientConfig);
     }
 
