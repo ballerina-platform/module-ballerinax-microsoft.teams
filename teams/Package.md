@@ -7,7 +7,7 @@ This package provides the capability to access Microsoft Teams.
 ### Compatibility
 |                       | Version                    |
 |-----------------------|----------------------------|
-| Ballerina Language    | Swan Lake 2201.2.0         |
+| Ballerina Language    | Swan Lake 2201.2.1         |
 | Microsoft Graph API   | v1.0                       |
 
 ## Report issues
