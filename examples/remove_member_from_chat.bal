@@ -26,27 +26,21 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    log:printInfo("Send channel message");
-    string teamId = "<TEAM_ID>";
-    string channelId = "<CHANNEL_ID>";
-    teams:Message message = {
-        body: {
-            content: "Hello World"
-        }
-    };
+    log:printInfo("Remove member from chat"); /////////////// test
+    string chatId = "<CHAT_ID>";
+    string membershipId = "<MEMBERSHIP_ID>";
 
-    teams:MessageData|error channelMessage = teamsClient->sendChannelMessage(teamId, channelId, message);    
-    if (channelMessage is teams:MessageData) {
-        log:printInfo("Message ID " + channelMessage?.id.toString());
+    error? chatMember = teamsClient->removeMemberFromChat(chatId, membershipId);
+    if (chatMember is ()) {
         log:printInfo("Success!");
     } else {
-        log:printError(channelMessage.message());
+        log:printError(chatMember.message());
     }
 }

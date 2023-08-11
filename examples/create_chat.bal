@@ -26,22 +26,35 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    log:printInfo("Delete team"); //////////test
+    log:printInfo("Create chat");
+    string owner1 = "<OWNER1_ID>";
+    string owner2 = "<OWNER2_ID>";
+    teams:Chat data = {
+        chatType: "group",
+        members: [
+            {
+                roles: ["owner"],
+                userId: owner1
+            },
+            {
+                roles: ["owner"],
+                userId: owner2
+            }
+        ]
+    };
 
-    string teamId = "<TEAM_ID>";
-
-    error? teamInfo = teamsClient->deleteTeam(teamId);
-    if (teamInfo is ()) {
-        log:printInfo("CSucessfully deleted");
+    teams:ChatData|error chat = teamsClient->createChat(data);
+    if (chat is teams:ChatData) {
+        log:printInfo("Succesfully created the chat " + chat?.id.toString());
         log:printInfo("Success!");
     } else {
-        log:printError(teamInfo.message());
+        log:printError(chat.message());
     }
 }

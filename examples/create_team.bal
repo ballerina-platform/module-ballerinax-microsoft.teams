@@ -26,26 +26,24 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    log:printInfo("Add member to team");
-    string teamId = "<TEAM_ID>";
-    string userId = "<USER_ID>";
-    teams:Member data = {
-        roles: ["owner"],
-        userId: userId
+    log:printInfo("Create team");
+    teams:Team info = {
+        displayName: "New team name",
+        description: "This is the description for new team"
     };
 
-    teams:MemberData|error memberInfo = teamsClient-> addMemberToTeam(teamId, data);
-    if (memberInfo is teams:MemberData) {
-        log:printInfo("Member Added to the team " + memberInfo?.id.toString());
+    string|error newTeamId = teamsClient->createTeam(info);
+    if (newTeamId is string) {
+        log:printInfo("Team succesfully created " + newTeamId);
         log:printInfo("Success!");
     } else {
-        log:printError(memberInfo.message());
+        log:printError(newTeamId.message());
     }
 }

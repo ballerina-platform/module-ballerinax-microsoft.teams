@@ -26,28 +26,21 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    log:printInfo("Send reply to channel message");
+    log:printInfo("Get channels in team");
     string teamId = "<TEAM_ID>";
-    string channelId = "<CHANNEL_ID>";
-    string channelMessageId = "<CHANNEL_MESSAGE_ID>";
-    teams:Message body = {
-        body: {
-            content: "Hi this is the reply"
-        }
-    };
 
-    teams:MessageData|error channelReply = teamsClient->sendReplyMessage(teamId, channelId, channelMessageId, body);
-    if (channelReply is teams:MessageData) {
-        log:printInfo("Message ID " + channelReply?.id.toString());
+    teams:ChannelData[]|error channelArray = teamsClient->getChannelsInTeam(teamId);
+    if (channelArray is teams:ChannelData[]) {
+        log:printInfo("List of channels " + channelArray.toString());
         log:printInfo("Success!");
     } else {
-        log:printError(channelReply.message());
+        log:printError(channelArray.message());
     }
 }

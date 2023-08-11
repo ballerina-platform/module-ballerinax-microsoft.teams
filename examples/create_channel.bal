@@ -26,22 +26,24 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    log:printInfo("Delete channel member"); //////////test
-
+    log:printInfo("Create channel");
     string teamId = "<TEAM_ID>";
-    string channelId = "<CHANNEL_ID>";
-    string membershipId = "<MEMBERSHIP_ID>";
-    
-    error? channelInfo = teamsClient->deleteChannelMember(teamId, channelId, membershipId);    
-    if (channelInfo is ()) {
-        log:printInfo("CSucessfully deleted");
+    teams:Channel data = {
+        displayName: "New Channel Name", //Channel should have unique names
+        description: "This is our new channel",
+        membershipType: "standard"
+    };
+
+    teams:ChannelData|error channelInfo = teamsClient->createChannel(teamId, data);
+    if (channelInfo is teams:ChannelData) {
+        log:printInfo("Channel succesfully created " + channelInfo?.id.toString());
         log:printInfo("Success!");
     } else {
         log:printError(channelInfo.message());

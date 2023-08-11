@@ -74,4 +74,4 @@ if (newTeamId is string) {
 
 2. Use `bal run` command to compile and run the Ballerina program
 
-**[You can find a list of samples here](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/teams/samples)**
+**[You can find a list of samples here](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples)**

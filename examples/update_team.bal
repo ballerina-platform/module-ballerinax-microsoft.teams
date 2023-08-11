@@ -26,23 +26,24 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    log:printInfo("Delete channel"); //////////test
-
+    log:printInfo("Update team");
     string teamId = "<TEAM_ID>";
-    string channelId = "<CHANNEL_ID>";
+    teams:Team info = {
+        displayName: "Alice in Wonderland"
+    };
 
-    error? channelInfo = teamsClient->deleteChannel(teamId, channelId);
-    if (channelInfo is ()) {
-        log:printInfo("Sucessfully deleted");
+    error? teamInfo = teamsClient->updateTeam(teamId, info);
+    if (teamInfo is ()) {
+        log:printInfo("Team succesfully updated");
         log:printInfo("Success!");
     } else {
-        log:printError(channelInfo.message());
+        log:printError(teamInfo.message());
     }
 }

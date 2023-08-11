@@ -26,21 +26,23 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    log:printInfo("Update chat");
-    string chatId = "<CHAT_ID>";
-    string topic  = "Our new Chat";
-    teams:ChatData|error chat = teamsClient->updateChat(chatId, topic);
-    if (chat is teams:ChatData) {
-        log:printInfo("Chat info " + chat.toString());
+    log:printInfo("Delete channel"); //////////test
+
+    string teamId = "<TEAM_ID>";
+    string channelId = "<CHANNEL_ID>";
+
+    error? channelInfo = teamsClient->deleteChannel(teamId, channelId);
+    if (channelInfo is ()) {
+        log:printInfo("Sucessfully deleted");
         log:printInfo("Success!");
     } else {
-        log:printError(chat.message());
+        log:printError(channelInfo.message());
     }
 }
