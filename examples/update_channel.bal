@@ -26,20 +26,23 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    log:printInfo("Get channel info");
+    log:printInfo("Update channel");
     string teamId = "<TEAM_ID>";
     string channelId = "<CHANNEL_ID>";
-
-    teams:ChannelData|error channelInfo = teamsClient->getChannel(teamId, channelId);
-    if (channelInfo is teams:ChannelData) {
-        log:printInfo("Channel Info " + channelInfo.toString());
+    teams:Channel data = {
+        displayName: "Plot room",
+        description: "Alices' army"
+    };
+    error? channelInfo = teamsClient->updateChannel(teamId, channelId, data);
+    if (channelInfo is ()) {
+        log:printInfo("Channel updated sucessfully");
         log:printInfo("Success!");
     } else {
         log:printError(channelInfo.message());

@@ -26,23 +26,24 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    // This operation is allowed only for channels with a membershipType value of private
-    log:printInfo("Add member to channel");
+    log:printInfo("Add member to team");
     string teamId = "<TEAM_ID>";
-    string privateChannelId = "<PRIVATE_CHANNEL_ID>";
     string userId = "<USER_ID>";
-    string role = "owner"; //member should be owner
+    teams:Member data = {
+        roles: ["owner"],
+        userId: userId
+    };
 
-    teams:MemberData|error memberInfo = teamsClient->addMemberToChannel(teamId, privateChannelId, userId, role);
+    teams:MemberData|error memberInfo = teamsClient->addMemberToTeam(teamId, data);
     if (memberInfo is teams:MemberData) {
-        log:printInfo("Member added sucessfully " + memberInfo?.id.toString());
+        log:printInfo("Member Added to the team " + memberInfo?.id.toString());
         log:printInfo("Success!");
     } else {
         log:printError(memberInfo.message());

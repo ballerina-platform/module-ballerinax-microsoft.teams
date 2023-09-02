@@ -26,19 +26,25 @@ public function main() returns error? {
     teams:ConnectionConfig configuration = {
         auth: {
             refreshUrl: refreshUrl,
-            refreshToken : refreshToken,
-            clientId : clientId,
-            clientSecret : clientSecret
+            refreshToken: refreshToken,
+            clientId: clientId,
+            clientSecret: clientSecret
         }
     };
-    teams:Client teamsClient = check new(configuration);
+    teams:Client teamsClient = check new (configuration);
 
-    log:printInfo("Remove member from chat"); /////////////// test
+    log:printInfo("Add member to chat");
+    string owner = "<OWNER_ID>";
     string chatId = "<CHAT_ID>";
-    string membershipId = "<MEMBERSHIP_ID>";
+    teams:Member data = {
+        roles: ["owner"],
+        userId: owner,
+        visibleHistoryStartDateTime: "2019-04-18T23:51:43.255Z"
+    };
 
-    error? chatMember = teamsClient->removeMemberFromChat(chatId, membershipId);
-    if (chatMember is ()) {
+    teams:MemberData|error chatMember = teamsClient->addMemberToChat(chatId, data);
+    if (chatMember is teams:MemberData) {
+        log:printInfo("Member Added to the chat " + chatMember?.id.toString());
         log:printInfo("Success!");
     } else {
         log:printError(chatMember.message());
