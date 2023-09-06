@@ -204,11 +204,11 @@ public type Channel record {|
 # + webUrl - A hyperlink that will go to the channel in Microsoft Teams
 # + createdDateTime - Timestamp at which the channel was created 
 public type ChannelData record {
-    string id?;
-    string displayName?;
-    string email?;
-    string webUrl?;
-    string createdDateTime?;
+    string? id?;
+    string? displayName?;
+    string? email?;
+    string? webUrl?;
+    string? createdDateTime?;
     *ChannelBaseData;
 };
 
