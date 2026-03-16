@@ -1,14 +1,15 @@
-Connects to Microsoft Teams from Ballerina.
+## Overview
 
-## Package overview
-The `microsoft.teams` is a [Ballerina](https://ballerina.io/) connector for Microsoft Teams.
-This package provides the capability to access Microsoft Teams.
+[Microsoft Teams](https://www.microsoft.com/en-us/microsoft-teams/group-chat-software) is a proprietary business communication platform developed by Microsoft. It offers workspace chat, videoconferencing, file storage, and application integration.
 
-### Compatibility
-|                       | Version                    |
-|-----------------------|----------------------------|
-| Ballerina Language    | Swan Lake 2201.3.0         |
-| Microsoft Graph API   | v1.0                       |
+The Microsoft Teams connector offers APIs to connect and interact with Microsoft Graph API endpoints, providing the capability to access and manage Microsoft Teams resources programmatically.
+
+### Key Features
+
+- Access and manage Microsoft Teams, channels, and chats
+- Support for Microsoft Graph API v1.0
+- Programmatic interaction with workspace communication features
+- Seamless integration with Microsoft 365 environment
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Extended Library repository](https://github.com/ballerina-platform/ballerina-extended-library)
