@@ -1,9 +1,17 @@
 ## Overview
-Ballerina connector for Microsoft Teams is connecting to MS Teams platform API in Microsoft Graph via Ballerina language. 
+The connector for Microsoft Teams is connecting to MS Teams platform API in Microsoft Graph via Ballerina language. 
 It provides capability to perform basic functionalities provided in MS Teams such as Sending messages, 
 Viewing messages, Creating Teams, Channels and Chats, deleting and updating resources etc programmatically. 
 
 This module supports [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/overview) `v1.0`.
+
+
+### Key Features
+
+- Manage teams, channels, and memberships
+- Send and read channel messages
+- Access team and channel information
+- Support for chat and collaboration operations
 
 ## Prerequisites
 Before using this connector in your Ballerina application, complete the following:
