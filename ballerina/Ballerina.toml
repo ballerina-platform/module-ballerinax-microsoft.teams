@@ -1,12 +1,12 @@
 [package]
-distribution = "2201.3.0"
-org= "ballerinax"
-name= "microsoft.teams"
+distribution = "2201.13.4"
+org= "pesaratest"
+name= "ms.teams"
 version= "2.3.0"
-authors = ["Ballerina"]
+authors = ["pesaratest"]
 keywords = ["Communication/Team Chat", "Cost/Paid", "Vendor/Microsoft", "Area/Communication", "Type/Connector"]
 icon = "icon.png"
-repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.teams"
+repository = "https://github.com/RisinuWijeisnghe/module-ballerinax-microsoft.teams"
 license = ["Apache-2.0"]
 
 [build-options]

@@ -41,7 +41,9 @@ BAL_SOURCE_DIR="$HOME/.ballerina/repositories/local/bala/ballerinax/$BAL_PACKAGE
 [ -d "$BAL_SOURCE_DIR" ] && cp -r "$BAL_SOURCE_DIR" "$BAL_DESTINATION_DIR"
 echo "Successfully updated the local central repositories"
 
-# Loop through examples in the examples directory
-find "$BAL_EXAMPLES_DIR" -type f -name "*.bal" | while read -r BAL_EXAMPLE_FILE; do
-  bal "$BAL_CMD" --offline "$BAL_EXAMPLE_FILE"
+# Loop through example packages in the examples directory
+for BAL_EXAMPLE_DIR in "$BAL_EXAMPLES_DIR"/*/; do
+  [ -f "$BAL_EXAMPLE_DIR/Ballerina.toml" ] || continue
+  echo "Running '$BAL_CMD' for example: $(basename "$BAL_EXAMPLE_DIR")"
+  bal "$BAL_CMD" --offline "$BAL_EXAMPLE_DIR"
 done
