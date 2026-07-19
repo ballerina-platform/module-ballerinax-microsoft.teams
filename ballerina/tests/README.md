@@ -63,12 +63,18 @@ real service. They mirror the runnable samples under `examples/`:
 
 | Scenario test | Mirrors example | Chained operations |
 |---------------|-----------------|--------------------|
-| `testScenarioChannelLifecycle` | `team-and-channel-setup` | createChannel → getChannel → updateChannel → getChannel → listChannels → deleteChannel |
-| `testScenarioMessageThread` | `channel-message-thread` | createChannelMessage → getChannelMessage → createChannelMessageReply → listChannelMessageReplies → setReaction → unsetReaction → softDelete → undoSoftDelete (last two best-effort) |
+| `testScenarioChannelLifecycle` | `team-and-channel-setup` | getPrimaryChannel → createChannel → getChannel → updateChannel → getChannel → getChannelFilesFolder* → listChannels → deleteChannel |
+| `testScenarioMessageThread` | `channel-message-thread` | createChannelMessage → getChannelMessage → createChannelMessageReply → listChannelMessageReplies → getChannelMessageReply → listChannelMessages → updateChannelMessage → (inline hostedContents: create → listHostedContents → getHostedContentValue)* → getChannelMessagesDelta* → setReaction → unsetReaction → softDelete → undoSoftDelete (last two best-effort) |
 | `testScenarioChannelMembersRead` | `channel-member-management` | listChannelMembers → getChannelMember |
-| `testScenarioTeamMemberAddRemove` | `channel-member-management` | createMember → getMember → listMembers → deleteMember |
+| `testScenarioChannelMemberManagement` | `channel-member-management` | createMember (team-roster prereq) → createChannel (private) → createChannelMember → getChannelMember → updateChannelMember → listChannelMembers → deleteChannelMember → deleteChannel → deleteMember |
+| `testScenarioTeamMemberAddRemove` | `channel-member-management` | createMember → getMember → listMembers → updateMember → deleteMember → addMembers → deleteMember |
+| `testScenarioTabManagement` | (new) | listChannelTabs → createChannelTab → getChannelTab → updateChannelTab → listChannelTabs → deleteChannelTab (whole scenario skips if the app isn't installed / `TeamsTab.*` not consented) |
+| `testScenarioActivityNotification` | (new) | sendActivityNotification* (systemDefault, to the signed-in user) |
 | `testScenarioTagManagement` | `team-tag-management` | createTag → getTag → updateTag → getTag → listTagMembers → (createTagMember → getTagMember → deleteTagMember) → listTags → deleteTag |
-| `testScenarioTeamProvisioning` | `team-and-channel-setup` (extended) | createTeam → (await provisioning) → createChannel ×3 → listChannels → createMember → createChannel (private) → createChannelMember → listChannelMembers → deleteTeam |
+| `testScenarioTeamProvisioning` | `team-and-channel-setup` (extended) | createTeam → (await provisioning) → getTeam → updateTeam → getPrimaryChannel → createChannel ×3 → listChannels → createMember → createChannel (private) → createChannelMember → listChannelMembers → deleteTeam |
+
+`*` = best-effort step: it runs but logs-and-skips if the tenant or permission set doesn't allow it,
+rather than failing the scenario.
 
 These do meaningful work only against the live server (each returns early when `isLiveServer` is
 false), so configure live credentials as above, set `isLiveServer = true`, then run:
@@ -86,11 +92,18 @@ Beyond the OAuth2 + `teamId`/`channelId` fields, scenarios use:
 userId = "<signed-in-user-object-id>"
 
 # Optional. A second tenant user's object id. Enables the team-member and tag-member add/remove
-# steps, which need a user who isn't already a member. Left empty, those steps are skipped.
+# steps and the private-channel member scenario, which need a user who isn't already a member.
+# Left empty, those steps/scenarios are skipped.
 secondUserId = "<second-user-object-id>"
 
+# Optional. A Teams app installed in the team, used by testScenarioTabManagement to create a tab.
+# Defaults to the built-in Website app. If the app isn't installed or TeamsTab.* isn't consented,
+# the tab scenario logs a note and skips.
+tabTeamsAppId = "com.microsoft.teamspace.tab.web"
+
 # Opt-in. Runs testScenarioTeamProvisioning, which creates a REAL team (slow) and can only
-# auto-delete it with Group.ReadWrite.All. Off by default.
+# auto-delete it with Group.ReadWrite.All. It is the only scenario that covers createTeam / getTeam /
+# updateTeam / deleteTeam live. Off by default.
 runTeamProvisioning = false
 ```
 

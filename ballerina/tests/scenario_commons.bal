@@ -45,6 +45,12 @@ configurable string secondUserId = "";
 // it is off by default. Set to true in Config.toml to run it.
 configurable boolean runTeamProvisioning = false;
 
+// Optional. Id of a Teams app already installed in the team, used by the tab-management scenario to
+// create a channel tab (bound via `teamsApp@odata.bind`). Defaults to the built-in Website app. If
+// the app isn't installed in the team, or `TeamsTab.*` permission isn't consented, the tab scenario
+// logs a note and skips rather than failing.
+configurable string tabTeamsAppId = "com.microsoft.teamspace.tab.web";
+
 // Emits an indented progress line so the flow of a scenario is visible in the test output.
 function logStep(string message) {
     io:println("    - " + message);
@@ -54,4 +60,14 @@ function logStep(string message) {
 // (HTTP 403 Forbidden). Used to skip permission-gated optional steps rather than fail a scenario.
 isolated function isForbidden(error e) returns boolean {
     return e.message().includes("Forbidden");
+}
+
+// True when a live call failed for a reason an optional scenario step should skip over rather than
+// fail on: a missing permission scope (403), or the operation/resource being unavailable in this
+// tenant (400/404/405 — e.g. a preview-only endpoint, an app not installed, or a resource with no
+// data). Used only for genuinely best-effort steps, which log a note and continue.
+isolated function isSkippable(error e) returns boolean {
+    string m = e.message();
+    return m.includes("Forbidden") || m.includes("Not Found") || m.includes("NotFound")
+        || m.includes("Bad Request") || m.includes("BadRequest") || m.includes("Method Not Allowed");
 }

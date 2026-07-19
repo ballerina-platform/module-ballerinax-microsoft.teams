@@ -21,9 +21,9 @@ import ballerina/time;
 // Scenario: provision a team, add several channels, and add members to the team and a channel.
 // This is a common onboarding flow ("stand up a new team") and extends examples/team-and-channel-setup.
 //
-// Chains: createTeam -> (wait for provisioning) -> createChannel x3 -> listChannels
-//         -> createMember (team) -> createChannel (private) -> createChannelMember -> listChannelMembers
-//         -> deleteTeam
+// Chains: createTeam -> (wait for provisioning) -> getTeam -> updateTeam -> getPrimaryChannel
+//         -> createChannel x3 -> listChannels -> createMember (team) -> createChannel (private)
+//         -> createChannelMember -> listChannelMembers -> deleteTeam
 //
 // Team creation and private-channel creation are asynchronous in Graph (HTTP 202, empty body); the
 // connector now returns the new id from the response `Location` header, and this test polls for
@@ -60,6 +60,20 @@ function testScenarioTeamProvisioning() returns error? {
         // Step 2: Wait for the team to finish provisioning before operating on it.
         check waitUntilTeamReady(newTeamId);
         logStep("Team finished provisioning");
+
+        // Step 2b: Read the team back, rename it, and resolve its primary (General) channel.
+        MicrosoftGraphTeam fetchedTeam = check teams->getTeam(newTeamId);
+        test:assertEquals(fetchedTeam.id, newTeamId, "getTeam returned a different id");
+        logStep("Fetched team and verified id");
+
+        string updatedTeamDescription = "Updated by the team-provisioning scenario test";
+        MicrosoftGraphTeam updatedTeam = check teams->updateTeam(newTeamId, {description: updatedTeamDescription});
+        test:assertEquals(updatedTeam?.description, updatedTeamDescription, "updateTeam did not return the updated description");
+        logStep("Updated team description");
+
+        MicrosoftGraphChannel general = check teams->getPrimaryChannel(newTeamId);
+        test:assertTrue((general.id ?: "").length() > 0, "getPrimaryChannel did not return a channel id");
+        logStep("Resolved primary channel: " + (general.displayName ?: general.id ?: ""));
 
         // Step 3: Create several standard channels.
         string[] channelIds = [];

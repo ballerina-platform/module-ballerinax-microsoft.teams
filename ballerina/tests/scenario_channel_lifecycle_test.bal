@@ -19,7 +19,8 @@ import ballerina/time;
 
 // Scenario: channel lifecycle within an existing team (mirrors examples/team-and-channel-setup).
 //
-// Chains: createChannel -> getChannel -> updateChannel -> getChannel -> listChannels -> deleteChannel.
+// Chains: getPrimaryChannel -> createChannel -> getChannel -> updateChannel -> getChannel
+//         -> getChannelFilesFolder (best-effort) -> listChannels -> deleteChannel.
 //
 // Note: creating a *team* is an asynchronous Graph operation (HTTP 202 with an empty body), so the
 // connector's `createTeam` cannot return the new team's id. Scenarios therefore operate inside the
@@ -33,6 +34,11 @@ function testScenarioChannelLifecycle() returns error? {
 
     string suffix = time:utcNow()[0].toString();
     string channelName = "Connector Scenario " + suffix;
+
+    // Step 0: Resolve the team's default (General) channel via the primaryChannel singleton.
+    MicrosoftGraphChannel primary = check teams->getPrimaryChannel(teamId);
+    test:assertTrue((primary.id ?: "").length() > 0, "getPrimaryChannel did not return a channel id");
+    logStep("Resolved primary channel: " + (primary.displayName ?: primary.id ?: ""));
 
     // Step 1: Create a standard channel in the existing team.
     MicrosoftGraphChannel created = check teams->createChannel(teamId, {
@@ -63,6 +69,18 @@ function testScenarioChannelLifecycle() returns error? {
     MicrosoftGraphChannel refetched = check teams->getChannel(teamId, newChannelId);
     test:assertEquals(refetched?.description, updatedDescription, "description update not persisted");
     logStep("Re-fetched channel and verified updated description");
+
+    // Step 4b: Resolve the channel's SharePoint files folder. A newly created channel's
+    // folder may not be provisioned immediately, and this needs the `Files.Read.All` scope, so any
+    // failure here is logged and skipped rather than failing the scenario.
+    MicrosoftGraphDriveItem|error filesFolder = teams->getChannelFilesFolder(teamId, newChannelId);
+    if filesFolder is MicrosoftGraphDriveItem {
+        logStep("Resolved channel files folder: " + (filesFolder?.name ?: filesFolder?.id ?: ""));
+    } else if isSkippable(filesFolder) {
+        logStep("Skipped getChannelFilesFolder (folder not yet provisioned or Files.Read.All not consented).");
+    } else {
+        return filesFolder;
+    }
 
     // Step 5: List channels and confirm ours is present.
     MicrosoftGraphChannelCollectionResponse channels = check teams->listChannels(teamId);

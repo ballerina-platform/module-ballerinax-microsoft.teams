@@ -19,8 +19,10 @@ import ballerina/test;
 // Scenario: a channel message thread (mirrors examples/channel-message-thread).
 //
 // Chains: createChannelMessage -> getChannelMessage -> createChannelMessageReply
-//         -> listChannelMessageReplies -> setReaction -> unsetReaction
-//         -> softDeleteChannelMessage -> undoSoftDeleteChannelMessage
+//         -> listChannelMessageReplies -> getChannelMessageReply -> listChannelMessages
+//         -> updateChannelMessage -> (inline hosted content: create -> listHostedContents
+//         -> getHostedContentValue, best-effort) -> getChannelMessagesDelta (best-effort)
+//         -> setReaction -> unsetReaction -> softDeleteChannelMessage -> undoSoftDeleteChannelMessage
 //
 // Operates in the pre-existing `teamId`/`channelId`. Channel messages cannot be permanently deleted
 // through Graph, so the message is soft-deleted and then restored (leaving it visible, as in the
@@ -65,6 +67,74 @@ function testScenarioMessageThread() returns error? {
     }
     test:assertTrue(replyFound, "created reply not found in listChannelMessageReplies");
     logStep("Located reply in listChannelMessageReplies");
+
+    // Step 4b: Fetch the reply directly by its id.
+    MicrosoftGraphChatMessage fetchedReply = check teams->getChannelMessageReply(teamId, channelId, newMessageId, newReplyId);
+    test:assertEquals(fetchedReply.id, newReplyId, "getChannelMessageReply returned a different id");
+    logStep("Fetched reply by id");
+
+    // Step 4c: List the channel's messages and confirm ours is present.
+    MicrosoftGraphChatMessageCollectionResponse messages = check teams->listChannelMessages(teamId, channelId);
+    boolean messageFound = false;
+    foreach MicrosoftGraphChatMessage m in messages.value ?: [] {
+        if m.id == newMessageId {
+            messageFound = true;
+            break;
+        }
+    }
+    test:assertTrue(messageFound, "posted message not found in listChannelMessages");
+    logStep("Located message in listChannelMessages");
+
+    // Step 4d: Edit the message body and confirm the change round-trips. A delegated chatMessage
+    // PATCH returns 204; the connector re-fetches so the updated entity is still returned.
+    MicrosoftGraphChatMessage edited = check teams->updateChannelMessage(teamId, channelId, newMessageId, {
+        body: {contentType: "html", content: "<p>Edited by the message-thread scenario test.</p>"}
+    });
+    test:assertTrue((edited.body?.content ?: "").includes("Edited by"), "updateChannelMessage did not persist the edit");
+    logStep("Edited message and verified");
+
+    // Step 4e: Inline hosted content (best-effort). Post a message with an embedded image, list its
+    // hosted contents, then download the raw bytes via $value. Some tenants/permission sets reject
+    // inline content, so any failure here is logged and skipped.
+    do {
+        // A 1x1 transparent PNG, referenced from the HTML body by its temporary id.
+        string pngBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+        MicrosoftGraphChatMessage imgMessage = check teams->createChannelMessage(teamId, channelId, {
+            body: {contentType: "html", content: "<div>Inline image: <img src=\"../hostedContents/1/$value\"></div>"},
+            "hostedContents": [
+                {"contentBytes": pngBase64, "contentType": "image/png", "@microsoft.graph.temporaryId": "1"}
+            ]
+        });
+        string imgMessageId = imgMessage.id ?: "";
+        MicrosoftGraphChatMessageHostedContentCollectionResponse hosted =
+            check teams->listChannelMessageHostedContents(teamId, channelId, imgMessageId);
+        MicrosoftGraphChatMessageHostedContent[] hostedList = hosted.value ?: [];
+        if hostedList.length() > 0 {
+            string hostedId = hostedList[0].id ?: "";
+            byte[] bytes = check teams->getChannelMessageHostedContentValue(teamId, channelId, imgMessageId, hostedId);
+            test:assertTrue(bytes.length() > 0, "hosted content $value returned no bytes");
+            logStep("Posted inline image, listed hosted contents, and downloaded bytes: " + bytes.length().toString());
+        } else {
+            logStep("Inline image posted but no hosted contents were listed; skipped $value download.");
+        }
+    } on fail error e {
+        if isSkippable(e) {
+            logStep("Skipped inline hosted-content flow (not permitted in this tenant): " + e.message());
+        } else {
+            return e;
+        }
+    }
+
+    // Step 4f: Channel-message delta (best-effort). The v1.0 reference documents a chats-scoped delta,
+    // so the channel-scoped variant is treated as best-effort and skipped on failure.
+    ChatMessageDeltaCollectionResponse|error delta = teams->getChannelMessagesDelta(teamId, channelId);
+    if delta is ChatMessageDeltaCollectionResponse {
+        logStep("Retrieved channel messages delta: " + (delta.value ?: []).length().toString() + " items");
+    } else if isSkippable(delta) {
+        logStep("Skipped getChannelMessagesDelta (channel-scoped delta not available in this tenant).");
+    } else {
+        return delta;
+    }
 
     // Step 5: React to the message, then remove the reaction.
     // Graph expects `reactionType` to be a Unicode emoji (e.g. "👍"); reaction names such as

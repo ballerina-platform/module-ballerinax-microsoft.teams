@@ -624,7 +624,15 @@ public isolated client class Client {
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
-        return self.clientEp->patch(resourcePath, request, headers);
+        // A delegated chatMessage PATCH returns 204 No Content; re-fetch so the updated entity can
+        // still be returned (an application/policyViolation update returns 200 with a body).
+        http:Response response = check self.clientEp->patch(resourcePath, request, headers);
+        check validateResponse(response);
+        if response.statusCode == 204 {
+            return self.clientEp->get(resourcePath);
+        }
+        json responseBody = check response.getJsonPayload();
+        return jsondata:parseAsType(responseBody);
     }
 
     # List hostedContents
