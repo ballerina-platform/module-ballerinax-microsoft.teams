@@ -1,6 +1,6 @@
 _Author_: Ballerina \
 _Created_: 2026-07-15 \
-_Updated_: 2026-07-15 \
+_Updated_: 2026-07-20 \
 _Edition_: Swan Lake
 
 # Sanitation for OpenAPI specification
@@ -248,6 +248,28 @@ These changes are done in order to improve the overall usability, and as workaro
 | `PATCH` | `/teams/{teamId}/tags/{teamworkTagId}/members/{teamworkTagMemberId}` | `updateTagMember` |
 
 </details>
+
+5. **Document required request-body fields and navigation-property bindings per operation**
+    - Original: Every write operation binds its request body to a broad Microsoft Graph entity type (`MicrosoftGraphTeam`, `MicrosoftGraphChannel`, `MicrosoftGraphConversationMember`, `MicrosoftGraphChatMessage`, `MicrosoftGraphTeamsTab`, `MicrosoftGraphTeamworkTag`, ...) in which **every property is optional**. The generated method signatures therefore give no indication of which fields an operation actually requires (for example, `createChannel` needs a `displayName`), and they don't surface the `@odata.bind` navigation-property bindings some scenarios need (creating a team from a template, a private/shared channel, a channel/team member, or a channel tab).
+    - Updated: Added Ballerina doc comments (a "Required payload fields" note in the description block) above **every remote method that accepts a request body** — all `create*`/`update*` operations, the `add*`/`remove*`/`setReaction*`/`unsetReaction*`/`replyWithQuote*` actions, `sendActivityNotification`, and the binary `application/octet-stream` content uploads. Each note states the minimally required fields, any conditionally-required fields (e.g. `membershipType` + a single-owner `members` array for a private/shared channel), and the exact navigation-property bindings for the relevant scenario — the four bindings used across the API are `template@odata.bind` (team), `user@odata.bind` (member), `teamsApp@odata.bind` (tab), and `group@odata.bind` (team from an existing group). The required-vs-optional distinction and the binding formats were verified against the [Microsoft Graph v1.0 reference](https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview?view=graph-rest-1.0).
+    - Scope: This change is **documentation only** — it edits doc comments in the generated `ballerina/client.bal`. The OpenAPI specification and the generated types are left unchanged, so the payloads remain the open Graph entity records and any additional navigation-property keys (e.g. `"user@odata.bind"`) can still be supplied as extra fields on those open records.
+    - Reason: Makes each operation self-documenting about what a caller must send for the request to succeed, compensating for the all-optional generated payload types without altering the spec or type model.
+
+6. **Replace the OData "navigation property" doc-comment boilerplate with resource-specific wording**
+    - Original: Microsoft Graph's OData metadata describes relationship (sub-resource) operations in generic OData terms, and `bal openapi` copied that phrasing verbatim into the generated method docs — for example `# Create new navigation property to allMembers for teams`, `# Update the navigation property members in teams`, `# Delete navigation property tabs for teams`, and the parameter/return descriptions `New navigation property`, `New navigation property values`, `Created navigation property`, `Retrieved navigation property`. This wording is opaque (a reader can't tell *which* resource is affected) and often says "for teams" even when the resource is a channel, message, or tab.
+    - Updated: Rewrote every doc line that used the "navigation property" boilerplate (134 lines) into concise, resource-specific text derived from each operation's actual resource and payload/return type — method summaries such as `Add member to primary channel allMembers`, `Update primary channel message`, `Delete channel reply hosted content`, and parameter/return docs such as `The member to create`, `The channel properties to update`, `The created message`, `The retrieved tab`.
+    - Scope: Documentation only — comment text in `ballerina/client.bal`. Operation IDs, method names, the OpenAPI specification, and the generated types are all unchanged.
+    - Reason: The generic OData boilerplate carried no useful information and was frequently misleading about the target resource; resource-specific summaries make the generated API docs readable.
+
+7. **Add the Microsoft Entra ID (Azure AD v2) OAuth2 security scheme**
+    - Original: The Microsoft Graph source spec omits `securitySchemes` entirely — no authentication is described, even though every Graph request requires an `Authorization: Bearer <token>` header.
+    - Updated: Manually added an OAuth2 security scheme (`azureaadv2`) under `components.securitySchemes`, together with a global `security` requirement. It declares both flows the connector supports: `authorizationCode` (delegated / on-behalf-of-user, including `offline_access` for refresh tokens) and `clientCredentials` (app-only, using the `https://graph.microsoft.com/.default` scope). The relevant Microsoft Graph permission scopes (for example `Team.ReadBasic.All`, `ChannelMessage.Send`, `TeamsTab.ReadWrite.All`, `TeamworkTag.ReadWrite`) are enumerated under each flow. Applied to both `teams-endpoints.yaml` and `aligned_ballerina_openapi.json`.
+    - Reason: Documents how callers authenticate against Microsoft Graph and lets the tooling surface the supported OAuth2 flows and the scopes each operation needs, instead of leaving the API appearing unauthenticated.
+
+8. **Make the generated `atOdataType` (`@odata.type`) field optional**
+    - Original: The spec marks `@odata.type` as `required` on the schemas where it appears, so the generated `MicrosoftGraph*` records in `ballerina/types.bal` declared `atOdataType` (the `@jsondata:Name`-mapped `@odata.type`) as a **required** field.
+    - Updated: Manually edited `ballerina/types.bal` after generation to make every `atOdataType` field optional (`string atOdataType?;`). The OpenAPI specification (both `teams-endpoints.yaml` and `aligned_ballerina_openapi.json`) and its `required` arrays were left unchanged.
+    - Reason: Microsoft Graph returns `@odata.type` only for polymorphic/derived instances, so most GET responses omit it. With the field required, response binding (`jsondata:parseAsType`) failed whenever `@odata.type` was absent; making it optional lets those responses bind. Note: this is a post-generation edit — regenerating the client from the spec reintroduces the required field, so it must be re-applied.
 
 ## OpenAPI cli command
 

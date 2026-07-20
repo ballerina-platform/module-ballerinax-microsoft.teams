@@ -334,9 +334,9 @@ dependencies = [
 ]
 
 [[package]]
-org = "pesaratest"
-name = "ms.teams"
-version = "2.3.2"
+org = "ballerinax"
+name = "microsoft.teams"
+version = "2.4.0"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "data.jsondata"},
@@ -348,6 +348,6 @@ dependencies = [
 	{org = "ballerina", name = "url"}
 ]
 modules = [
-	{org = "pesaratest", packageName = "ms.teams", moduleName = "ms.teams"}
+	{org = "ballerinax", packageName = "microsoft.teams", moduleName = "microsoft.teams"}
 ]
 

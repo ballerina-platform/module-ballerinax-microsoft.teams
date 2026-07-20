@@ -32,8 +32,18 @@ public isolated client class Client {
 
     # Create team
     #
-    # + headers - Headers to be sent with the request 
-    # + payload - New entity 
+    # Required payload fields: `displayName`, plus the `template@odata.bind` navigation binding that
+    # selects the base template, e.g. `"template@odata.bind": "https://graph.microsoft.com/v1.0/teamsTemplates('standard')"`.
+    # When the calling app uses application (app-only) permissions, also include a `members` array with at
+    # least one owner — an `aadUserConversationMember` with `roles` = `["owner"]` and a `user@odata.bind`
+    # binding to the user (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
+    # To create a team from an existing Microsoft 365 group, bind the group with `group@odata.bind` set to
+    # `https://graph.microsoft.com/v1.0/groups('{group-id}')` together with `template@odata.bind` and omit
+    # `displayName` (the group must have at least one owner). Team creation is asynchronous (see the note in
+    # the function body).
+    #
+    # + headers - Headers to be sent with the request
+    # + payload - The team to create
     # + return - Created entity 
     remote isolated function createTeam(MicrosoftGraphTeam payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeam|error {
         string resourcePath = string `/teams`;
@@ -81,6 +91,9 @@ public isolated client class Client {
 
     # Update team
     #
+    # No fields are required; send only the team properties to change (for example `displayName`,
+    # `description`, `visibility`, `funSettings`, `memberSettings`). Read-only properties are ignored.
+    #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - New property values 
@@ -119,7 +132,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved channel
     remote isolated function getAllChannel(string teamId, string channelId, map<string|string[]> headers = {}, *GetAllChannelQueries queries) returns MicrosoftGraphChannel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/allChannels/${getEncodedUri(channelId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -154,10 +167,16 @@ public isolated client class Client {
 
     # Create channel
     #
+    # Required payload fields: `displayName` (max 50 characters). A `standard` channel is created by
+    # default. For a private or shared channel, also set `membershipType` (`"private"` / `"shared"`) and
+    # include a `members` array with exactly one owner — an `aadUserConversationMember` with
+    # `roles` = `["owner"]` and a `user@odata.bind` binding to the user
+    # (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
+    #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The channel to create
+    # + return - The created channel
     remote isolated function createChannel(string teamId, MicrosoftGraphChannel payload, map<string|string[]> headers = {}) returns MicrosoftGraphChannel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels`;
         http:Request request = new;
@@ -185,7 +204,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved channel
     remote isolated function getChannel(string teamId, string channelId, map<string|string[]> headers = {}, *GetChannelQueries queries) returns MicrosoftGraphChannel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -207,10 +226,13 @@ public isolated client class Client {
 
     # Patch channel
     #
+    # No fields are required; send only the channel properties to change (for example `displayName`,
+    # `description`). The team's default `General` channel can't be renamed.
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The channel properties to update
     # + return - Success 
     remote isolated function updateChannel(string teamId, string channelId, MicrosoftGraphChannel payload, map<string|string[]> headers = {}) returns MicrosoftGraphChannel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}`;
@@ -241,13 +263,18 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to allMembers for teams
+    # Add member to channel allMembers
+    #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
+    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # `roles` (`["owner"]` for an owner, `[]` for a standard member). Members can be added only to private
+    # and shared channels, and the user must already belong to the parent team's roster.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The member to create
+    # + return - The created member
     remote isolated function createChannelAllMember(string teamId, string channelId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers`;
         http:Request request = new;
@@ -263,7 +290,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved member
     remote isolated function getChannelAllMember(string teamId, string channelId, string conversationMemberId, map<string|string[]> headers = {}, *GetChannelAllMemberQueries queries) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -271,7 +298,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property allMembers for teams
+    # Remove member from channel allMembers
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -284,13 +311,16 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property allMembers in teams
+    # Update member in channel allMembers
+    #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
+    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The member properties to update
     # + return - Success 
     remote isolated function updateChannelAllMember(string teamId, string channelId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers/${getEncodedUri(conversationMemberId)}`;
@@ -315,6 +345,10 @@ public isolated client class Client {
 
     # Invoke action add
     #
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
+    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
+    # `roles` (`["owner"]` or `[]`).
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
@@ -329,6 +363,10 @@ public isolated client class Client {
     }
 
     # Invoke action remove
+    #
+    # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
+    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
+    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -364,7 +402,7 @@ public isolated client class Client {
     # + teamsAppId - The unique identifier of teamsApp
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved app
     remote isolated function getChannelEnabledApp(string teamId, string channelId, string teamsAppId, map<string|string[]> headers = {}, *GetChannelEnabledAppQueries queries) returns MicrosoftGraphTeamsApp|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/enabledApps/${getEncodedUri(teamsAppId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -391,7 +429,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved files folder
     remote isolated function getChannelFilesFolder(string teamId, string channelId, map<string|string[]> headers = {}, *GetChannelFilesFolderQueries queries) returns MicrosoftGraphDriveItem|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/filesFolder`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -399,7 +437,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Get content for the navigation property filesFolder from teams
+    # Get channel filesFolder content
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -412,7 +450,10 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Update content for the navigation property filesFolder in teams
+    # Upload channel filesFolder content
+    #
+    # The payload is the raw file content, uploaded as `application/octet-stream`. Simple upload supports
+    # files up to ~250 MB; larger files require an upload session, which this operation doesn't provide.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -426,7 +467,7 @@ public isolated client class Client {
         return self.clientEp->put(resourcePath, request, headers);
     }
 
-    # Delete content for the navigation property filesFolder in teams
+    # Delete channel filesFolder content
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -454,11 +495,16 @@ public isolated client class Client {
 
     # Add member to channel
     #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
+    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # `roles` (`["owner"]` for an owner, `[]` for a standard member). Members can be added only to private
+    # and shared channels, and the user must already belong to the parent team's roster.
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The member to create
+    # + return - The created member
     remote isolated function createChannelMember(string teamId, string channelId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members`;
         http:Request request = new;
@@ -474,7 +520,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved member
     remote isolated function getChannelMember(string teamId, string channelId, string conversationMemberId, map<string|string[]> headers = {}, *GetChannelMemberQueries queries) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -497,11 +543,14 @@ public isolated client class Client {
 
     # Update member in channel
     #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
+    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The member properties to update
     # + return - Success 
     remote isolated function updateChannelMember(string teamId, string channelId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members/${getEncodedUri(conversationMemberId)}`;
@@ -526,6 +575,10 @@ public isolated client class Client {
 
     # Invoke action add
     #
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
+    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
+    # `roles` (`["owner"]` or `[]`).
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
@@ -540,6 +593,10 @@ public isolated client class Client {
     }
 
     # Invoke action remove
+    #
+    # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
+    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
+    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -570,11 +627,15 @@ public isolated client class Client {
 
     # Send chatMessage in channel
     #
+    # Required payload fields: `body` with a non-empty `content` (set `body.contentType` to `"html"` or
+    # `"text"`). Optional: `attachments`, `mentions` (referenced from HTML content by an at-mention tag), and
+    # `hostedContents` for inline images (each referenced by its `@microsoft.graph.temporaryId`).
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The message to create
+    # + return - The created message
     remote isolated function createChannelMessage(string teamId, string channelId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages`;
         http:Request request = new;
@@ -590,7 +651,7 @@ public isolated client class Client {
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved message
     remote isolated function getChannelMessage(string teamId, string channelId, string chatMessageId, map<string|string[]> headers = {}, *GetChannelMessageQueries queries) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -598,7 +659,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property messages for teams
+    # Delete channel message
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -613,11 +674,14 @@ public isolated client class Client {
 
     # Update chatMessage
     #
+    # Send only the properties to change — typically `body` with the new `content`. Note: Microsoft
+    # Graph v1.0 restricts which chatMessage properties may be updated (for example, `policyViolation`).
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The message properties to update
     # + return - Success 
     remote isolated function updateChannelMessage(string teamId, string channelId, string chatMessageId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}`;
@@ -650,14 +714,18 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to hostedContents for teams
+    # Create channel message hosted content
+    #
+    # Required payload fields: `contentBytes` (base64-encoded content) and `contentType` (the MIME type,
+    # for example `"image/png"`). Inline images are usually created together with the message instead, via
+    # the message's `hostedContents` array.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The hosted content to create
+    # + return - The created hosted content
     remote isolated function createChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/hostedContents`;
         http:Request request = new;
@@ -674,7 +742,7 @@ public isolated client class Client {
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved hosted content
     remote isolated function getChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetChannelMessageHostedContentQueries queries) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -682,7 +750,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property hostedContents for teams
+    # Delete channel message hosted content
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -696,14 +764,17 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property hostedContents in teams
+    # Update channel message hosted content
+    #
+    # Sends hosted-content properties (`contentBytes`, `contentType`). Note: Microsoft Graph v1.0 offers
+    # limited support for updating message hosted content; this is provided for API completeness.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + chatMessageId - The unique identifier of chatMessage
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The hosted content properties to update
     # + return - Success 
     remote isolated function updateChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageHostedContentId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
@@ -726,7 +797,9 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Update media content for the navigation property hostedContents in teams
+    # Upload channel message hosted content
+    #
+    # The payload is the raw media bytes (for example an image), uploaded as `application/octet-stream`.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -742,7 +815,7 @@ public isolated client class Client {
         return self.clientEp->put(resourcePath, request, headers);
     }
 
-    # Delete media content for the navigation property hostedContents in teams
+    # Delete channel message hosted content value
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -771,6 +844,9 @@ public isolated client class Client {
     }
 
     # Invoke action setReaction
+    #
+    # Required payload field: `reactionType`. On Microsoft Graph v1.0 this must be a Unicode emoji (for
+    # example `"👍"`); reaction names such as `"like"` are rejected with HTTP 400.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -814,6 +890,9 @@ public isolated client class Client {
 
     # Invoke action unsetReaction
     #
+    # Required payload field: `reactionType`. On Microsoft Graph v1.0 this must be a Unicode emoji (for
+    # example `"👍"`); reaction names such as `"like"` are rejected with HTTP 400.
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + chatMessageId - The unique identifier of chatMessage
@@ -845,12 +924,16 @@ public isolated client class Client {
 
     # Reply to a message in a channel
     #
+    # Required payload fields: `body` with a non-empty `content` (set `body.contentType` to `"html"` or
+    # `"text"`). Optional: `attachments`, `mentions` (referenced from HTML content by an at-mention tag), and
+    # `hostedContents` for inline images (each referenced by its `@microsoft.graph.temporaryId`).
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The message to create
+    # + return - The created message
     remote isolated function createChannelMessageReply(string teamId, string channelId, string chatMessageId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies`;
         http:Request request = new;
@@ -867,7 +950,7 @@ public isolated client class Client {
     # + chatMessageId1 - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved message
     remote isolated function getChannelMessageReply(string teamId, string channelId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *GetChannelMessageReplyQueries queries) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -875,7 +958,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property replies for teams
+    # Delete channel message reply
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -889,14 +972,17 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property replies in teams
+    # Update channel message reply
+    #
+    # Send only the properties to change — typically `body` with the new `content`. Note: Microsoft
+    # Graph v1.0 restricts which chatMessage properties may be updated (for example, `policyViolation`).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + chatMessageId - The unique identifier of chatMessage
     # + chatMessageId1 - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The message properties to update
     # + return - Success 
     remote isolated function updateChannelMessageReply(string teamId, string channelId, string chatMessageId, string chatMessageId1, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
@@ -922,15 +1008,19 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to hostedContents for teams
+    # Create channel reply hosted content
+    #
+    # Required payload fields: `contentBytes` (base64-encoded content) and `contentType` (the MIME type,
+    # for example `"image/png"`). Inline images are usually created together with the message instead, via
+    # the message's `hostedContents` array.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + chatMessageId - The unique identifier of chatMessage
     # + chatMessageId1 - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The hosted content to create
+    # + return - The created hosted content
     remote isolated function createChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents`;
         http:Request request = new;
@@ -948,7 +1038,7 @@ public isolated client class Client {
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved hosted content
     remote isolated function getChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetChannelMessageReplyHostedContentQueries queries) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -956,7 +1046,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property hostedContents for teams
+    # Delete channel reply hosted content
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -971,7 +1061,10 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property hostedContents in teams
+    # Update channel reply hosted content
+    #
+    # Sends hosted-content properties (`contentBytes`, `contentType`). Note: Microsoft Graph v1.0 offers
+    # limited support for updating message hosted content; this is provided for API completeness.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -979,7 +1072,7 @@ public isolated client class Client {
     # + chatMessageId1 - The unique identifier of chatMessage
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The hosted content properties to update
     # + return - Success 
     remote isolated function updateChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
@@ -1003,7 +1096,9 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Update media content for the navigation property hostedContents in teams
+    # Upload channel reply hosted content
+    #
+    # The payload is the raw media bytes (for example an image), uploaded as `application/octet-stream`.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -1020,7 +1115,7 @@ public isolated client class Client {
         return self.clientEp->put(resourcePath, request, headers);
     }
 
-    # Delete media content for the navigation property hostedContents in teams
+    # Delete channel reply hosted content value
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -1051,6 +1146,9 @@ public isolated client class Client {
     }
 
     # Invoke action setReaction
+    #
+    # Required payload field: `reactionType`. On Microsoft Graph v1.0 this must be a Unicode emoji (for
+    # example `"👍"`); reaction names such as `"like"` are rejected with HTTP 400.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -1096,6 +1194,9 @@ public isolated client class Client {
     }
 
     # Invoke action unsetReaction
+    #
+    # Required payload field: `reactionType`. On Microsoft Graph v1.0 this must be a Unicode emoji (for
+    # example `"👍"`); reaction names such as `"like"` are rejected with HTTP 400.
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -1143,6 +1244,10 @@ public isolated client class Client {
 
     # Invoke action replyWithQuote
     #
+    # Required payload fields: `messageIds` (id(s) of the message(s) being quoted, up to 10) and
+    # `replyMessage` (a chatMessage whose `body.content` holds the reply text). Note: on Microsoft Graph
+    # v1.0 `replyWithQuote` is documented for chats, so channel-scoped support may be limited.
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + chatMessageId - The unique identifier of chatMessage
@@ -1186,6 +1291,10 @@ public isolated client class Client {
 
     # Invoke action replyWithQuote
     #
+    # Required payload fields: `messageIds` (id(s) of the message(s) being quoted, up to 10) and
+    # `replyMessage` (a chatMessage whose `body.content` holds the reply text). Note: on Microsoft Graph
+    # v1.0 `replyWithQuote` is documented for chats, so channel-scoped support may be limited.
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
@@ -1215,11 +1324,16 @@ public isolated client class Client {
 
     # Add tab to channel
     #
+    # Required payload fields: `displayName` and the `teamsApp@odata.bind` navigation binding
+    # (`https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/{app-id}`); the app must already be installed
+    # in the team. `configuration` (`entityId`, `contentUrl`, ...) is optional. For a static tab, omit
+    # `displayName`/`configuration` — Graph reads them from the app manifest and otherwise returns 400.
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The tab to create
+    # + return - The created tab
     remote isolated function createChannelTab(string teamId, string channelId, MicrosoftGraphTeamsTab payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs`;
         http:Request request = new;
@@ -1235,7 +1349,7 @@ public isolated client class Client {
     # + teamsTabId - The unique identifier of teamsTab
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved tab
     remote isolated function getChannelTab(string teamId, string channelId, string teamsTabId, map<string|string[]> headers = {}, *GetChannelTabQueries queries) returns MicrosoftGraphTeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs/${getEncodedUri(teamsTabId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1258,11 +1372,14 @@ public isolated client class Client {
 
     # Update tab
     #
+    # No fields are required; send only the tab properties to change (for example `displayName`,
+    # `configuration`).
+    #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
     # + teamsTabId - The unique identifier of teamsTab
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The tab properties to update
     # + return - Success 
     remote isolated function updateChannelTab(string teamId, string channelId, string teamsTabId, MicrosoftGraphTeamsTab payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs/${getEncodedUri(teamsTabId)}`;
@@ -1279,7 +1396,7 @@ public isolated client class Client {
     # + teamsTabId - The unique identifier of teamsTab
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved app
     remote isolated function getChannelTabTeamsApp(string teamId, string channelId, string teamsTabId, map<string|string[]> headers = {}, *GetChannelTabTeamsAppQueries queries) returns MicrosoftGraphTeamsApp|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs/${getEncodedUri(teamsTabId)}/teamsApp`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1357,7 +1474,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved channel
     remote isolated function getIncomingChannel(string teamId, string channelId, map<string|string[]> headers = {}, *GetIncomingChannelQueries queries) returns MicrosoftGraphChannel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/incomingChannels/${getEncodedUri(channelId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1392,10 +1509,14 @@ public isolated client class Client {
 
     # Add member to team
     #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
+    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # `roles` (`["owner"]` for an owner, `[]` for a standard member).
+    #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The member to create
+    # + return - The created member
     remote isolated function createMember(string teamId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members`;
         http:Request request = new;
@@ -1410,7 +1531,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved member
     remote isolated function getMember(string teamId, string conversationMemberId, map<string|string[]> headers = {}, *GetMemberQueries queries) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1432,10 +1553,13 @@ public isolated client class Client {
 
     # Update member in team
     #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
+    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
+    #
     # + teamId - The unique identifier of team
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The member properties to update
     # + return - Success 
     remote isolated function updateMember(string teamId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members/${getEncodedUri(conversationMemberId)}`;
@@ -1459,6 +1583,10 @@ public isolated client class Client {
 
     # Invoke action add
     #
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
+    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
+    # `roles` (`["owner"]` or `[]`).
+    #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
@@ -1473,6 +1601,10 @@ public isolated client class Client {
 
     # Invoke action remove
     #
+    # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
+    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
+    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
+    #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
@@ -1486,6 +1618,11 @@ public isolated client class Client {
     }
 
     # Invoke action sendActivityNotification
+    #
+    # Required payload fields: `topic` (with `source` and `value`), `activityType` (the reserved
+    # `systemDefault`, or a type declared in the team's app manifest), `previewText` (an item body with
+    # `content`), and `recipient` (for example an `aadUserNotificationRecipient` with a `userId`). Add
+    # `templateParameters` when the activity text contains placeholders.
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1504,7 +1641,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved channel
     remote isolated function getPrimaryChannel(string teamId, map<string|string[]> headers = {}, *GetPrimaryChannelQueries queries) returns MicrosoftGraphChannel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1512,7 +1649,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property primaryChannel for teams
+    # Delete primary channel
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1523,11 +1660,14 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property primaryChannel in teams
+    # Update primary channel
+    #
+    # No fields are required; send only the properties to change. `primaryChannel` is the team's
+    # `General` channel, whose `displayName` can't be changed (its `description` and settings can).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The channel properties to update
     # + return - Success 
     remote isolated function updatePrimaryChannel(string teamId, MicrosoftGraphChannel payload, map<string|string[]> headers = {}) returns MicrosoftGraphChannel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel`;
@@ -1550,12 +1690,17 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to allMembers for teams
+    # Add member to primary channel allMembers
+    #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
+    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # `roles` (`["owner"]` for an owner, `[]` for a standard member). Members can be added only to private
+    # and shared channels, and the user must already belong to the parent team's roster.
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The member to create
+    # + return - The created member
     remote isolated function createPrimaryChannelAllMember(string teamId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers`;
         http:Request request = new;
@@ -1570,7 +1715,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved member
     remote isolated function getPrimaryChannelAllMember(string teamId, string conversationMemberId, map<string|string[]> headers = {}, *GetPrimaryChannelAllMemberQueries queries) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1578,7 +1723,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property allMembers for teams
+    # Remove member from primary channel allMembers
     #
     # + teamId - The unique identifier of team
     # + conversationMemberId - The unique identifier of conversationMember
@@ -1590,12 +1735,15 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property allMembers in teams
+    # Update member in primary channel allMembers
+    #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
+    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
     #
     # + teamId - The unique identifier of team
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The member properties to update
     # + return - Success 
     remote isolated function updatePrimaryChannelAllMember(string teamId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers/${getEncodedUri(conversationMemberId)}`;
@@ -1619,6 +1767,10 @@ public isolated client class Client {
 
     # Invoke action add
     #
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
+    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
+    # `roles` (`["owner"]` or `[]`).
+    #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
@@ -1632,6 +1784,10 @@ public isolated client class Client {
     }
 
     # Invoke action remove
+    #
+    # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
+    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
+    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1664,7 +1820,7 @@ public isolated client class Client {
     # + teamsAppId - The unique identifier of teamsApp
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved app
     remote isolated function getPrimaryChannelEnabledApp(string teamId, string teamsAppId, map<string|string[]> headers = {}, *GetPrimaryChannelEnabledAppQueries queries) returns MicrosoftGraphTeamsApp|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/enabledApps/${getEncodedUri(teamsAppId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1689,7 +1845,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved files folder
     remote isolated function getPrimaryChannelFilesFolder(string teamId, map<string|string[]> headers = {}, *GetPrimaryChannelFilesFolderQueries queries) returns MicrosoftGraphDriveItem|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/filesFolder`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1697,7 +1853,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Get content for the navigation property filesFolder from teams
+    # Get primary channel filesFolder content
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1709,7 +1865,10 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Update content for the navigation property filesFolder in teams
+    # Upload primary channel filesFolder content
+    #
+    # The payload is the raw file content, uploaded as `application/octet-stream`. Simple upload supports
+    # files up to ~250 MB; larger files require an upload session, which this operation doesn't provide.
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1722,7 +1881,7 @@ public isolated client class Client {
         return self.clientEp->put(resourcePath, request, headers);
     }
 
-    # Delete content for the navigation property filesFolder in teams
+    # Delete primary channel filesFolder content
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1746,12 +1905,17 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to members for teams
+    # Add member to primary channel
+    #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
+    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # `roles` (`["owner"]` for an owner, `[]` for a standard member). Members can be added only to private
+    # and shared channels, and the user must already belong to the parent team's roster.
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The member to create
+    # + return - The created member
     remote isolated function createPrimaryChannelMember(string teamId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members`;
         http:Request request = new;
@@ -1766,7 +1930,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved member
     remote isolated function getPrimaryChannelMember(string teamId, string conversationMemberId, map<string|string[]> headers = {}, *GetPrimaryChannelMemberQueries queries) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1774,7 +1938,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property members for teams
+    # Remove member from primary channel
     #
     # + teamId - The unique identifier of team
     # + conversationMemberId - The unique identifier of conversationMember
@@ -1786,12 +1950,15 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property members in teams
+    # Update member in primary channel
+    #
+    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
+    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
     #
     # + teamId - The unique identifier of team
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The member properties to update
     # + return - Success 
     remote isolated function updatePrimaryChannelMember(string teamId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members/${getEncodedUri(conversationMemberId)}`;
@@ -1815,6 +1982,10 @@ public isolated client class Client {
 
     # Invoke action add
     #
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
+    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
+    # `roles` (`["owner"]` or `[]`).
+    #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
@@ -1828,6 +1999,10 @@ public isolated client class Client {
     }
 
     # Invoke action remove
+    #
+    # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
+    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
+    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1854,12 +2029,16 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to messages for teams
+    # Send message in primary channel
+    #
+    # Required payload fields: `body` with a non-empty `content` (set `body.contentType` to `"html"` or
+    # `"text"`). Optional: `attachments`, `mentions` (referenced from HTML content by an at-mention tag), and
+    # `hostedContents` for inline images (each referenced by its `@microsoft.graph.temporaryId`).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The message to create
+    # + return - The created message
     remote isolated function createPrimaryChannelMessage(string teamId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages`;
         http:Request request = new;
@@ -1874,7 +2053,7 @@ public isolated client class Client {
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved message
     remote isolated function getPrimaryChannelMessage(string teamId, string chatMessageId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageQueries queries) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1882,7 +2061,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property messages for teams
+    # Delete primary channel message
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -1894,12 +2073,15 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property messages in teams
+    # Update primary channel message
+    #
+    # Send only the properties to change — typically `body` with the new `content`. Note: Microsoft
+    # Graph v1.0 restricts which chatMessage properties may be updated (for example, `policyViolation`).
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The message properties to update
     # + return - Success 
     remote isolated function updatePrimaryChannelMessage(string teamId, string chatMessageId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}`;
@@ -1923,13 +2105,17 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to hostedContents for teams
+    # Create primary channel message hosted content
+    #
+    # Required payload fields: `contentBytes` (base64-encoded content) and `contentType` (the MIME type,
+    # for example `"image/png"`). Inline images are usually created together with the message instead, via
+    # the message's `hostedContents` array.
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The hosted content to create
+    # + return - The created hosted content
     remote isolated function createPrimaryChannelMessageHostedContent(string teamId, string chatMessageId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/hostedContents`;
         http:Request request = new;
@@ -1945,7 +2131,7 @@ public isolated client class Client {
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved hosted content
     remote isolated function getPrimaryChannelMessageHostedContent(string teamId, string chatMessageId, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageHostedContentQueries queries) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1953,7 +2139,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property hostedContents for teams
+    # Delete primary channel message hosted content
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -1966,13 +2152,16 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property hostedContents in teams
+    # Update primary channel message hosted content
+    #
+    # Sends hosted-content properties (`contentBytes`, `contentType`). Note: Microsoft Graph v1.0 offers
+    # limited support for updating message hosted content; this is provided for API completeness.
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The hosted content properties to update
     # + return - Success 
     remote isolated function updatePrimaryChannelMessageHostedContent(string teamId, string chatMessageId, string chatMessageHostedContentId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
@@ -1982,7 +2171,7 @@ public isolated client class Client {
         return self.clientEp->patch(resourcePath, request, headers);
     }
 
-    # Get media content for the navigation property hostedContents from teams
+    # Get primary channel message hosted content
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -1994,7 +2183,9 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Update media content for the navigation property hostedContents in teams
+    # Upload primary channel message hosted content
+    #
+    # The payload is the raw media bytes (for example an image), uploaded as `application/octet-stream`.
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2009,7 +2200,7 @@ public isolated client class Client {
         return self.clientEp->put(resourcePath, request, headers);
     }
 
-    # Delete media content for the navigation property hostedContents in teams
+    # Delete primary channel message hosted content value
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2036,6 +2227,9 @@ public isolated client class Client {
     }
 
     # Invoke action setReaction
+    #
+    # Required payload field: `reactionType`. On Microsoft Graph v1.0 this must be a Unicode emoji (for
+    # example `"👍"`); reaction names such as `"like"` are rejected with HTTP 400.
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2076,6 +2270,9 @@ public isolated client class Client {
 
     # Invoke action unsetReaction
     #
+    # Required payload field: `reactionType`. On Microsoft Graph v1.0 this must be a Unicode emoji (for
+    # example `"👍"`); reaction names such as `"like"` are rejected with HTTP 400.
+    #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
@@ -2103,13 +2300,17 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to replies for teams
+    # Reply to a message in primary channel
+    #
+    # Required payload fields: `body` with a non-empty `content` (set `body.contentType` to `"html"` or
+    # `"text"`). Optional: `attachments`, `mentions` (referenced from HTML content by an at-mention tag), and
+    # `hostedContents` for inline images (each referenced by its `@microsoft.graph.temporaryId`).
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The message to create
+    # + return - The created message
     remote isolated function createPrimaryChannelMessageReply(string teamId, string chatMessageId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies`;
         http:Request request = new;
@@ -2125,7 +2326,7 @@ public isolated client class Client {
     # + chatMessageId1 - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved message
     remote isolated function getPrimaryChannelMessageReply(string teamId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *GetPrimaryChannelMessageReplyQueries queries) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -2133,7 +2334,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property replies for teams
+    # Delete primary channel message reply
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2146,13 +2347,16 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property replies in teams
+    # Update primary channel message reply
+    #
+    # Send only the properties to change — typically `body` with the new `content`. Note: Microsoft
+    # Graph v1.0 restricts which chatMessage properties may be updated (for example, `policyViolation`).
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
     # + chatMessageId1 - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The message properties to update
     # + return - Success 
     remote isolated function updatePrimaryChannelMessageReply(string teamId, string chatMessageId, string chatMessageId1, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
@@ -2177,14 +2381,18 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to hostedContents for teams
+    # Create primary channel reply hosted content
+    #
+    # Required payload fields: `contentBytes` (base64-encoded content) and `contentType` (the MIME type,
+    # for example `"image/png"`). Inline images are usually created together with the message instead, via
+    # the message's `hostedContents` array.
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
     # + chatMessageId1 - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The hosted content to create
+    # + return - The created hosted content
     remote isolated function createPrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents`;
         http:Request request = new;
@@ -2201,7 +2409,7 @@ public isolated client class Client {
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved hosted content
     remote isolated function getPrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageReplyHostedContentQueries queries) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -2209,7 +2417,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property hostedContents for teams
+    # Delete primary channel reply hosted content
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2223,14 +2431,17 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property hostedContents in teams
+    # Update primary channel reply hosted content
+    #
+    # Sends hosted-content properties (`contentBytes`, `contentType`). Note: Microsoft Graph v1.0 offers
+    # limited support for updating message hosted content; this is provided for API completeness.
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
     # + chatMessageId1 - The unique identifier of chatMessage
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The hosted content properties to update
     # + return - Success 
     remote isolated function updatePrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
@@ -2240,7 +2451,7 @@ public isolated client class Client {
         return self.clientEp->patch(resourcePath, request, headers);
     }
 
-    # Get media content for the navigation property hostedContents from teams
+    # Get primary channel reply hosted content
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2253,7 +2464,9 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Update media content for the navigation property hostedContents in teams
+    # Upload primary channel reply hosted content
+    #
+    # The payload is the raw media bytes (for example an image), uploaded as `application/octet-stream`.
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2269,7 +2482,7 @@ public isolated client class Client {
         return self.clientEp->put(resourcePath, request, headers);
     }
 
-    # Delete media content for the navigation property hostedContents in teams
+    # Delete primary channel reply hosted content value
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2298,6 +2511,9 @@ public isolated client class Client {
     }
 
     # Invoke action setReaction
+    #
+    # Required payload field: `reactionType`. On Microsoft Graph v1.0 this must be a Unicode emoji (for
+    # example `"👍"`); reaction names such as `"like"` are rejected with HTTP 400.
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2340,6 +2556,9 @@ public isolated client class Client {
     }
 
     # Invoke action unsetReaction
+    #
+    # Required payload field: `reactionType`. On Microsoft Graph v1.0 this must be a Unicode emoji (for
+    # example `"👍"`); reaction names such as `"like"` are rejected with HTTP 400.
     #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
@@ -2384,6 +2603,10 @@ public isolated client class Client {
 
     # Invoke action replyWithQuote
     #
+    # Required payload fields: `messageIds` (id(s) of the message(s) being quoted, up to 10) and
+    # `replyMessage` (a chatMessage whose `body.content` holds the reply text). Note: on Microsoft Graph
+    # v1.0 `replyWithQuote` is documented for chats, so channel-scoped support may be limited.
+    #
     # + teamId - The unique identifier of team
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
@@ -2424,6 +2647,10 @@ public isolated client class Client {
 
     # Invoke action replyWithQuote
     #
+    # Required payload fields: `messageIds` (id(s) of the message(s) being quoted, up to 10) and
+    # `replyMessage` (a chatMessage whose `body.content` holds the reply text). Note: on Microsoft Graph
+    # v1.0 `replyWithQuote` is documented for chats, so channel-scoped support may be limited.
+    #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
@@ -2449,12 +2676,17 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Create new navigation property to tabs for teams
+    # Add tab to primary channel
+    #
+    # Required payload fields: `displayName` and the `teamsApp@odata.bind` navigation binding
+    # (`https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/{app-id}`); the app must already be installed
+    # in the team. `configuration` (`entityId`, `contentUrl`, ...) is optional. For a static tab, omit
+    # `displayName`/`configuration` — Graph reads them from the app manifest and otherwise returns 400.
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The tab to create
+    # + return - The created tab
     remote isolated function createPrimaryChannelTab(string teamId, MicrosoftGraphTeamsTab payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs`;
         http:Request request = new;
@@ -2469,7 +2701,7 @@ public isolated client class Client {
     # + teamsTabId - The unique identifier of teamsTab
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved tab
     remote isolated function getPrimaryChannelTab(string teamId, string teamsTabId, map<string|string[]> headers = {}, *GetPrimaryChannelTabQueries queries) returns MicrosoftGraphTeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs/${getEncodedUri(teamsTabId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -2477,7 +2709,7 @@ public isolated client class Client {
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete navigation property tabs for teams
+    # Delete tab from primary channel
     #
     # + teamId - The unique identifier of team
     # + teamsTabId - The unique identifier of teamsTab
@@ -2489,12 +2721,15 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property tabs in teams
+    # Update primary channel tab
+    #
+    # No fields are required; send only the tab properties to change (for example `displayName`,
+    # `configuration`).
     #
     # + teamId - The unique identifier of team
     # + teamsTabId - The unique identifier of teamsTab
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The tab properties to update
     # + return - Success 
     remote isolated function updatePrimaryChannelTab(string teamId, string teamsTabId, MicrosoftGraphTeamsTab payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs/${getEncodedUri(teamsTabId)}`;
@@ -2510,7 +2745,7 @@ public isolated client class Client {
     # + teamsTabId - The unique identifier of teamsTab
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved app
     remote isolated function getPrimaryChannelTabTeamsApp(string teamId, string teamsTabId, map<string|string[]> headers = {}, *GetPrimaryChannelTabTeamsAppQueries queries) returns MicrosoftGraphTeamsApp|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs/${getEncodedUri(teamsTabId)}/teamsApp`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -2545,10 +2780,13 @@ public isolated client class Client {
 
     # Create teamworkTag
     #
+    # Required payload fields: `displayName` (max 40 characters) and a non-empty `members` array (max 25)
+    # — each member is a teamworkTagMember identified by `userId`. At least one member is required.
+    #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The tag to create
+    # + return - The created tag
     remote isolated function createTag(string teamId, MicrosoftGraphTeamworkTag payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamworkTag|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags`;
         http:Request request = new;
@@ -2563,7 +2801,7 @@ public isolated client class Client {
     # + teamworkTagId - The unique identifier of teamworkTag
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved tag
     remote isolated function getTag(string teamId, string teamworkTagId, map<string|string[]> headers = {}, *GetTagQueries queries) returns MicrosoftGraphTeamworkTag|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -2585,10 +2823,12 @@ public isolated client class Client {
 
     # Update teamworkTag
     #
+    # Required payload field: `displayName` (the only editable property of a teamworkTag).
+    #
     # + teamId - The unique identifier of team
     # + teamworkTagId - The unique identifier of teamworkTag
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The tag properties to update
     # + return - Success 
     remote isolated function updateTag(string teamId, string teamworkTagId, MicrosoftGraphTeamworkTag payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamworkTag|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}`;
@@ -2614,11 +2854,13 @@ public isolated client class Client {
 
     # Create teamworkTagMember
     #
+    # Required payload field: `userId` — the object id of a user who is a member of the team.
+    #
     # + teamId - The unique identifier of team
     # + teamworkTagId - The unique identifier of teamworkTag
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property 
-    # + return - Created navigation property 
+    # + payload - The tag member to create
+    # + return - The created tag member
     remote isolated function createTagMember(string teamId, string teamworkTagId, MicrosoftGraphTeamworkTagMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamworkTagMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}/members`;
         http:Request request = new;
@@ -2634,7 +2876,7 @@ public isolated client class Client {
     # + teamworkTagMemberId - The unique identifier of teamworkTagMember
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Retrieved navigation property 
+    # + return - The retrieved tag member
     remote isolated function getTagMember(string teamId, string teamworkTagId, string teamworkTagMemberId, map<string|string[]> headers = {}, *GetTagMemberQueries queries) returns MicrosoftGraphTeamworkTagMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}/members/${getEncodedUri(teamworkTagMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -2655,13 +2897,16 @@ public isolated client class Client {
         return self.clientEp->delete(resourcePath, headers = httpHeaders);
     }
 
-    # Update the navigation property members in teams
+    # Update tag member
+    #
+    # Sends the tag-member properties to change. Note: Microsoft Graph v1.0 exposes no editable
+    # properties for a teamworkTagMember; this is provided for API completeness.
     #
     # + teamId - The unique identifier of team
     # + teamworkTagId - The unique identifier of teamworkTag
     # + teamworkTagMemberId - The unique identifier of teamworkTagMember
     # + headers - Headers to be sent with the request 
-    # + payload - New navigation property values 
+    # + payload - The tag member properties to update
     # + return - Success 
     remote isolated function updateTagMember(string teamId, string teamworkTagId, string teamworkTagMemberId, MicrosoftGraphTeamworkTagMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamworkTagMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}/members/${getEncodedUri(teamworkTagMemberId)}`;

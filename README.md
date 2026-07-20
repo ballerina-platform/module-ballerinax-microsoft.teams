@@ -14,7 +14,9 @@ The `ballerinax/microsoft.teams` connector allows you to programmatically access
 
 ## Setup guide
 
-To use the Microsoft Teams connector, you must have access to a Microsoft 365 account and register an application in Microsoft Entra ID.
+To use the Microsoft Teams connector, you need access to a Microsoft 365 account and an application registered in Microsoft Entra ID.
+
+> **Note:** The screenshots in this guide are for illustration only. The Microsoft Entra admin center changes over time, so treat them as a visual reference rather than an exact match — follow the described actions and choose the values (application name, redirect URI, permissions, and so on) that fit your own scenario.
 
 ### Step 1: Register an application in Microsoft Entra ID
 
@@ -23,7 +25,7 @@ To use the Microsoft Teams connector, you must have access to a Microsoft 365 ac
 
    ![App registrations](ballerina/setup-guide-1.jpg)
 
-3. Enter a name (e.g., `ms-teams-connector`), select the supported account types, and — for delegated (`refresh_token`) access — add a **Redirect URI**. Choose the **Public client/native (mobile & desktop)** platform and use `https://jwt.ms` (a Microsoft-hosted page that echoes back whatever it's redirected to, which makes it convenient for picking up the authorization code in Step 4). Click **Register**.
+3. Enter a name of your choice and select the account types appropriate for your organization. For delegated (`refresh_token`) access, add a **Redirect URI** under the **Public client/native (mobile & desktop)** platform — this is where the sign-in flow returns the authorization code (a Microsoft-hosted page such as `https://jwt.ms` is a convenient choice for Step 4). Click **Register**.
 
    ![Register an application](ballerina/setup-guide-2.jpeg)
 
@@ -32,7 +34,7 @@ To use the Microsoft Teams connector, you must have access to a Microsoft 365 ac
 ### Step 2: Add Microsoft Graph permissions
 
 1. In the registered application, go to **API permissions** > **Add a permission** > **Microsoft Graph**.
-2. Choose **Delegated permissions** (for `refresh_token`) or **Application permissions** (for `client_credentials`), then select what your scenario needs — for example, `Team.ReadBasic.All`, `Channel.ReadBasic.All`, `ChannelMessage.Send`, and `TeamMember.ReadWrite.All`. For the delegated flow, also include `offline_access` so the token response includes a refresh token. Click **Add permissions**.
+2. Choose **Delegated permissions** (for `refresh_token`) or **Application permissions** (for `client_credentials`), then add the permissions your use case requires — each operation's required scope is listed in its [Microsoft Graph API reference](https://learn.microsoft.com/en-us/graph/api/overview). For the delegated flow, also include `offline_access` so the token response includes a refresh token. Click **Add permissions**.
 
    ![Request API permissions](ballerina/setup-guide-4.jpeg)
 
