@@ -336,7 +336,7 @@ dependencies = [
 [[package]]
 org = "pesaratest"
 name = "ms.teams"
-version = "2.3.0"
+version = "2.3.2"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "data.jsondata"},

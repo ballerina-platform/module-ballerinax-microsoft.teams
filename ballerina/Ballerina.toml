@@ -2,7 +2,7 @@
 distribution = "2201.13.4"
 org= "pesaratest"
 name= "ms.teams"
-version= "2.3.0"
+version= "2.3.2"
 authors = ["pesaratest"]
 keywords = ["Communication/Team Chat", "Cost/Paid", "Vendor/Microsoft", "Area/Communication", "Type/Connector"]
 icon = "icon.png"

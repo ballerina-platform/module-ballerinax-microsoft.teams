@@ -20,22 +20,116 @@ To use the Microsoft Teams connector, you must have access to a Microsoft 365 ac
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
 2. Navigate to **Identity** > **Applications** > **App registrations** and click **New registration**.
-3. Enter a name, select the supported account types, and (for delegated access) add a redirect URI. Click **Register**.
+
+   ![App registrations](ballerina/setup-guide-1.jpg)
+
+3. Enter a name (e.g., `ms-teams-connector`), select the supported account types, and — for delegated (`refresh_token`) access — add a **Redirect URI**. Choose the **Public client/native (mobile & desktop)** platform and use `https://jwt.ms` (a Microsoft-hosted page that echoes back whatever it's redirected to, which makes it convenient for picking up the authorization code in Step 4). Click **Register**.
+
+   ![Register an application](ballerina/setup-guide-2.jpeg)
+
+4. On the app's **Overview** page, note the **Application (client) ID** and **Directory (tenant) ID** — both are needed for `Config.toml`.
 
 ### Step 2: Add Microsoft Graph permissions
 
 1. In the registered application, go to **API permissions** > **Add a permission** > **Microsoft Graph**.
-2. Add the delegated or application permissions your scenario requires — for example, `Team.ReadBasic.All`, `Channel.ReadBasic.All`, `ChannelMessage.Send`, and `TeamMember.ReadWrite.All`.
-3. Grant admin consent for the added permissions.
+2. Choose **Delegated permissions** (for `refresh_token`) or **Application permissions** (for `client_credentials`), then select what your scenario needs — for example, `Team.ReadBasic.All`, `Channel.ReadBasic.All`, `ChannelMessage.Send`, and `TeamMember.ReadWrite.All`. For the delegated flow, also include `offline_access` so the token response includes a refresh token. Click **Add permissions**.
+
+   ![Request API permissions](ballerina/setup-guide-4.jpeg)
+
+3. Back on the **API permissions** page, click **Grant admin consent** and confirm **Yes**.
+
+   ![Grant admin consent](ballerina/setup-guide-6.jpeg)
+
+4. Confirm every permission now shows **Yes** under **Admin consent granted**.
+
+   ![Configured permissions](ballerina/setup-guide-3.jpeg)
 
 ### Step 3: Create a client secret
 
 1. Go to **Certificates & secrets** > **New client secret**, add a description and an expiry, and click **Add**.
-2. Copy the secret **Value** immediately — it is shown only once.
 
-### Step 4: Obtain a refresh token
+   ![Add a client secret](ballerina/setup-guide-8.jpeg)
 
-Complete the OAuth2 authorization-code flow to obtain a refresh token for delegated access, or use the client-credentials flow for application-only access. See the [Microsoft identity platform documentation](https://learn.microsoft.com/en-us/graph/auth-v2-user) for details.
+2. Copy the secret **Value** immediately — it is shown only once. (The **Secret ID** shown next to it is just a label for the secret, not a credential.)
+
+   ![Certificates & secrets](ballerina/setup-guide-7.jpeg)
+
+### Step 4: Obtain the credentials for `Config.toml`
+
+Microsoft Entra's v2.0 endpoints for the app registered above:
+
+- Authorize: `https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/authorize`
+- Token: `https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/token`
+
+Replace `<TENANT_ID>`, `<CLIENT_ID>`, and `<CLIENT_SECRET>` below with the values from Steps 1 and 3.
+
+#### Option A — Delegated access (`refreshToken` + `authMode = "refresh_token"`)
+
+Requires a one-time interactive sign-in.
+
+**1. Get an authorization code.** This is an interactive sign-in + consent step, so it can't be curled — paste this URL into a browser instead:
+
+```text
+https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/authorize?client_id=<CLIENT_ID>&response_type=code&redirect_uri=https%3A%2F%2Fjwt.ms&response_mode=query&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default%20offline_access&state=12345
+```
+
+Sign in and accept the consent prompt. You'll land on `https://jwt.ms/?code=<AUTH_CODE>&state=12345` — copy the `code` value from that URL. It's single-use and short-lived, so use it in the next step within a few minutes.
+
+**2. Exchange the code for a refresh token.**
+
+macOS / Linux (bash, zsh):
+
+```bash
+curl -X POST "https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/token" \
+  --data-urlencode "client_id=<CLIENT_ID>" \
+  --data-urlencode "client_secret=<CLIENT_SECRET>" \
+  --data-urlencode "scope=https://graph.microsoft.com/.default offline_access" \
+  --data-urlencode "code=<AUTH_CODE>" \
+  --data-urlencode "redirect_uri=https://jwt.ms" \
+  --data-urlencode "grant_type=authorization_code"
+```
+
+Windows (PowerShell — call `curl.exe` explicitly; plain `curl` is aliased to `Invoke-WebRequest` and takes different flags):
+
+```powershell
+curl.exe -X POST "https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/token" `
+  --data-urlencode "client_id=<CLIENT_ID>" `
+  --data-urlencode "client_secret=<CLIENT_SECRET>" `
+  --data-urlencode "scope=https://graph.microsoft.com/.default offline_access" `
+  --data-urlencode "code=<AUTH_CODE>" `
+  --data-urlencode "redirect_uri=https://jwt.ms" `
+  --data-urlencode "grant_type=authorization_code"
+```
+
+The JSON response includes a `refresh_token` field — copy that value into `Config.toml` as `refreshToken`, alongside `clientId`, `clientSecret`, `tenantId`, and `authMode = "refresh_token"`.
+
+> The `access_token` in the same response is short-lived (~1 hour) and isn't used directly; the connector uses `refreshToken` to mint new access tokens automatically on each call.
+
+#### Option B — App-only access (`authMode = "client_credentials"`)
+
+No user, no redirect URI, and no `/authorize` step — the app authenticates as itself directly against `/token`. This requires **Application** permissions (not delegated), admin-consented, from Step 2.
+
+macOS / Linux:
+
+```bash
+curl -X POST "https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/token" \
+  --data-urlencode "client_id=<CLIENT_ID>" \
+  --data-urlencode "client_secret=<CLIENT_SECRET>" \
+  --data-urlencode "scope=https://graph.microsoft.com/.default" \
+  --data-urlencode "grant_type=client_credentials"
+```
+
+Windows (PowerShell):
+
+```powershell
+curl.exe -X POST "https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/token" `
+  --data-urlencode "client_id=<CLIENT_ID>" `
+  --data-urlencode "client_secret=<CLIENT_SECRET>" `
+  --data-urlencode "scope=https://graph.microsoft.com/.default" `
+  --data-urlencode "grant_type=client_credentials"
+```
+
+There's no `refresh_token` in this response — app-only tokens aren't refreshed; the connector just calls this same endpoint again with `clientId`/`clientSecret`/`tenantId` whenever a token expires. Set `authMode = "client_credentials"` in `Config.toml` and leave `refreshToken` unset.
 
 ## Quickstart
 
