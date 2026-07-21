@@ -1,6 +1,6 @@
 _Author_: Ballerina \
 _Created_: 2026-07-15 \
-_Updated_: 2026-07-20 \
+_Updated_: 2026-07-21 \
 _Edition_: Swan Lake
 
 # Sanitation for OpenAPI specification
@@ -270,6 +270,11 @@ These changes are done in order to improve the overall usability, and as workaro
     - Original: The spec marks `@odata.type` as `required` on the schemas where it appears, so the generated `MicrosoftGraph*` records in `ballerina/types.bal` declared `atOdataType` (the `@jsondata:Name`-mapped `@odata.type`) as a **required** field.
     - Updated: Manually edited `ballerina/types.bal` after generation to make every `atOdataType` field optional (`string atOdataType?;`). The OpenAPI specification (both `teams-endpoints.yaml` and `aligned_ballerina_openapi.json`) and its `required` arrays were left unchanged.
     - Reason: Microsoft Graph returns `@odata.type` only for polymorphic/derived instances, so most GET responses omit it. With the field required, response binding (`jsondata:parseAsType`) failed whenever `@odata.type` was absent; making it optional lets those responses bind. Note: this is a post-generation edit — regenerating the client from the spec reintroduces the required field, so it must be re-applied.
+
+9. **Make the OAuth2 token/refresh URL a required field**
+    - Original: The generated grant-config records defaulted the endpoint URL to the multi-tenant `/common/` endpoint — `OAuth2ClientCredentialsGrantConfig.tokenUrl` and `OAuth2RefreshTokenGrantConfig.refreshUrl` were both `= "https://login.microsoftonline.com/common/oauth2/v2.0/token"`.
+    - Updated: Manually edited `ballerina/types.bal` after generation to drop those defaults, so `tokenUrl` (client-credentials flow) and `refreshUrl` (refresh-token flow) are now **required** fields the caller must supply.
+    - Reason: The `/common/` default only works for multi-tenant app registrations; single-tenant apps must authenticate against their tenant-specific endpoint (`https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`). Silently defaulting to `/common/` produced confusing auth failures for single-tenant apps. Requiring the URL forces callers to point at the correct tenant. Note: this is a post-generation edit — regenerating the client reintroduces the defaults, so it must be re-applied.
 
 ## OpenAPI cli command
 
