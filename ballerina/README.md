@@ -23,39 +23,39 @@ To use the Microsoft Teams connector, you need access to a Microsoft 365 account
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
 2. Navigate to **Identity** > **App registrations** and click **New registration**.
 
-   ![App registrations](setup-guide-1.jpg)
+   ![App registrations](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-1.jpg)
 
 3. Enter a name of your choice and select the account types appropriate for your organization. For delegated (`refresh_token`) access, add a **Redirect URI** under the **Public client/native (mobile & desktop)** platform — this is where the sign-in flow returns the authorization code (a Microsoft-hosted page such as `https://jwt.ms` is a convenient choice for Step 4). Click **Register**.
 
-   ![Register an application](setup-guide-2.jpeg)
+   ![Register an application](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-2.jpeg)
 
 4. On the app's **Overview** page, note the **Application (client) ID** and **Directory (tenant) ID** — both are needed for `Config.toml`.
-   ![Overview of application](setup-guide-9.jpeg)
+   ![Overview of application](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-9.jpeg)
 
 ### Step 2: Add Microsoft Graph permissions
 
 1. In the registered application, go to **API permissions** > **Add a permission** > **Microsoft Graph**.
 2. Choose **Delegated permissions** (for `refresh_token`) or **Application permissions** (for `client_credentials`), then add the permissions your use case requires — each operation's required scope is listed in its [Microsoft Graph API reference](https://learn.microsoft.com/en-us/graph/api/overview). For the delegated flow, also include `offline_access` so the token response includes a refresh token. Click **Add permissions**.
 
-   ![Request API permissions](setup-guide-4.jpeg)
+   ![Request API permissions](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-4.jpeg)
 
 3. Back on the **API permissions** page, click **Grant admin consent** and confirm **Yes**.
 
-   ![Grant admin consent](setup-guide-6.jpeg)
+   ![Grant admin consent](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-6.jpeg)
 
 4. Confirm every permission now shows **Yes** under **Admin consent granted**.
 
-   ![Configured permissions](setup-guide-3.jpeg)
+   ![Configured permissions](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-3.jpeg)
 
 ### Step 3: Create a client secret
 
 1. Go to **Certificates & secrets** > **New client secret**, add a description and an expiry, and click **Add**.
 
-   ![Add a client secret](setup-guide-8.jpeg)
+   ![Add a client secret](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-8.jpeg)
 
 2. Copy the secret **Value** immediately — it is shown only once. (The **Secret ID** shown next to it is just a label for the secret, not a credential.)
 
-   ![Certificates & secrets](setup-guide-7.jpeg)
+   ![Certificates & secrets](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-7.jpeg)
 
 ### Step 4: Obtain the credentials for `Config.toml`
 
@@ -152,6 +152,7 @@ Create a `Config.toml` file with your OAuth2 credentials:
 clientId = "<client-id>"
 clientSecret = "<client-secret>"
 refreshToken = "<refresh-token>"
+tenantId = "<tenant-id>"
 ```
 
 Initialize the client with these credentials:
@@ -160,8 +161,14 @@ Initialize the client with these credentials:
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
+configurable string tenantId = ?;
 
-teams:OAuth2RefreshTokenGrantConfig auth = {clientId, clientSecret, refreshToken};
+teams:OAuth2RefreshTokenGrantConfig auth = {
+    clientId,
+    clientSecret,
+    refreshToken,
+    refreshUrl: string `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`
+};
 teams:Client teamsClient = check new ({auth});
 ```
 
@@ -178,12 +185,12 @@ public function main() returns error? {
 
 ## Examples
 
-The `Microsoft Teams` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples/), covering the following use cases:
+The `Microsoft Teams` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples), covering the following use cases:
 
-- [Team and channel setup](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples/team-and-channel-setup) — Provision a new team and create a channel within it.
-- [Channel message thread](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples/channel-message-thread) — Post a message to a channel, reply to it, and add a reaction.
-- [Channel member management](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples/channel-member-management) — Add owners to a channel and list its current members.
-- [Team tag management](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples/team-tag-management) — Create a teamwork tag on a team and list all its tags.
+1. [Team and channel setup](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples/team-and-channel-setup) — Provision a new team and create a channel within it.
+2. [Channel message thread](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples/channel-message-thread) — Post a message to a channel, reply to it, and add a reaction.
+3. [Channel member management](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples/channel-member-management) — Create a private channel with an owner and list its members.
+4. [Team tag management](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/tree/main/examples/team-tag-management) — Create a teamwork tag on a team and list all its tags.
 
 ## Build from the source
 

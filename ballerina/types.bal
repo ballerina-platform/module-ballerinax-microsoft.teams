@@ -1,4 +1,4 @@
-// Copyright (c) 2021 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 //
 // WSO2 Inc. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -698,7 +698,7 @@ public type MicrosoftGraphChatMessageFromIdentitySet record {
 public type OAuth2ClientCredentialsGrantConfig record {|
     *http:OAuth2ClientCredentialsGrantConfig;
     # Token URL
-    string tokenUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
+    string tokenUrl;
 |};
 
 public type MicrosoftGraphSearchResult record {
@@ -1116,7 +1116,7 @@ public type MicrosoftGraphChatMessageMentionedIdentitySet record {
 public type OAuth2RefreshTokenGrantConfig record {|
     *http:OAuth2RefreshTokenGrantConfig;
     # Refresh URL
-    string refreshUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
+    string refreshUrl;
 |};
 
 public type MicrosoftGraphConversationMember record {
