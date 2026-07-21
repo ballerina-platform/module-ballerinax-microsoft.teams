@@ -21,31 +21,35 @@ To use the Microsoft Teams connector, you need access to a Microsoft 365 account
 ### Step 1: Register an application in Microsoft Entra ID
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
-2. Navigate to **Identity** > **App registrations** and click **New registration**.
+2. Navigate to **Entra ID** > **App registrations** and click **New registration**.
 
    ![App registrations](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-1.jpg)
 
-3. Enter a name of your choice and select the account types appropriate for your organization. For delegated (`refresh_token`) access, add a **Redirect URI** under the **Public client/native (mobile & desktop)** platform — this is where the sign-in flow returns the authorization code (a Microsoft-hosted page such as `https://jwt.ms` is a convenient choice for Step 4). Click **Register**.
+3. Enter a name of your choice and select the account types appropriate for your organization. For delegated (`refresh_token`) access, add a **Redirect URI** under the **Web** platform — this is where the sign-in flow returns the authorization code (a Microsoft-hosted page such as `https://jwt.ms` is a convenient choice for Step 4). The **Web** platform is required here because the connector redeems the code using a client secret (a confidential-client flow); the public "Mobile and desktop applications" platform does not accept a client secret. Click **Register**.
 
    ![Register an application](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-2.jpeg)
 
 4. On the app's **Overview** page, note the **Application (client) ID** and **Directory (tenant) ID** — both are needed for `Config.toml`.
-   ![Overview of application](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-9.jpeg)
+
+   ![Overview of application](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-3.jpeg)
 
 ### Step 2: Add Microsoft Graph permissions
 
 1. In the registered application, go to **API permissions** > **Add a permission** > **Microsoft Graph**.
+
+   ![Select Microsoft Graph](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-5.jpeg)
+
 2. Choose **Delegated permissions** (for `refresh_token`) or **Application permissions** (for `client_credentials`), then add the permissions your use case requires — each operation's required scope is listed in its [Microsoft Graph API reference](https://learn.microsoft.com/en-us/graph/api/overview). For the delegated flow, also include `offline_access` so the token response includes a refresh token. Click **Add permissions**.
 
    ![Request API permissions](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-4.jpeg)
 
-3. Back on the **API permissions** page, click **Grant admin consent** and confirm **Yes**.
+3. Back on the **API permissions** page, click **Grant admin consent for \<your tenant\>** and confirm **Yes**.
 
    ![Grant admin consent](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-6.jpeg)
 
-4. Confirm every permission now shows **Yes** under **Admin consent granted**.
+4. Confirm every permission now shows **Granted for \<your tenant\>** in the **Status** column.
 
-   ![Configured permissions](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-3.jpeg)
+   ![Configured permissions](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-microsoft.teams/main/docs/resources/setup-guide-9.jpeg)
 
 ### Step 3: Create a client secret
 

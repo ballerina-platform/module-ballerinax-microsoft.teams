@@ -5,8 +5,8 @@ name = "microsoft.teams"
 version = "@toml.version@"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = [] # TODO: Add keywords
-# icon = "icon.png" # TODO: Add icon
+keywords = ["Communication/Team Chat", "Cost/Paid", "Vendor/Microsoft", "Area/Communication", "Type/Connector"]
+icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.teams"
 
 [build-options]
