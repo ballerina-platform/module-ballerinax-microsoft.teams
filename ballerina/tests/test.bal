@@ -1,6 +1,6 @@
-// Copyright (c) 2026 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com).
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -16,21 +16,26 @@
 
 
 import ballerina/http;
+import ballerina/os;
 import ballerina/test;
 
-// Set to `true` in tests/Config.toml to run against the real Microsoft Graph API
-// instead of the local mock server.
-configurable boolean isLiveServer = false;
+// The following values are resolved from `tests/Config.toml` when present, otherwise from the
+// corresponding environment variables. This lets local runs use a Config.toml while CI/live runs
+// only need env vars/secrets set (no committed file).
 
-// Which OAuth2 grant to use when isLiveServer = true:
+// Set to `true` in tests/Config.toml (or via `-CisLiveServer=true`) to run against the real
+// Microsoft Graph API. Defaults to `false` when unset, so `bal test` runs against the local mock.
+configurable boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
+
+// Which OAuth2 grant to use when isLiveServer = true (env `AUTH_MODE`):
 // - "client_credentials": app-only auth with clientId + clientSecret + tenantId (no user or refresh token needed)
 // - "refresh_token": delegated auth with clientId + clientSecret + refreshToken
-configurable string authMode = "client_credentials";
+configurable string authMode = os:getEnv("AUTH_MODE") == "" ? "client_credentials" : os:getEnv("AUTH_MODE");
 
-configurable string clientId = "";
-configurable string clientSecret = "";
-configurable string tenantId = "common";
-configurable string refreshToken = "";
+configurable string clientId = os:getEnv("CLIENT_ID");
+configurable string clientSecret = os:getEnv("CLIENT_SECRET");
+configurable string tenantId = os:getEnv("TENANT_ID") == "" ? "common" : os:getEnv("TENANT_ID");
+configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 
 final string serviceUrl = isLiveServer ? "https://graph.microsoft.com/v1.0" : "http://localhost:9090/v1.0";
 
@@ -66,17 +71,17 @@ final string myUserId = "71f6175d-3e35-4554-ac0d-6ebe54bde96d";
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_createTeam() returns error? {
-    MicrosoftGraphTeam response = check teams->createTeam({
+    http:Response response = check teams->createTeam({
         displayName: "Ballerina Connector Test Team",
         description: "Team created by the Ballerina Microsoft Teams connector test suite",
         "template@odata.bind": "https://graph.microsoft.com/v1.0/teamsTemplates('standard')"
     });
-    test:assertTrue(response.id is string);
+    test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_getTeam() returns error? {
-    MicrosoftGraphTeam response = check teams->getTeam(teamId);
+    Team response = check teams->getTeam(teamId);
     test:assertTrue(response.id is string);
 }
 
@@ -88,21 +93,21 @@ isolated function test_deleteTeam() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_updateTeam() returns error? {
-    MicrosoftGraphTeam response = check teams->updateTeam(teamId, {
+    http:Response response = check teams->updateTeam(teamId, {
         description: "Updated by the Ballerina Microsoft Teams connector test suite"
     });
-    test:assertTrue(response.id is string);
+    test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listAllChannels() returns error? {
-    MicrosoftGraphChannelCollectionResponse response = check teams->listAllChannels(teamId);
+    ChannelCollectionResponse response = check teams->listAllChannels(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getAllChannel() returns error? {
-    MicrosoftGraphChannel response = check teams->getAllChannel(teamId, channelId);
+    Channel response = check teams->getAllChannel(teamId, channelId);
     test:assertTrue(response.id is string);
 }
 
@@ -114,22 +119,22 @@ isolated function test_countAllChannels() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_listChannels() returns error? {
-    MicrosoftGraphChannelCollectionResponse response = check teams->listChannels(teamId);
+    ChannelCollectionResponse response = check teams->listChannels(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_createChannel() returns error? {
-    MicrosoftGraphChannel response = check teams->createChannel(teamId, {
+    http:Response response = check teams->createChannel(teamId, {
         displayName: "Connector Test Channel",
         description: "Channel created by the Ballerina Microsoft Teams connector test suite"
     });
-    test:assertTrue(response.id is string);
+    test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_getChannel() returns error? {
-    MicrosoftGraphChannel response = check teams->getChannel(teamId, channelId);
+    Channel response = check teams->getChannel(teamId, channelId);
     test:assertTrue(response.id is string);
 }
 
@@ -141,21 +146,21 @@ isolated function test_deleteChannel() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_updateChannel() returns error? {
-    MicrosoftGraphChannel response = check teams->updateChannel(teamId, channelId, {
+    http:Response response = check teams->updateChannel(teamId, channelId, {
         description: "Updated by the Ballerina Microsoft Teams connector test suite"
     });
-    test:assertTrue(response.id is string);
+    test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listChannelAllMembers() returns error? {
-    MicrosoftGraphConversationMemberCollectionResponse response = check teams->listChannelAllMembers(teamId, channelId);
+    ConversationMemberCollectionResponse response = check teams->listChannelAllMembers(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createChannelAllMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->createChannelAllMember(teamId, channelId, {
+    ConversationMember response = check teams->createChannelAllMember(teamId, channelId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
         "user@odata.bind": string `https://graph.microsoft.com/v1.0/users('${myUserId}')`
@@ -165,7 +170,7 @@ isolated function test_createChannelAllMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getChannelAllMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->getChannelAllMember(teamId, channelId, memberId);
+    ConversationMember response = check teams->getChannelAllMember(teamId, channelId, memberId);
     test:assertTrue(response.id is string);
 }
 
@@ -177,7 +182,7 @@ isolated function test_deleteChannelAllMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updateChannelAllMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->updateChannelAllMember(teamId, channelId, memberId, {
+    ConversationMember response = check teams->updateChannelAllMember(teamId, channelId, memberId, {
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
@@ -211,13 +216,13 @@ isolated function test_removeChannelAllMembers() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listChannelEnabledApps() returns error? {
-    MicrosoftGraphTeamsAppCollectionResponse response = check teams->listChannelEnabledApps(teamId, channelId);
+    TeamsAppCollectionResponse response = check teams->listChannelEnabledApps(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getChannelEnabledApp() returns error? {
-    MicrosoftGraphTeamsApp response = check teams->getChannelEnabledApp(teamId, channelId, "test-id");
+    TeamsApp response = check teams->getChannelEnabledApp(teamId, channelId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -229,7 +234,7 @@ isolated function test_countChannelEnabledApps() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getChannelFilesFolder() returns error? {
-    MicrosoftGraphDriveItem response = check teams->getChannelFilesFolder(teamId, channelId);
+    DriveItem response = check teams->getChannelFilesFolder(teamId, channelId);
     test:assertTrue(response.id is string);
 }
 
@@ -241,7 +246,7 @@ isolated function test_getChannelFilesFolderContent() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updateChannelFilesFolderContent() returns error? {
-    MicrosoftGraphDriveItem response = check teams->updateChannelFilesFolderContent(teamId, channelId, "mock-content".toBytes());
+    DriveItem response = check teams->updateChannelFilesFolderContent(teamId, channelId, "mock-content".toBytes());
     test:assertTrue(response.id is string);
 }
 
@@ -253,13 +258,13 @@ isolated function test_deleteChannelFilesFolderContent() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_listChannelMembers() returns error? {
-    MicrosoftGraphConversationMemberCollectionResponse response = check teams->listChannelMembers(teamId, channelId);
+    ConversationMemberCollectionResponse response = check teams->listChannelMembers(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_createChannelMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->createChannelMember(teamId, channelId, {
+    ConversationMember response = check teams->createChannelMember(teamId, channelId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
         "user@odata.bind": string `https://graph.microsoft.com/v1.0/users('${myUserId}')`
@@ -269,7 +274,7 @@ isolated function test_createChannelMember() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_getChannelMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->getChannelMember(teamId, channelId, memberId);
+    ConversationMember response = check teams->getChannelMember(teamId, channelId, memberId);
     test:assertTrue(response.id is string);
 }
 
@@ -281,7 +286,7 @@ isolated function test_deleteChannelMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updateChannelMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->updateChannelMember(teamId, channelId, memberId, {
+    ConversationMember response = check teams->updateChannelMember(teamId, channelId, memberId, {
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
@@ -315,13 +320,13 @@ isolated function test_removeChannelMembers() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_listChannelMessages() returns error? {
-    MicrosoftGraphChatMessageCollectionResponse response = check teams->listChannelMessages(teamId, channelId);
+    ChatMessageCollectionResponse response = check teams->listChannelMessages(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_createChannelMessage() returns error? {
-    MicrosoftGraphChatMessage response = check teams->createChannelMessage(teamId, channelId, {
+    ChatMessage response = check teams->createChannelMessage(teamId, channelId, {
         body: {
             contentType: "html",
             content: "<p>Hello from the Ballerina Microsoft Teams connector test suite.</p>"
@@ -332,7 +337,7 @@ isolated function test_createChannelMessage() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_getChannelMessage() returns error? {
-    MicrosoftGraphChatMessage response = check teams->getChannelMessage(teamId, channelId, messageId);
+    ChatMessage response = check teams->getChannelMessage(teamId, channelId, messageId);
     test:assertTrue(response.id is string);
 }
 
@@ -344,24 +349,24 @@ isolated function test_deleteChannelMessage() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_updateChannelMessage() returns error? {
-    MicrosoftGraphChatMessage response = check teams->updateChannelMessage(teamId, channelId, messageId, {
+    http:Response response = check teams->updateChannelMessage(teamId, channelId, messageId, {
         body: {
             contentType: "html",
             content: "<p>Updated by the Ballerina Microsoft Teams connector test suite.</p>"
         }
     });
-    test:assertTrue(response.id is string);
+    test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listChannelMessageHostedContents() returns error? {
-    MicrosoftGraphChatMessageHostedContentCollectionResponse response = check teams->listChannelMessageHostedContents(teamId, channelId, messageId);
+    ChatMessageHostedContentCollectionResponse response = check teams->listChannelMessageHostedContents(teamId, channelId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createChannelMessageHostedContent() returns error? {
-    MicrosoftGraphChatMessageHostedContent response = check teams->createChannelMessageHostedContent(teamId, channelId, messageId, {
+    ChatMessageHostedContent response = check teams->createChannelMessageHostedContent(teamId, channelId, messageId, {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
     });
@@ -370,7 +375,7 @@ isolated function test_createChannelMessageHostedContent() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getChannelMessageHostedContent() returns error? {
-    MicrosoftGraphChatMessageHostedContent response = check teams->getChannelMessageHostedContent(teamId, channelId, messageId, "test-id");
+    ChatMessageHostedContent response = check teams->getChannelMessageHostedContent(teamId, channelId, messageId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -384,7 +389,7 @@ isolated function test_deleteChannelMessageHostedContent() returns error? {
 isolated function test_updateChannelMessageHostedContent() returns error? {
     // NOTE: "test-id" is not a real hostedContent id (would require chaining from a prior
     // createChannelMessageHostedContent call); this call is expected to 404 against the live API.
-    MicrosoftGraphChatMessageHostedContent response = check teams->updateChannelMessageHostedContent(teamId, channelId, messageId, "test-id", {
+    ChatMessageHostedContent response = check teams->updateChannelMessageHostedContent(teamId, channelId, messageId, "test-id", {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
     });
@@ -441,13 +446,13 @@ isolated function test_unsetReactionChannelMessage() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_listChannelMessageReplies() returns error? {
-    MicrosoftGraphChatMessageCollectionResponse response = check teams->listChannelMessageReplies(teamId, channelId, messageId);
+    ChatMessageCollectionResponse response = check teams->listChannelMessageReplies(teamId, channelId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_createChannelMessageReply() returns error? {
-    MicrosoftGraphChatMessage response = check teams->createChannelMessageReply(teamId, channelId, messageId, {
+    ChatMessage response = check teams->createChannelMessageReply(teamId, channelId, messageId, {
         body: {
             contentType: "html",
             content: "<p>Reply from the Ballerina Microsoft Teams connector test suite.</p>"
@@ -458,7 +463,7 @@ isolated function test_createChannelMessageReply() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_getChannelMessageReply() returns error? {
-    MicrosoftGraphChatMessage response = check teams->getChannelMessageReply(teamId, channelId, messageId, replyId);
+    ChatMessage response = check teams->getChannelMessageReply(teamId, channelId, messageId, replyId);
     test:assertTrue(response.id is string);
 }
 
@@ -470,24 +475,24 @@ isolated function test_deleteChannelMessageReply() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updateChannelMessageReply() returns error? {
-    MicrosoftGraphChatMessage response = check teams->updateChannelMessageReply(teamId, channelId, messageId, replyId, {
+    http:Response response = check teams->updateChannelMessageReply(teamId, channelId, messageId, replyId, {
         body: {
             contentType: "html",
             content: "<p>Updated reply from the Ballerina Microsoft Teams connector test suite.</p>"
         }
     });
-    test:assertTrue(response.id is string);
+    test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listChannelMessageReplyHostedContents() returns error? {
-    MicrosoftGraphChatMessageHostedContentCollectionResponse response = check teams->listChannelMessageReplyHostedContents(teamId, channelId, messageId, replyId);
+    ChatMessageHostedContentCollectionResponse response = check teams->listChannelMessageReplyHostedContents(teamId, channelId, messageId, replyId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createChannelMessageReplyHostedContent() returns error? {
-    MicrosoftGraphChatMessageHostedContent response = check teams->createChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, {
+    ChatMessageHostedContent response = check teams->createChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
     });
@@ -496,7 +501,7 @@ isolated function test_createChannelMessageReplyHostedContent() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getChannelMessageReplyHostedContent() returns error? {
-    MicrosoftGraphChatMessageHostedContent response = check teams->getChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, "test-id");
+    ChatMessageHostedContent response = check teams->getChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -510,7 +515,7 @@ isolated function test_deleteChannelMessageReplyHostedContent() returns error? {
 isolated function test_updateChannelMessageReplyHostedContent() returns error? {
     // NOTE: "test-id" is not a real hostedContent id (would require chaining from a prior
     // createChannelMessageReplyHostedContent call); this call is expected to 404 against the live API.
-    MicrosoftGraphChatMessageHostedContent response = check teams->updateChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, "test-id", {
+    ChatMessageHostedContent response = check teams->updateChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, "test-id", {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
     });
@@ -579,7 +584,7 @@ isolated function test_getChannelMessageRepliesDelta() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_replyWithQuoteChannelMessageReplies() returns error? {
-    MicrosoftGraphChatMessage quoteReply = {
+    ChatMessage quoteReply = {
         body: {
             contentType: "html",
             content: "<p>Replying with quote via the Ballerina connector test suite.</p>"
@@ -589,7 +594,7 @@ isolated function test_replyWithQuoteChannelMessageReplies() returns error? {
         replyMessage: quoteReply,
         messageIds: [replyId]
     });
-    test:assertTrue(response is MicrosoftGraphChatMessage);
+    test:assertTrue(response is ChatMessage);
 }
 
 @test:Config {groups: ["mock_tests"]}
@@ -606,7 +611,7 @@ isolated function test_getChannelMessagesDelta() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_replyWithQuoteChannelMessages() returns error? {
-    MicrosoftGraphChatMessage quoteReply = {
+    ChatMessage quoteReply = {
         body: {
             contentType: "html",
             content: "<p>Replying with quote via the Ballerina connector test suite.</p>"
@@ -616,28 +621,28 @@ isolated function test_replyWithQuoteChannelMessages() returns error? {
         replyMessage: quoteReply,
         messageIds: [messageId]
     });
-    test:assertTrue(response is MicrosoftGraphChatMessage);
+    test:assertTrue(response is ChatMessage);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_listChannelTabs() returns error? {
-    MicrosoftGraphTeamsTabCollectionResponse response = check teams->listChannelTabs(teamId, channelId);
+    TeamsTabCollectionResponse response = check teams->listChannelTabs(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_createChannelTab() returns error? {
-    MicrosoftGraphTeamsTab response = check teams->createChannelTab(teamId, channelId, {
+    TeamsTab response = check teams->createChannelTab(teamId, channelId, {
         displayName: "Wiki",
         "teamsApp@odata.bind": "https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/com.microsoft.teamspace.tab.wiki",
-        configuration: <MicrosoftGraphTeamsTabConfiguration>{}
+        configuration: <TeamsTabConfiguration>{}
     });
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getChannelTab() returns error? {
-    MicrosoftGraphTeamsTab response = check teams->getChannelTab(teamId, channelId, "test-id");
+    TeamsTab response = check teams->getChannelTab(teamId, channelId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -651,7 +656,7 @@ isolated function test_deleteChannelTab() returns error? {
 isolated function test_updateChannelTab() returns error? {
     // NOTE: "test-id" is not a real tab id (would require chaining from a prior createChannelTab
     // call); this call is expected to 404 against the live API.
-    MicrosoftGraphTeamsTab response = check teams->updateChannelTab(teamId, channelId, "test-id", {
+    TeamsTab response = check teams->updateChannelTab(teamId, channelId, "test-id", {
         displayName: "Wiki (Updated)"
     });
     test:assertTrue(response.id is string);
@@ -659,7 +664,7 @@ isolated function test_updateChannelTab() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getChannelTabTeamsApp() returns error? {
-    MicrosoftGraphTeamsApp response = check teams->getChannelTabTeamsApp(teamId, channelId, "test-id");
+    TeamsApp response = check teams->getChannelTabTeamsApp(teamId, channelId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -689,13 +694,13 @@ isolated function test_getAllRetainedChannelMessages() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listIncomingChannels() returns error? {
-    MicrosoftGraphChannelCollectionResponse response = check teams->listIncomingChannels(teamId);
+    ChannelCollectionResponse response = check teams->listIncomingChannels(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getIncomingChannel() returns error? {
-    MicrosoftGraphChannel response = check teams->getIncomingChannel(teamId, channelId);
+    Channel response = check teams->getIncomingChannel(teamId, channelId);
     test:assertTrue(response.id is string);
 }
 
@@ -707,13 +712,13 @@ isolated function test_countIncomingChannels() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listMembers() returns error? {
-    MicrosoftGraphConversationMemberCollectionResponse response = check teams->listMembers(teamId);
+    ConversationMemberCollectionResponse response = check teams->listMembers(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->createMember(teamId, {
+    ConversationMember response = check teams->createMember(teamId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
         "user@odata.bind": string `https://graph.microsoft.com/v1.0/users('${myUserId}')`
@@ -723,7 +728,7 @@ isolated function test_createMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->getMember(teamId, memberId);
+    ConversationMember response = check teams->getMember(teamId, memberId);
     test:assertTrue(response.id is string);
 }
 
@@ -735,7 +740,7 @@ isolated function test_deleteMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updateMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->updateMember(teamId, memberId, {
+    ConversationMember response = check teams->updateMember(teamId, memberId, {
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
@@ -772,16 +777,16 @@ isolated function test_sendActivityNotification() returns error? {
     // NOTE: requires a Teams app actually installed on this team whose manifest declares a
     // matching activity type; without one, Graph is expected to reject this even with valid shape.
     error? response = teams->sendActivityNotification(teamId, {
-        topic: <MicrosoftGraphTeamworkActivityTopic>{
+        topic: <TeamworkActivityTopic>{
             atOdataType: "#microsoft.graph.teamworkActivityTopic",
             'source: "entityUrl",
             value: string `https://graph.microsoft.com/v1.0/teams/${teamId}`
         },
         activityType: "taskCreated",
-        previewText: <MicrosoftGraphItemBody>{
+        previewText: <ItemBody>{
             content: "You have a new notification from the Ballerina connector test suite"
         },
-        recipient: <MicrosoftGraphTeamworkNotificationRecipient>{
+        recipient: <TeamworkNotificationRecipient>{
             atOdataType: "#microsoft.graph.aadUserNotificationRecipient",
             "userId": myUserId
         }
@@ -791,7 +796,7 @@ isolated function test_sendActivityNotification() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannel() returns error? {
-    MicrosoftGraphChannel response = check teams->getPrimaryChannel(teamId);
+    Channel response = check teams->getPrimaryChannel(teamId);
     test:assertTrue(response.id is string);
 }
 
@@ -803,21 +808,21 @@ isolated function test_deletePrimaryChannel() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updatePrimaryChannel() returns error? {
-    MicrosoftGraphChannel response = check teams->updatePrimaryChannel(teamId, {
+    http:Response response = check teams->updatePrimaryChannel(teamId, {
         description: "Updated by the Ballerina Microsoft Teams connector test suite"
     });
-    test:assertTrue(response.id is string);
+    test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listPrimaryChannelAllMembers() returns error? {
-    MicrosoftGraphConversationMemberCollectionResponse response = check teams->listPrimaryChannelAllMembers(teamId);
+    ConversationMemberCollectionResponse response = check teams->listPrimaryChannelAllMembers(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createPrimaryChannelAllMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->createPrimaryChannelAllMember(teamId, {
+    ConversationMember response = check teams->createPrimaryChannelAllMember(teamId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
         "user@odata.bind": string `https://graph.microsoft.com/v1.0/users('${myUserId}')`
@@ -827,7 +832,7 @@ isolated function test_createPrimaryChannelAllMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelAllMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->getPrimaryChannelAllMember(teamId, memberId);
+    ConversationMember response = check teams->getPrimaryChannelAllMember(teamId, memberId);
     test:assertTrue(response.id is string);
 }
 
@@ -839,7 +844,7 @@ isolated function test_deletePrimaryChannelAllMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updatePrimaryChannelAllMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->updatePrimaryChannelAllMember(teamId, memberId, {
+    ConversationMember response = check teams->updatePrimaryChannelAllMember(teamId, memberId, {
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
@@ -873,13 +878,13 @@ isolated function test_removePrimaryChannelAllMembers() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listPrimaryChannelEnabledApps() returns error? {
-    MicrosoftGraphTeamsAppCollectionResponse response = check teams->listPrimaryChannelEnabledApps(teamId);
+    TeamsAppCollectionResponse response = check teams->listPrimaryChannelEnabledApps(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelEnabledApp() returns error? {
-    MicrosoftGraphTeamsApp response = check teams->getPrimaryChannelEnabledApp(teamId, "test-id");
+    TeamsApp response = check teams->getPrimaryChannelEnabledApp(teamId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -891,7 +896,7 @@ isolated function test_countPrimaryChannelEnabledApps() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelFilesFolder() returns error? {
-    MicrosoftGraphDriveItem response = check teams->getPrimaryChannelFilesFolder(teamId);
+    DriveItem response = check teams->getPrimaryChannelFilesFolder(teamId);
     test:assertTrue(response.id is string);
 }
 
@@ -903,7 +908,7 @@ isolated function test_getPrimaryChannelFilesFolderContent() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updatePrimaryChannelFilesFolderContent() returns error? {
-    MicrosoftGraphDriveItem response = check teams->updatePrimaryChannelFilesFolderContent(teamId, "mock-content".toBytes());
+    DriveItem response = check teams->updatePrimaryChannelFilesFolderContent(teamId, "mock-content".toBytes());
     test:assertTrue(response.id is string);
 }
 
@@ -915,13 +920,13 @@ isolated function test_deletePrimaryChannelFilesFolderContent() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listPrimaryChannelMembers() returns error? {
-    MicrosoftGraphConversationMemberCollectionResponse response = check teams->listPrimaryChannelMembers(teamId);
+    ConversationMemberCollectionResponse response = check teams->listPrimaryChannelMembers(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createPrimaryChannelMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->createPrimaryChannelMember(teamId, {
+    ConversationMember response = check teams->createPrimaryChannelMember(teamId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
         "user@odata.bind": string `https://graph.microsoft.com/v1.0/users('${myUserId}')`
@@ -931,7 +936,7 @@ isolated function test_createPrimaryChannelMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->getPrimaryChannelMember(teamId, memberId);
+    ConversationMember response = check teams->getPrimaryChannelMember(teamId, memberId);
     test:assertTrue(response.id is string);
 }
 
@@ -943,7 +948,7 @@ isolated function test_deletePrimaryChannelMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updatePrimaryChannelMember() returns error? {
-    MicrosoftGraphConversationMember response = check teams->updatePrimaryChannelMember(teamId, memberId, {
+    ConversationMember response = check teams->updatePrimaryChannelMember(teamId, memberId, {
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
@@ -977,13 +982,13 @@ isolated function test_removePrimaryChannelMembers() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listPrimaryChannelMessages() returns error? {
-    MicrosoftGraphChatMessageCollectionResponse response = check teams->listPrimaryChannelMessages(teamId);
+    ChatMessageCollectionResponse response = check teams->listPrimaryChannelMessages(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createPrimaryChannelMessage() returns error? {
-    MicrosoftGraphChatMessage response = check teams->createPrimaryChannelMessage(teamId, {
+    ChatMessage response = check teams->createPrimaryChannelMessage(teamId, {
         body: {
             contentType: "html",
             content: "<p>Hello from the Ballerina Microsoft Teams connector test suite.</p>"
@@ -994,7 +999,7 @@ isolated function test_createPrimaryChannelMessage() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelMessage() returns error? {
-    MicrosoftGraphChatMessage response = check teams->getPrimaryChannelMessage(teamId, messageId);
+    ChatMessage response = check teams->getPrimaryChannelMessage(teamId, messageId);
     test:assertTrue(response.id is string);
 }
 
@@ -1006,24 +1011,24 @@ isolated function test_deletePrimaryChannelMessage() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updatePrimaryChannelMessage() returns error? {
-    MicrosoftGraphChatMessage response = check teams->updatePrimaryChannelMessage(teamId, messageId, {
+    http:Response response = check teams->updatePrimaryChannelMessage(teamId, messageId, {
         body: {
             contentType: "html",
             content: "<p>Updated by the Ballerina Microsoft Teams connector test suite.</p>"
         }
     });
-    test:assertTrue(response.id is string);
+    test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listPrimaryChannelMessageHostedContents() returns error? {
-    MicrosoftGraphChatMessageHostedContentCollectionResponse response = check teams->listPrimaryChannelMessageHostedContents(teamId, messageId);
+    ChatMessageHostedContentCollectionResponse response = check teams->listPrimaryChannelMessageHostedContents(teamId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createPrimaryChannelMessageHostedContent() returns error? {
-    MicrosoftGraphChatMessageHostedContent response = check teams->createPrimaryChannelMessageHostedContent(teamId, messageId, {
+    ChatMessageHostedContent response = check teams->createPrimaryChannelMessageHostedContent(teamId, messageId, {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
     });
@@ -1032,7 +1037,7 @@ isolated function test_createPrimaryChannelMessageHostedContent() returns error?
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelMessageHostedContent() returns error? {
-    MicrosoftGraphChatMessageHostedContent response = check teams->getPrimaryChannelMessageHostedContent(teamId, messageId, "test-id");
+    ChatMessageHostedContent response = check teams->getPrimaryChannelMessageHostedContent(teamId, messageId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -1046,7 +1051,7 @@ isolated function test_deletePrimaryChannelMessageHostedContent() returns error?
 isolated function test_updatePrimaryChannelMessageHostedContent() returns error? {
     // NOTE: "test-id" is not a real hostedContent id (would require chaining from a prior
     // createPrimaryChannelMessageHostedContent call); this call is expected to 404 against the live API.
-    MicrosoftGraphChatMessageHostedContent response = check teams->updatePrimaryChannelMessageHostedContent(teamId, messageId, "test-id", {
+    ChatMessageHostedContent response = check teams->updatePrimaryChannelMessageHostedContent(teamId, messageId, "test-id", {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
     });
@@ -1103,13 +1108,13 @@ isolated function test_unsetReactionPrimaryChannelMessage() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listPrimaryChannelMessageReplies() returns error? {
-    MicrosoftGraphChatMessageCollectionResponse response = check teams->listPrimaryChannelMessageReplies(teamId, messageId);
+    ChatMessageCollectionResponse response = check teams->listPrimaryChannelMessageReplies(teamId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createPrimaryChannelMessageReply() returns error? {
-    MicrosoftGraphChatMessage response = check teams->createPrimaryChannelMessageReply(teamId, messageId, {
+    ChatMessage response = check teams->createPrimaryChannelMessageReply(teamId, messageId, {
         body: {
             contentType: "html",
             content: "<p>Reply from the Ballerina Microsoft Teams connector test suite.</p>"
@@ -1120,7 +1125,7 @@ isolated function test_createPrimaryChannelMessageReply() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelMessageReply() returns error? {
-    MicrosoftGraphChatMessage response = check teams->getPrimaryChannelMessageReply(teamId, messageId, replyId);
+    ChatMessage response = check teams->getPrimaryChannelMessageReply(teamId, messageId, replyId);
     test:assertTrue(response.id is string);
 }
 
@@ -1132,24 +1137,24 @@ isolated function test_deletePrimaryChannelMessageReply() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updatePrimaryChannelMessageReply() returns error? {
-    MicrosoftGraphChatMessage response = check teams->updatePrimaryChannelMessageReply(teamId, messageId, replyId, {
+    http:Response response = check teams->updatePrimaryChannelMessageReply(teamId, messageId, replyId, {
         body: {
             contentType: "html",
             content: "<p>Updated reply from the Ballerina Microsoft Teams connector test suite.</p>"
         }
     });
-    test:assertTrue(response.id is string);
+    test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listPrimaryChannelMessageReplyHostedContents() returns error? {
-    MicrosoftGraphChatMessageHostedContentCollectionResponse response = check teams->listPrimaryChannelMessageReplyHostedContents(teamId, messageId, replyId);
+    ChatMessageHostedContentCollectionResponse response = check teams->listPrimaryChannelMessageReplyHostedContents(teamId, messageId, replyId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createPrimaryChannelMessageReplyHostedContent() returns error? {
-    MicrosoftGraphChatMessageHostedContent response = check teams->createPrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, {
+    ChatMessageHostedContent response = check teams->createPrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
     });
@@ -1158,7 +1163,7 @@ isolated function test_createPrimaryChannelMessageReplyHostedContent() returns e
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelMessageReplyHostedContent() returns error? {
-    MicrosoftGraphChatMessageHostedContent response = check teams->getPrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, "test-id");
+    ChatMessageHostedContent response = check teams->getPrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -1172,7 +1177,7 @@ isolated function test_deletePrimaryChannelMessageReplyHostedContent() returns e
 isolated function test_updatePrimaryChannelMessageReplyHostedContent() returns error? {
     // NOTE: "test-id" is not a real hostedContent id (would require chaining from a prior
     // createPrimaryChannelMessageReplyHostedContent call); expected to 404 against the live API.
-    MicrosoftGraphChatMessageHostedContent response = check teams->updatePrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, "test-id", {
+    ChatMessageHostedContent response = check teams->updatePrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, "test-id", {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
     });
@@ -1241,7 +1246,7 @@ isolated function test_getPrimaryChannelMessageRepliesDelta() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_replyWithQuotePrimaryChannelMessageReplies() returns error? {
-    MicrosoftGraphChatMessage quoteReply = {
+    ChatMessage quoteReply = {
         body: {
             contentType: "html",
             content: "<p>Replying with quote via the Ballerina connector test suite.</p>"
@@ -1251,7 +1256,7 @@ isolated function test_replyWithQuotePrimaryChannelMessageReplies() returns erro
         replyMessage: quoteReply,
         messageIds: [replyId]
     });
-    test:assertTrue(response is MicrosoftGraphChatMessage);
+    test:assertTrue(response is ChatMessage);
 }
 
 @test:Config {groups: ["mock_tests"]}
@@ -1268,7 +1273,7 @@ isolated function test_getPrimaryChannelMessagesDelta() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_replyWithQuotePrimaryChannelMessages() returns error? {
-    MicrosoftGraphChatMessage quoteReply = {
+    ChatMessage quoteReply = {
         body: {
             contentType: "html",
             content: "<p>Replying with quote via the Ballerina connector test suite.</p>"
@@ -1278,28 +1283,28 @@ isolated function test_replyWithQuotePrimaryChannelMessages() returns error? {
         replyMessage: quoteReply,
         messageIds: [messageId]
     });
-    test:assertTrue(response is MicrosoftGraphChatMessage);
+    test:assertTrue(response is ChatMessage);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listPrimaryChannelTabs() returns error? {
-    MicrosoftGraphTeamsTabCollectionResponse response = check teams->listPrimaryChannelTabs(teamId);
+    TeamsTabCollectionResponse response = check teams->listPrimaryChannelTabs(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_createPrimaryChannelTab() returns error? {
-    MicrosoftGraphTeamsTab response = check teams->createPrimaryChannelTab(teamId, {
+    TeamsTab response = check teams->createPrimaryChannelTab(teamId, {
         displayName: "Wiki",
         "teamsApp@odata.bind": "https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/com.microsoft.teamspace.tab.wiki",
-        configuration: <MicrosoftGraphTeamsTabConfiguration>{}
+        configuration: <TeamsTabConfiguration>{}
     });
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelTab() returns error? {
-    MicrosoftGraphTeamsTab response = check teams->getPrimaryChannelTab(teamId, "test-id");
+    TeamsTab response = check teams->getPrimaryChannelTab(teamId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -1313,7 +1318,7 @@ isolated function test_deletePrimaryChannelTab() returns error? {
 isolated function test_updatePrimaryChannelTab() returns error? {
     // NOTE: "test-id" is not a real tab id (would require chaining from a prior
     // createPrimaryChannelTab call); this call is expected to 404 against the live API.
-    MicrosoftGraphTeamsTab response = check teams->updatePrimaryChannelTab(teamId, "test-id", {
+    TeamsTab response = check teams->updatePrimaryChannelTab(teamId, "test-id", {
         displayName: "Wiki (Updated)"
     });
     test:assertTrue(response.id is string);
@@ -1321,7 +1326,7 @@ isolated function test_updatePrimaryChannelTab() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getPrimaryChannelTabTeamsApp() returns error? {
-    MicrosoftGraphTeamsApp response = check teams->getPrimaryChannelTabTeamsApp(teamId, "test-id");
+    TeamsApp response = check teams->getPrimaryChannelTabTeamsApp(teamId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -1333,13 +1338,13 @@ isolated function test_countPrimaryChannelTabs() returns error? {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_listTags() returns error? {
-    MicrosoftGraphTeamworkTagCollectionResponse response = check teams->listTags(teamId);
+    TeamworkTagCollectionResponse response = check teams->listTags(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 isolated function test_createTag() returns error? {
-    MicrosoftGraphTeamworkTag response = check teams->createTag(teamId, {
+    TeamworkTag response = check teams->createTag(teamId, {
         displayName: "Connector Test Tag",
         "members": [
             {userId: myUserId}
@@ -1350,7 +1355,7 @@ isolated function test_createTag() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getTag() returns error? {
-    MicrosoftGraphTeamworkTag response = check teams->getTag(teamId, "test-id");
+    TeamworkTag response = check teams->getTag(teamId, "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -1364,7 +1369,7 @@ isolated function test_deleteTag() returns error? {
 isolated function test_updateTag() returns error? {
     // NOTE: "test-id" is not a real tag id (would require chaining from a prior createTag call);
     // this call is expected to 404 against the live API.
-    MicrosoftGraphTeamworkTag response = check teams->updateTag(teamId, "test-id", {
+    TeamworkTag response = check teams->updateTag(teamId, "test-id", {
         displayName: "Connector Test Tag (Updated)"
     });
     test:assertTrue(response.id is string);
@@ -1372,7 +1377,7 @@ isolated function test_updateTag() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_listTagMembers() returns error? {
-    MicrosoftGraphTeamworkTagMemberCollectionResponse response = check teams->listTagMembers(teamId, "test-id");
+    TeamworkTagMemberCollectionResponse response = check teams->listTagMembers(teamId, "test-id");
     test:assertTrue(response.value is anydata[]);
 }
 
@@ -1380,7 +1385,7 @@ isolated function test_listTagMembers() returns error? {
 isolated function test_createTagMember() returns error? {
     // NOTE: "test-id" is not a real tag id (would require chaining from a prior createTag call);
     // this call is expected to 404 against the live API.
-    MicrosoftGraphTeamworkTagMember response = check teams->createTagMember(teamId, "test-id", {
+    TeamworkTagMember response = check teams->createTagMember(teamId, "test-id", {
         userId: myUserId
     });
     test:assertTrue(response.id is string);
@@ -1388,7 +1393,7 @@ isolated function test_createTagMember() returns error? {
 
 @test:Config {groups: ["mock_tests"]}
 isolated function test_getTagMember() returns error? {
-    MicrosoftGraphTeamworkTagMember response = check teams->getTagMember(teamId, "test-id", "test-id");
+    TeamworkTagMember response = check teams->getTagMember(teamId, "test-id", "test-id");
     test:assertTrue(response.id is string);
 }
 
@@ -1402,7 +1407,7 @@ isolated function test_deleteTagMember() returns error? {
 isolated function test_updateTagMember() returns error? {
     // NOTE: "test-id" is not a real tag/member id (would require chaining from prior create
     // calls); this call is expected to 404 against the live API.
-    MicrosoftGraphTeamworkTagMember response = check teams->updateTagMember(teamId, "test-id", "test-id", {
+    TeamworkTagMember response = check teams->updateTagMember(teamId, "test-id", "test-id", {
         displayName: "Connector Test Tag Member (Updated)"
     });
     test:assertTrue(response.id is string);

@@ -1,6 +1,6 @@
 # Team and channel setup
 
-This example provisions a new Microsoft Teams team from the standard template and creates a channel within it. Team creation is asynchronous in Microsoft Graph (HTTP 202), so the example waits for provisioning to finish before adding the channel.
+This example provisions a new team and sets up a channel in it, handling Microsoft Graph's **asynchronous** operations. It creates a team (202 Accepted — the team id is read from the `Location` header), polls until the team is provisioned, creates a channel (synchronous 201 for a standard channel, or async 202 for a shared channel), and finally lists the team's channels.
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ This example provisions a new Microsoft Teams team from the standard template an
 
 2. **Configuration**
 
-   Create a `Config.toml` file in the example directory and add your credentials:
+   Create a `Config.toml` file in the example directory and add your credentials. No resource ids are needed — the team and channel are created by the example:
 
    ```toml
    clientId = "<client-id>"

@@ -1,6 +1,6 @@
-// Copyright (c) 2026 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com).
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -14,7 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-// Start a conversation in a channel: post a message, reply to it, and react to it.
+// Start a threaded conversation in a channel: post a root message, reply to it,
+// then list the replies to read the thread back.
 
 import ballerina/io;
 import ballerinax/microsoft.teams;
@@ -35,21 +36,24 @@ public function main() returns error? {
     };
     teams:Client teamsClient = check new ({auth});
 
-    // Step 1: Post a message to the channel.
-    teams:MicrosoftGraphChatMessage message = check teamsClient->createChannelMessage(teamId, channelId, {
-        body: {contentType: "html", content: "Hello team! Let's kick off the project."}
+    // Step 1: Post the root message to the channel.
+    teams:ChatMessage rootMessage = check teamsClient->createChannelMessage(teamId, channelId, {
+        body: {content: "Kicking off the release checklist for this sprint. Please reply with your status."}
     });
-    string messageId = message.id ?: "";
-    io:println("Posted message with id: ", messageId);
+    string messageId = rootMessage.id ?: "";
+    io:println("Posted root message: ", messageId);
 
-    // Step 2: Reply to the message.
-    teams:MicrosoftGraphChatMessage reply = check teamsClient->createChannelMessageReply(teamId, channelId, messageId, {
-        body: {contentType: "html", content: "Sounds great, count me in!"}
+    // Step 2: Reply to the root message, forming a thread.
+    teams:ChatMessage reply = check teamsClient->createChannelMessageReply(teamId, channelId, messageId, {
+        body: {content: "Backend tasks are done and deployed to staging."}
     });
-    io:println("Posted reply with id: ", reply.id ?: "");
+    io:println("Posted reply: ", reply.id ?: "");
 
-    // Step 3: Add a reaction to the original message. Graph expects a Unicode emoji here
-    // (reaction names such as "like" are rejected with HTTP 400).
-    check teamsClient->setReactionChannelMessage(teamId, channelId, messageId, {reactionType: "👍"});
-    io:println("Reacted to message: ", messageId);
+    // Step 3: List every reply in the thread.
+    teams:ChatMessageCollectionResponse replies =
+        check teamsClient->listChannelMessageReplies(teamId, channelId, messageId);
+    io:println("Thread replies:");
+    foreach teams:ChatMessage r in replies.value ?: [] {
+        io:println("  - ", r.body?.content ?: "");
+    }
 }

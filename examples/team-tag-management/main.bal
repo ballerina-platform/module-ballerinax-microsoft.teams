@@ -1,6 +1,6 @@
-// Copyright (c) 2026 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com).
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -14,7 +14,10 @@
 // specific language governing permissions and limitations
 // under the License.
 
-// Create a teamwork tag for a team and then list all tags defined on that team.
+// Manage teamwork tags on a team: create a tag with a member, list the team's tags,
+// read one back, then delete it.
+//
+// A new tag must be created with at least one member, so a user object id is required.
 
 import ballerina/io;
 import ballerinax/microsoft.teams;
@@ -24,8 +27,7 @@ configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 configurable string tenantId = ?;
 configurable string teamId = ?;
-// Object id of a team member to seed the tag with. Microsoft Graph requires a new tag to be
-// created with at least one member.
+// Object id of a user to assign to the new tag (a tag needs at least one member).
 configurable string userId = ?;
 
 public function main() returns error? {
@@ -37,17 +39,28 @@ public function main() returns error? {
     };
     teams:Client teamsClient = check new ({auth});
 
-    // Step 1: Create a teamwork tag on the team, seeded with one member.
-    teams:MicrosoftGraphTeamworkTag newTag = check teamsClient->createTag(teamId, {
-        displayName: "On-call",
-        description: "Members currently on call",
-        "members": [{userId: userId}]
+    // Step 1: Create a tag with one member.
+    teams:TeamworkTag newTag = check teamsClient->createTag(teamId, {
+        displayName: "Release Managers",
+        "members": [
+            {"userId": userId}
+        ]
     });
-    io:println("Created tag with id: ", newTag.id ?: "");
+    string tagId = newTag.id ?: "";
+    io:println("Created tag with id: ", tagId);
 
-    // Step 2: List all teamwork tags defined on the team.
-    teams:MicrosoftGraphTeamworkTagCollectionResponse tags = check teamsClient->listTags(teamId);
-    foreach teams:MicrosoftGraphTeamworkTag tag in tags.value ?: [] {
-        io:println("Tag: ", tag?.displayName ?: "");
+    // Step 2: List all tags defined on the team.
+    teams:TeamworkTagCollectionResponse tags = check teamsClient->listTags(teamId);
+    io:println("Team tags:");
+    foreach teams:TeamworkTag tag in tags.value ?: [] {
+        io:println("  - ", tag?.displayName ?: tag.id ?: "unknown");
     }
+
+    // Step 3: Read the newly created tag back.
+    teams:TeamworkTag fetched = check teamsClient->getTag(teamId, tagId);
+    io:println("Fetched tag: ", fetched?.displayName ?: tagId, " (members: ", fetched?.memberCount ?: 0, ")");
+
+    // Step 4: Delete the tag.
+    check teamsClient->deleteTag(teamId, tagId);
+    io:println("Deleted tag: ", tagId);
 }

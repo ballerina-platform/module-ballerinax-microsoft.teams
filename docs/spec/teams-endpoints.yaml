@@ -45,11 +45,11 @@ paths:
         required: true
       responses:
         2XX:
-          description: Created entity
+          description: Any Response
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/microsoft.graph.team'
+                description: Any type of entity body
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -117,11 +117,11 @@ paths:
         required: true
       responses:
         2XX:
-          description: Success
+          description: Any Response
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/microsoft.graph.team'
+                description: Any type of entity body
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -377,11 +377,11 @@ paths:
         required: true
       responses:
         2XX:
-          description: Created navigation property.
+          description: Any Response
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/microsoft.graph.channel'
+                description: Any type of entity body
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -457,11 +457,11 @@ paths:
         required: true
       responses:
         2XX:
-          description: Success
+          description: Any Response
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/microsoft.graph.channel'
+                description: Any type of entity body
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1748,11 +1748,11 @@ paths:
         required: true
       responses:
         2XX:
-          description: Success
+          description: Any Response
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                description: Any type of entity body
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -2519,11 +2519,11 @@ paths:
         required: true
       responses:
         2XX:
-          description: Success
+          description: Any Response
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                description: Any type of entity body
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4702,11 +4702,11 @@ paths:
         required: true
       responses:
         2XX:
-          description: Success
+          description: Any Response
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/microsoft.graph.channel'
+                description: Any type of entity body
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5826,11 +5826,11 @@ paths:
         required: true
       responses:
         2XX:
-          description: Success
+          description: Any Response
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                description: Any type of entity body
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6511,11 +6511,11 @@ paths:
         required: true
       responses:
         2XX:
-          description: Success
+          description: Any Response
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                description: Any type of entity body
         4XX:
           $ref: '#/components/responses/error'
         5XX:

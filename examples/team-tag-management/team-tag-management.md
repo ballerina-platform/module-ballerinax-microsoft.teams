@@ -1,6 +1,6 @@
-# Channel message thread
+# Team tag management
 
-This example starts a conversation in a channel: it posts a message, replies to it, and adds an emoji reaction to the original message.
+This example manages teamwork tags on a team: it creates a tag — seeded with one member, as Microsoft Graph requires a new tag to have at least one member — lists all tags on the team, reads the new tag back, and then deletes it.
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ This example starts a conversation in a channel: it posts a message, replies to 
 
 2. **Configuration**
 
-   Create a `Config.toml` file in the example directory and add your credentials along with the target team and channel:
+   Create a `Config.toml` file in the example directory and add your credentials, the target team, and the object id of a team member to seed the tag with:
 
    ```toml
    clientId = "<client-id>"
@@ -17,7 +17,8 @@ This example starts a conversation in a channel: it posts a message, replies to 
    refreshToken = "<refresh-token>"
    tenantId = "<tenant-id>"
    teamId = "<team-id>"
-   channelId = "<channel-id>"
+   # Object id of a team member to seed the new tag with
+   userId = "<user-object-id>"
    ```
 
 ## Run the example

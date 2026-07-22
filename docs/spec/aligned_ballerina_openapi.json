@@ -41,11 +41,11 @@
         },
         "responses": {
           "2XX": {
-            "description": "Created entity",
+            "description": "Any Response",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/MicrosoftGraphTeam"
+                  "description": "Any type of entity body"
                 }
               }
             }
@@ -184,11 +184,11 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Any Response",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/MicrosoftGraphTeam"
+                  "description": "Any type of entity body"
                 }
               }
             }
@@ -579,11 +579,11 @@
         },
         "responses": {
           "2XX": {
-            "description": "Created navigation property",
+            "description": "Any Response",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/MicrosoftGraphChannel"
+                  "description": "Any type of entity body"
                 }
               }
             }
@@ -741,11 +741,11 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Any Response",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/MicrosoftGraphChannel"
+                  "description": "Any type of entity body"
                 }
               }
             }
@@ -2730,11 +2730,11 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Any Response",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/MicrosoftGraphChatMessage"
+                  "description": "Any type of entity body"
                 }
               }
             }
@@ -3959,11 +3959,11 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Any Response",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/MicrosoftGraphChatMessage"
+                  "description": "Any type of entity body"
                 }
               }
             }
@@ -7292,11 +7292,11 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Any Response",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/MicrosoftGraphChannel"
+                  "description": "Any type of entity body"
                 }
               }
             }
@@ -9020,11 +9020,11 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Any Response",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/MicrosoftGraphChatMessage"
+                  "description": "Any type of entity body"
                 }
               }
             }
@@ -10108,11 +10108,11 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Any Response",
             "content": {
-              "application/json": {
+              "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/MicrosoftGraphChatMessage"
+                  "description": "Any type of entity body"
                 }
               }
             }

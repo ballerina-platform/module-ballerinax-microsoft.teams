@@ -1,6 +1,6 @@
 _Author_: Ballerina \
 _Created_: 2026-07-15 \
-_Updated_: 2026-07-21 \
+_Updated_: 2026-07-22 \
 _Edition_: Swan Lake
 
 # Sanitation for OpenAPI specification
@@ -275,6 +275,36 @@ These changes are done in order to improve the overall usability, and as workaro
     - Original: The generated grant-config records defaulted the endpoint URL to the multi-tenant `/common/` endpoint — `OAuth2ClientCredentialsGrantConfig.tokenUrl` and `OAuth2RefreshTokenGrantConfig.refreshUrl` were both `= "https://login.microsoftonline.com/common/oauth2/v2.0/token"`.
     - Updated: Manually edited `ballerina/types.bal` after generation to drop those defaults, so `tokenUrl` (client-credentials flow) and `refreshUrl` (refresh-token flow) are now **required** fields the caller must supply.
     - Reason: The `/common/` default only works for multi-tenant app registrations; single-tenant apps must authenticate against their tenant-specific endpoint (`https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`). Silently defaulting to `/common/` produced confusing auth failures for single-tenant apps. Requiring the URL forces callers to point at the correct tenant. Note: this is a post-generation edit — regenerating the client reintroduces the defaults, so it must be re-applied.
+
+10. **Return `http:Response` for asynchronous (202) and no-content (204) create/update operations**
+    - Original: The Microsoft Graph metadata models every write operation's success response as `2XX` with the full entity body (e.g. `application/json` → `microsoft.graph.channel`). In reality several create/update operations do **not** return that body:
+      - `POST /teams` (`createTeam`) — always **202 Accepted**, empty body, new team URL in the `Location` header (async).
+      - `POST /teams/{id}/channels` (`createChannel`) — **201** with body for standard/private channels, but **202 Accepted** (empty body, `Location` header) for shared channels (partially async).
+      - `PATCH /teams/{id}` (`updateTeam`), `PATCH .../channels/{id}` (`updateChannel`, `updatePrimaryChannel`), `PATCH .../messages/{id}` (`updateChannelMessage`, `updatePrimaryChannelMessage`), and `PATCH .../replies/{id}` (`updateChannelMessageReply`, `updatePrimaryChannelMessageReply`) — **204 No Content**, empty body.
+
+      Because the generated methods bound the (absent) body directly into the entity record, these calls failed at runtime with a payload-binding error against live Graph. The exact status codes were verified against the [Microsoft Graph v1.0 API reference](https://learn.microsoft.com/en-us/graph/api/overview) for each operation.
+    - Updated: For these **9 operations** the `2XX` response in both `teams-endpoints.yaml` and `aligned_ballerina_openapi.json` was changed to a generic, untyped body:
+
+      ```yaml
+      responses:
+        2XX:
+          description: Any Response
+          content:
+            '*/*':
+              schema:
+                description: Any type of entity body
+      ```
+
+      and the corresponding remote methods in `ballerina/client.bal` now return **`http:Response`** (a straight pass-through of `self.clientEp->post/patch(...)`). The `4XX`/`5XX` error responses are unchanged. Callers inspect the raw response — status code, `Location` header (for the async id), and body when present. Two now-unused post-generation helpers that had previously worked around this (`validateResponse`, `asyncCreatedId`/`idAfterSegment` in `ballerina/utils.bal`) were removed.
+    - Scope: `docs/spec/teams-endpoints.yaml`, `docs/spec/aligned_ballerina_openapi.json`, `ballerina/client.bal`, `ballerina/utils.bal`. Tests (`ballerina/tests/test.bal`) and the affected examples were updated to consume `http:Response`.
+    - Reason: Modelling these responses as a typed body was incorrect and broke the calls at runtime. Returning `http:Response` is honest about the async/empty-body nature of these operations and lets callers read the `Location` header (created id) or handle the empty `204` without a binding failure. Note: this is a spec + post-generation edit — regenerating the client from the updated spec reproduces the `http:Response` return type, but if the spec is re-synced from upstream the `2XX` change and the client passthrough must be re-applied.
+
+11. **Strip the `MicrosoftGraph` prefix from generated type names**
+    - Original: Because the Microsoft Graph schemas are named `microsoft.graph.<entity>` (e.g. `microsoft.graph.team`, `microsoft.graph.channel`, `microsoft.graph.chatMessage`), `bal openapi` generated Ballerina record/enum types with a `MicrosoftGraph` prefix — `MicrosoftGraphTeam`, `MicrosoftGraphChannel`, `MicrosoftGraphChatMessage`, `MicrosoftGraphConversationMember`, `MicrosoftGraphTeamworkTag`, etc. (92 types). The prefix is redundant in a package already scoped as `ballerinax/microsoft.teams` and makes every method signature and type reference verbose (`teams:MicrosoftGraphChatMessageCollectionResponse`).
+    - Updated: Manually renamed every `MicrosoftGraph`-prefixed type after generation by dropping the prefix — `MicrosoftGraphTeam` → `Team`, `MicrosoftGraphChatMessage` → `ChatMessage`, `MicrosoftGraphConversationMemberCollectionResponse` → `ConversationMemberCollectionResponse`, and so on (91 types renamed). All references across `ballerina/types.bal`, `ballerina/client.bal`, `ballerina/tests/test.bal`, and the examples were updated to match (450 identifier replacements in total).
+      - **Collision handling:** `MicrosoftGraphChatMessageCollectionResponse` and the already-existing `ChatMessageCollectionResponse` were structurally identical (`*BaseCollectionPaginationCountResponse` + a `ChatMessage[] value?` field). Stripping the prefix would have produced a duplicate declaration, so the `MicrosoftGraph`-prefixed one was **removed** and its usages repointed to the existing `ChatMessageCollectionResponse`. No other type collided.
+    - Scope: Post-generation edit to `ballerina/types.bal`, `ballerina/client.bal`, `ballerina/tests/test.bal`, and `examples/*/main.bal`. The OpenAPI specification (`teams-endpoints.yaml`, `aligned_ballerina_openapi.json`) and the JSON wire format are **unchanged** — type names are Ballerina-side identifiers only; field-level JSON keys are still controlled by the `@jsondata:Name` annotations (e.g. `@odata.type`), and the `#microsoft.graph.*` `@odata.type` payload values are string literals that were not touched. The `MicrosoftGraph*` names mentioned in items 5 and 8 above therefore now refer to their unprefixed forms.
+    - Reason: Shorter, cleaner type names improve readability of the connector API without changing behaviour. Note: this is a post-generation edit — regenerating the client from the spec reintroduces the `MicrosoftGraph` prefix, so it must be re-applied (the schema names in the spec still carry the `microsoft.graph.` namespace).
 
 ## OpenAPI cli command
 

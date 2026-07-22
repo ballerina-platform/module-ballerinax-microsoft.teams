@@ -4,10 +4,11 @@ The `ballerinax/microsoft.teams` connector provides practical examples illustrat
 
 | Example | Description |
 |---------|-------------|
-| [`team-and-channel-setup`](./team-and-channel-setup) | Provision a new team and create a channel within it. |
-| [`channel-message-thread`](./channel-message-thread) | Post a message to a channel, reply to it, and add a reaction. |
-| [`channel-member-management`](./channel-member-management) | Create a private channel with an owner and list its members. |
-| [`team-tag-management`](./team-tag-management) | Create a teamwork tag on a team and list all its tags. |
+| [`team-and-channel-setup`](./team-and-channel-setup) | Provision a new team and set up a channel in it, handling Graph's asynchronous operations. |
+| [`channel-message-thread`](./channel-message-thread) | Post a root message to a channel, reply to it, and list the thread. |
+| [`channel-member-management`](./channel-member-management) | Add a member to a channel, list the members, read one back, and remove them. |
+| [`team-tag-management`](./team-tag-management) | Create a teamwork tag on a team, list its tags, read one back, and delete it. |
+| [`primary-channel-messaging`](./primary-channel-messaging) | Post to a team's primary channel, react to the message, and list recent messages. |
 
 ## Prerequisites
 
@@ -26,13 +27,11 @@ The `ballerinax/microsoft.teams` connector provides practical examples illustrat
    refreshToken = "<refresh-token>"
    tenantId = "<tenant-id>"
 
-   # Required by channel-message-thread, channel-member-management and team-tag-management
+   # Required by all examples EXCEPT team-and-channel-setup (which creates its own team)
    teamId = "<team-id>"
-   # Required by channel-message-thread
+   # Required by channel-message-thread and channel-member-management
    channelId = "<channel-id>"
-   # Required by channel-member-management — object id of the user to own the new private channel
-   ownerId = "<user-object-id>"
-   # Required by team-tag-management — object id of a team member to seed the tag with
+   # Required by channel-member-management (user to add) and team-tag-management (tag member)
    userId = "<user-object-id>"
    ```
 

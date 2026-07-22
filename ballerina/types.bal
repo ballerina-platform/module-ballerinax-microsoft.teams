@@ -1,6 +1,6 @@
-// Copyright (c) 2026 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com).
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -56,9 +56,9 @@ public type ListTagMembersQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphPendingOperations record {
+public type PendingOperations record {
     # A property that indicates that an operation that might update the binary content of a file is pending completion
-    MicrosoftGraphPendingContentUpdate|record {} pendingContentUpdate?;
+    PendingContentUpdate|record {} pendingContentUpdate?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
 };
@@ -101,14 +101,14 @@ public type CountPrimaryChannelEnabledAppsQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphTeamworkConversationIdentityType "team"|"channel"|"chat"|"unknownFutureValue";
+public type TeamworkConversationIdentityType "team"|"channel"|"chat"|"unknownFutureValue";
 
-public type MicrosoftGraphTeamworkTagCollectionResponse record {
+public type TeamworkTagCollectionResponse record {
     *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphTeamworkTag[] value?;
+    TeamworkTag[] value?;
 };
 
-public type MicrosoftGraphIdentity record {
+public type Identity record {
     # The display name of the identity.For drive items, the display name might not always be available or up to date. For example, if a user changes their display name the API might show the new value in a future response, but the items associated with the user don't show up as changed when using delta
     string? displayName?;
     @jsondata:Name {value: "@odata.type"}
@@ -127,17 +127,17 @@ public type CountChannelMessageReplyHostedContentsQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphPendingContentUpdate record {
+public type PendingContentUpdate record {
     # Date and time the pending binary operation was queued in UTC time. Read-only
     string? queuedDateTime?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
 };
 
-public type MicrosoftGraphChatMessagePolicyViolationVerdictDetailsTypes "none"|"allowFalsePositiveOverride"|"allowOverrideWithoutJustification"|"allowOverrideWithJustification";
+public type ChatMessagePolicyViolationVerdictDetailsTypes "none"|"allowFalsePositiveOverride"|"allowOverrideWithoutJustification"|"allowOverrideWithJustification";
 
-public type MicrosoftGraphChatMessageReactionIdentitySet record {
-    *MicrosoftGraphIdentitySet;
+public type ChatMessageReactionIdentitySet record {
+    *IdentitySet;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType = "#microsoft.graph.chatMessageReactionIdentitySet";
 };
@@ -214,8 +214,8 @@ public type ConnectionConfig record {|
     boolean laxDataBinding = true;
 |};
 
-public type MicrosoftGraphChatMessageHostedContent record {
-    *MicrosoftGraphTeamworkHostedContent;
+public type ChatMessageHostedContent record {
+    *TeamworkHostedContent;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
 };
@@ -283,12 +283,12 @@ public type DeleteChannelAllMemberHeaders record {
     string ifMatch?;
 };
 
-public type MicrosoftGraphChannel record {
-    *MicrosoftGraphEntity;
+public type Channel record {
+    *Entity;
     # Contains summary information about the channel, including number of owners, members, guests, and an indicator for members from other tenants. The summary property will only be returned if it is specified in the $select clause of the Get channel method
-    MicrosoftGraphChannelSummary|record {} summary?;
+    ChannelSummary|record {} summary?;
     # The type of the channel. Can be set during creation and can't be changed. The possible values are: standard, private, unknownFutureValue, shared. The default value is standard. Use the Prefer: include-unknown-enum-members request header to get the following members in this evolvable enum: shared
-    MicrosoftGraphChannelMembershipType|record {} membershipType?;
+    ChannelMembershipType|record {} membershipType?;
     # Channel name as it will appear to the user in Microsoft Teams. The maximum length is 50 characters
     string displayName?;
     # Indicates whether the channel is archived. Read-only
@@ -302,25 +302,25 @@ public type MicrosoftGraphChannel record {
     # Timestamp of the original creation time for the channel. The value is null if the channel never entered migration mode
     string? originalCreatedDateTime?;
     # Indicates whether a channel is in migration mode. This value is null for channels that never entered migration mode. The possible values are: inProgress, completed, unknownFutureValue
-    MicrosoftGraphMigrationMode|record {} migrationMode?;
+    MigrationMode|record {} migrationMode?;
     # A hyperlink that will go to the channel in Microsoft Teams. This is the URL that you get when you right-click a channel in Microsoft Teams and select Get link to channel. This URL should be treated as an opaque blob, and not parsed. Read-only
     string? webUrl?;
     # The ID of the Microsoft Entra tenant
     string? tenantId?;
     # The layout type of the channel. It can be set during creation and updated later. The possible values are: post, chat, unknownFutureValue. The default value is post. Channels with the post layout use a traditional post‑reply conversation format, and channels with the chat layout provide a chat‑like threading experience similar to group chats
-    MicrosoftGraphChannelLayoutType|record {} layoutType?;
+    ChannelLayoutType|record {} layoutType?;
     # Indicates whether the channel should be marked as recommended for all members of the team to show in their channel list. Note: All recommended channels automatically show in the channels list for education and frontline worker users. The property can only be set programmatically via the Create team method. The default value is false
     boolean? isFavoriteByDefault?;
     # The email address for sending messages to the channel. Read-only
     string? email?;
 };
 
-public type MicrosoftGraphFile record {
+public type File record {
     boolean? processingMetadata?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Hashes of the file's binary content, if available. Read-only
-    MicrosoftGraphHashes|record {} hashes?;
+    Hashes|record {} hashes?;
     # The MIME type for the file. This is determined by logic on the server and might not be the value provided when the file was uploaded. Read-only
     string? mimeType?;
 };
@@ -373,9 +373,9 @@ public type GetPrimaryChannelMessagesDeltaQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphTeamsAppCollectionResponse record {
+public type TeamsAppCollectionResponse record {
     *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphTeamsApp[] value?;
+    TeamsApp[] value?;
 };
 
 # Represents the Headers record for the operation: deletePrimaryChannelTab
@@ -385,7 +385,7 @@ public type DeletePrimaryChannelTabHeaders record {
     string ifMatch?;
 };
 
-public type MicrosoftGraphChannelSummary record {
+public type ChannelSummary record {
     # Count of members in a channel
     decimal? membersCount?;
     # Count of guests in a channel
@@ -398,7 +398,7 @@ public type MicrosoftGraphChannelSummary record {
     decimal? ownersCount?;
 };
 
-public type MicrosoftGraphVideo record {
+public type Video record {
     # Duration of the file in milliseconds
     decimal? duration?;
     # Frame rate of the video
@@ -458,9 +458,9 @@ public type ListChannelMessageRepliesQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphChatMessageHostedContentCollectionResponse record {
+public type ChatMessageHostedContentCollectionResponse record {
     *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphChatMessageHostedContent[] value?;
+    ChatMessageHostedContent[] value?;
 };
 
 # Represents the Queries record for the operation: getPrimaryChannelFilesFolderContent
@@ -500,16 +500,16 @@ public type GetChannelEnabledAppQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphSpecialFolder record {
+public type SpecialFolder record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # The unique identifier for this item in the /drive/special collection
     string? name?;
 };
 
-public type MicrosoftGraphTeamworkTagType "standard"|"unknownFutureValue";
+public type TeamworkTagType "standard"|"unknownFutureValue";
 
-public type MicrosoftGraphImage record {
+public type Image record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Optional. Width of the image, in pixels. Read-only
@@ -528,20 +528,20 @@ public type GetAllChannelQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphShared record {
+public type Shared record {
     # The identity of the owner of the shared item. Read-only
-    MicrosoftGraphIdentitySet|record {} owner?;
+    IdentitySet|record {} owner?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Indicates the scope of how the item is shared. The possible values are: anonymous, organization, or users. Read-only
     string? scope?;
     # The identity of the user who shared the item. Read-only
-    MicrosoftGraphIdentitySet|record {} sharedBy?;
+    IdentitySet|record {} sharedBy?;
     # The UTC date and time when the item was shared. Read-only
     string? sharedDateTime?;
 };
 
-public type MicrosoftGraphPhoto record {
+public type Photo record {
     # The numerator for the exposure time fraction from the camera. Read-only
     decimal|string|ReferenceNumeric? exposureNumerator?;
     # The orientation value from the camera. Writable on OneDrive Personal
@@ -564,7 +564,7 @@ public type MicrosoftGraphPhoto record {
     decimal|string|ReferenceNumeric? focalLength?;
 };
 
-public type MicrosoftGraphChatMessageType "message"|"chatEvent"|"typing"|"unknownFutureValue"|"systemEventMessage";
+public type ChatMessageType "message"|"chatEvent"|"typing"|"unknownFutureValue"|"systemEventMessage";
 
 # Represents the Queries record for the operation: countPrimaryChannelMessageReplies
 public type CountPrimaryChannelMessageRepliesQueries record {
@@ -611,9 +611,9 @@ public type ListAllChannelsQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphBundle record {
+public type Bundle record {
     # If the bundle is an album, then the album property is included
-    MicrosoftGraphAlbum|record {} album?;
+    Album|record {} album?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Number of children contained immediately within this container
@@ -648,7 +648,7 @@ public type ListIncomingChannelsQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphChatMessageActions "reactionAdded"|"reactionRemoved"|"actionUndefined"|"unknownFutureValue";
+public type ChatMessageActions "reactionAdded"|"reactionRemoved"|"actionUndefined"|"unknownFutureValue";
 
 # Represents the Queries record for the operation: getChannel
 public type GetChannelQueries record {
@@ -688,8 +688,8 @@ public type GetAllRetainedChannelMessagesQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphChatMessageFromIdentitySet record {
-    *MicrosoftGraphIdentitySet;
+public type ChatMessageFromIdentitySet record {
+    *IdentitySet;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType = "#microsoft.graph.chatMessageFromIdentitySet";
 };
@@ -701,14 +701,14 @@ public type OAuth2ClientCredentialsGrantConfig record {|
     string tokenUrl;
 |};
 
-public type MicrosoftGraphSearchResult record {
+public type SearchResult record {
     # A callback URL that can be used to record telemetry information. The application should issue a GET on this URL if the user interacts with this item to improve the quality of results
     string? onClickTelemetryUrl?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
 };
 
-public type MicrosoftGraphTeamsTabConfiguration record {
+public type TeamsTabConfiguration record {
     # Url used for rendering tab contents in Teams. Required
     string? contentUrl?;
     # Url called by Teams client when a Tab is removed using the Teams Client
@@ -738,7 +738,7 @@ public type GetChannelMessageQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphTeamGuestSettings record {
+public type TeamGuestSettings record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # If set to true, guests can delete channels
@@ -747,7 +747,7 @@ public type MicrosoftGraphTeamGuestSettings record {
     boolean? allowCreateUpdateChannels?;
 };
 
-public type MicrosoftGraphPublicErrorDetail record {
+public type PublicErrorDetail record {
     # The error code
     string? code?;
     @jsondata:Name {value: "@odata.type"}
@@ -758,7 +758,7 @@ public type MicrosoftGraphPublicErrorDetail record {
     string? target?;
 };
 
-public type MicrosoftGraphDeleted record {
+public type Deleted record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Represents the state of the deleted item
@@ -775,24 +775,24 @@ public type CountChannelTabsQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphTeamworkActivityTopic record {
+public type TeamworkActivityTopic record {
     # The link the user clicks when they select the notification. Optional when source is entityUrl; required when source is text
     string? webUrl?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Type of source. The possible values are: entityUrl, text. For supported Microsoft Graph URLs, use entityUrl. For custom text, use text
-    MicrosoftGraphTeamworkActivityTopicSource|record {} 'source?;
+    TeamworkActivityTopicSource|record {} 'source?;
     # The topic value. If the value of the source property is entityUrl, this must be a Microsoft Graph URL. If the value is text, this must be a plain text value
     string value?;
 };
 
-public type MicrosoftGraphPublicInnerError record {
+public type PublicInnerError record {
     # The error code
     string? code?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # A collection of error details
-    MicrosoftGraphPublicErrorDetail[] details?;
+    PublicErrorDetail[] details?;
     # The error message
     string? message?;
     # The target of the error
@@ -829,9 +829,9 @@ public type GetAllChannelMessagesQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphConversationMemberCollectionResponse record {
+public type ConversationMemberCollectionResponse record {
     *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphConversationMember[] value?;
+    ConversationMember[] value?;
 };
 
 # Represents the Queries record for the operation: listChannelMembers
@@ -862,7 +862,7 @@ public type ListChannelMembersQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphItemReference record {
+public type ItemReference record {
     # Percent-encoded path that can be used to navigate to the item. Read-only
     string? path?;
     # Unique identifier of the drive instance that contains the driveItem. Only returned if the item is located in a drive. Read-only
@@ -880,14 +880,14 @@ public type MicrosoftGraphItemReference record {
     # Unique identifier of the driveItem in the drive or a listItem in a list. Read-only
     string? id?;
     # Returns identifiers useful for SharePoint REST compatibility. Read-only
-    MicrosoftGraphSharepointIds|record {} sharepointIds?;
+    SharepointIds|record {} sharepointIds?;
 };
 
-public type MicrosoftGraphItemBody record {
+public type ItemBody record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # The type of the content. Possible values are text and html
-    MicrosoftGraphBodyType|record {} contentType?;
+    BodyType|record {} contentType?;
     # The content of the item
     string? content?;
 };
@@ -937,7 +937,7 @@ public type GetTagQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphTeamMessagingSettings record {
+public type TeamMessagingSettings record {
     # If set to true, users can delete their messages
     boolean? allowUserDeleteMessages?;
     # If set to true, @team mentions are allowed
@@ -962,12 +962,12 @@ public type CountChannelMessageHostedContentsQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphRoot record {
+public type Root record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
 };
 
-public type MicrosoftGraphBodyType "text"|"html";
+public type BodyType "text"|"html";
 
 # Represents the Headers record for the operation: deletePrimaryChannelMember
 public type DeletePrimaryChannelMemberHeaders record {
@@ -980,7 +980,7 @@ public type SetReactionRequest record {
     string? reactionType?;
 };
 
-public type MicrosoftGraphPublicationFacet record {
+public type PublicationFacet record {
     # The unique identifier for the version that is visible to the current caller. Read-only
     string? versionId?;
     # The state of publication for this document. Either published or checkout. Read-only
@@ -988,7 +988,7 @@ public type MicrosoftGraphPublicationFacet record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # The user who checked out the file
-    MicrosoftGraphIdentitySet|record {} checkedOutBy?;
+    IdentitySet|record {} checkedOutBy?;
 };
 
 # Represents the Headers record for the operation: deletePrimaryChannelMessageHostedContent
@@ -1005,7 +1005,7 @@ public type DeletePrimaryChannelMessageReplyHeaders record {
     string ifMatch?;
 };
 
-public type MicrosoftGraphPackage record {
+public type Package record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # A string indicating the type of package. While oneNote is the only currently defined value, you should expect other package types to be returned and handle them accordingly
@@ -1062,7 +1062,7 @@ public type DeletePrimaryChannelFilesFolderContentHeaders record {
     string If\-Match?;
 };
 
-public type MicrosoftGraphChatMessageAttachment record {
+public type ChatMessageAttachment record {
     # The ID of the Teams app that is associated with the attachment. The property is used to attribute a Teams message card to the specified app
     string? teamsAppId?;
     # The URL for the content of the attachment
@@ -1081,7 +1081,7 @@ public type MicrosoftGraphChatMessageAttachment record {
     string? thumbnailUrl?;
 };
 
-public type MicrosoftGraphChatMessagePolicyViolationPolicyTip record {
+public type ChatMessagePolicyViolationPolicyTip record {
     # The URL a user can visit to read about the data loss prevention policies for the organization. (ie, policies about what users shouldn't say in chats)
     string? complianceUrl?;
     @jsondata:Name {value: "@odata.type"}
@@ -1092,7 +1092,7 @@ public type MicrosoftGraphChatMessagePolicyViolationPolicyTip record {
     string[] matchedConditionDescriptions?;
 };
 
-public type MicrosoftGraphTeamsAppDistributionMethod "store"|"organization"|"sideloaded"|"unknownFutureValue";
+public type TeamsAppDistributionMethod "store"|"organization"|"sideloaded"|"unknownFutureValue";
 
 # Represents the Queries record for the operation: countMembers
 public type CountMembersQueries record {
@@ -1104,12 +1104,12 @@ public type CountMembersQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphChatMessageMentionedIdentitySet record {
-    *MicrosoftGraphIdentitySet;
+public type ChatMessageMentionedIdentitySet record {
+    *IdentitySet;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType = "#microsoft.graph.chatMessageMentionedIdentitySet";
     # If present, represents a conversation (for example, team, channel, or chat) @mentioned in a message
-    MicrosoftGraphTeamworkConversationIdentity|record {} conversation?;
+    TeamworkConversationIdentity|record {} conversation?;
 };
 
 # OAuth2 Refresh Token Grant Configs
@@ -1119,8 +1119,8 @@ public type OAuth2RefreshTokenGrantConfig record {|
     string refreshUrl;
 |};
 
-public type MicrosoftGraphConversationMember record {
-    *MicrosoftGraphEntity;
+public type ConversationMember record {
+    *Entity;
     # The display name of the user
     string? displayName?;
     @jsondata:Name {value: "@odata.type"}
@@ -1131,15 +1131,15 @@ public type MicrosoftGraphConversationMember record {
     string? visibleHistoryStartDateTime?;
 };
 
-public type MicrosoftGraphIdentitySet record {
+public type IdentitySet record {
     # Optional. The application associated with this action
-    MicrosoftGraphIdentity|record {} application?;
+    Identity|record {} application?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Optional. The device associated with this action
-    MicrosoftGraphIdentity|record {} device?;
+    Identity|record {} device?;
     # Optional. The user associated with this action
-    MicrosoftGraphIdentity|record {} user?;
+    Identity|record {} user?;
 };
 
 # Represents the Queries record for the operation: getMember
@@ -1226,17 +1226,17 @@ public type DeleteChannelMessageReplyHostedContentValueHeaders record {
     string If\-Match?;
 };
 
-public type MicrosoftGraphGiphyRatingType "strict"|"moderate"|"unknownFutureValue";
+public type GiphyRatingType "strict"|"moderate"|"unknownFutureValue";
 
-public type MicrosoftGraphPublicError record {
+public type PublicError record {
     # Represents the error code
     string? code?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Details of the error
-    MicrosoftGraphPublicErrorDetail[] details?;
+    PublicErrorDetail[] details?;
     # Details of the inner error
-    MicrosoftGraphPublicInnerError|record {} innerError?;
+    PublicInnerError|record {} innerError?;
     # A non-localized message for the developer
     string? message?;
     # The target of the error
@@ -1250,7 +1250,7 @@ public type DeleteChannelMessageHostedContentHeaders record {
     string ifMatch?;
 };
 
-public type MicrosoftGraphAlbum record {
+public type Album record {
     # Unique identifier of the driveItem that is the cover of the album
     string? coverImageItemId?;
     @jsondata:Name {value: "@odata.type"}
@@ -1302,9 +1302,9 @@ public type DeletePrimaryChannelHeaders record {
     string ifMatch?;
 };
 
-public type MicrosoftGraphTeamworkTagMemberCollectionResponse record {
+public type TeamworkTagMemberCollectionResponse record {
     *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphTeamworkTagMember[] value?;
+    TeamworkTagMember[] value?;
 };
 
 # Represents the Queries record for the operation: getTeam
@@ -1334,11 +1334,11 @@ public type GetPrimaryChannelMessageReplyHostedContentQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphTeamFunSettings record {
+public type TeamFunSettings record {
     # If set to true, enables users to include custom memes
     boolean? allowCustomMemes?;
     # Giphy content rating. The possible values are: moderate, strict
-    MicrosoftGraphGiphyRatingType|record {} giphyContentRating?;
+    GiphyRatingType|record {} giphyContentRating?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # If set to true, enables Giphy use
@@ -1375,7 +1375,7 @@ public type ListPrimaryChannelMessageRepliesQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphMalware record {
+public type Malware record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Contains the virus details for the malware facet
@@ -1410,14 +1410,14 @@ public type ListChannelsQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphTeam record {
-    *MicrosoftGraphEntity;
+public type Team record {
+    *Entity;
     # Contains summary information about the team, including number of owners, members, and guests
-    MicrosoftGraphTeamSummary|record {} summary?;
+    TeamSummary|record {} summary?;
     # Settings to configure whether guests can create, update, or delete channels in the team
-    MicrosoftGraphTeamGuestSettings|record {} guestSettings?;
+    TeamGuestSettings|record {} guestSettings?;
     # The visibility of the group and team. Defaults to Public
-    MicrosoftGraphTeamVisibilityType|record {} visibility?;
+    TeamVisibilityType|record {} visibility?;
     # The name of the team
     string? displayName?;
     # Whether this team is in read-only mode
@@ -1435,20 +1435,20 @@ public type MicrosoftGraphTeam record {
     # A unique ID for the team that was used in a few places such as the audit log/Office 365 Management Activity API
     string? internalId?;
     # Settings to configure messaging and mentions in the team
-    MicrosoftGraphTeamMessagingSettings|record {} messagingSettings?;
+    TeamMessagingSettings|record {} messagingSettings?;
     # Settings to configure use of Giphy, memes, and stickers in the team
-    MicrosoftGraphTeamFunSettings|record {} funSettings?;
+    TeamFunSettings|record {} funSettings?;
     # A hyperlink that goes to the team in the Microsoft Teams client. You get this URL when you right-click a team in the Microsoft Teams client and select Get link to team. This URL should be treated as an opaque blob, and not parsed
     string? webUrl?;
     # The ID of the Microsoft Entra tenant
     string? tenantId?;
     # Optional. Indicates whether the team is intended for a particular use case. Each team specialization has access to unique behaviors and experiences targeted to its use case
-    MicrosoftGraphTeamSpecialization|record {} specialization?;
+    TeamSpecialization|record {} specialization?;
     # Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the team
-    MicrosoftGraphTeamMemberSettings|record {} memberSettings?;
+    TeamMemberSettings|record {} memberSettings?;
 };
 
-public type MicrosoftGraphTeamMemberSettings record {
+public type TeamMemberSettings record {
     # If set to true, members can add and update private channels
     boolean? allowCreatePrivateChannels?;
     # If set to true, members can add, update, and remove tabs
@@ -1482,7 +1482,7 @@ public type DeleteChannelMessageReplyHeaders record {
     string ifMatch?;
 };
 
-public type MicrosoftGraphSharepointIds record {
+public type SharepointIds record {
     # The unique identifier (guid) for the item's list in SharePoint
     string? listId?;
     # The unique identifier (guid) for the item within OneDrive for Business or a SharePoint site
@@ -1503,7 +1503,7 @@ public type MicrosoftGraphSharepointIds record {
 
 public type ChatMessageDeltaCollectionResponse record {
     *BaseDeltaFunctionResponse;
-    MicrosoftGraphChatMessage[] value?;
+    ChatMessage[] value?;
 };
 
 # Represents the Headers record for the operation: deletePrimaryChannelMessageHostedContentValue
@@ -1512,7 +1512,7 @@ public type DeletePrimaryChannelMessageHostedContentValueHeaders record {
     string If\-Match?;
 };
 
-public type MicrosoftGraphChatMessageMention record {
+public type ChatMessageMention record {
     # String used to represent the mention. For example, a user's display name, a team name
     string? mentionText?;
     @jsondata:Name {value: "@odata.type"}
@@ -1520,7 +1520,7 @@ public type MicrosoftGraphChatMessageMention record {
     # Index of an entity being mentioned in the specified chatMessage. Matches the {index} value in the corresponding <at id='{index}'> tag in the message body
     decimal? id?;
     # The entity (user, application, team, channel, or chat) that was @mentioned
-    MicrosoftGraphChatMessageMentionedIdentitySet|record {} mentioned?;
+    ChatMessageMentionedIdentitySet|record {} mentioned?;
 };
 
 # Represents the Headers record for the operation: deletePrimaryChannelMessageReplyHostedContent
@@ -1540,19 +1540,19 @@ public type CountIncomingChannelsQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphChatMessage record {
-    *MicrosoftGraphEntity;
+public type ChatMessage record {
+    *Entity;
     # Summary text of the chat message that could be used for push notifications and summary views or fall back views. Only applies to channel chat messages, not chat messages in a chat
     string? summary?;
     # References to attached objects like files, tabs, meetings etc
-    MicrosoftGraphChatMessageAttachment[] attachments?;
+    ChatMessageAttachment[] attachments?;
     # Read-only. Timestamp when edits to the chat message were made. Triggers an 'Edited' flag in the Teams UI. If no edits are made the value is null
     string? lastEditedDateTime?;
     # Read-only. Timestamp when the chat message is created (initial setting) or modified, including when a reaction is added or removed
     string? lastModifiedDateTime?;
     # If the message was sent in a chat, represents the identity of the chat
     string? chatId?;
-    MicrosoftGraphChatMessageImportance importance?;
+    ChatMessageImportance importance?;
     # Read-only. ID of the parent chat message or root chat message of the thread. (Only applies to chat messages in channels, not chats.)
     string? replyToId?;
     # The subject of the chat message, in plaintext
@@ -1564,32 +1564,32 @@ public type MicrosoftGraphChatMessage record {
     # Read-only. Timestamp at which the chat message was deleted, or null if not deleted
     string? deletedDateTime?;
     # Defines the properties of a policy violation set by a data loss prevention (DLP) application
-    MicrosoftGraphChatMessagePolicyViolation|record {} policyViolation?;
-    MicrosoftGraphItemBody body?;
+    ChatMessagePolicyViolation|record {} policyViolation?;
+    ItemBody body?;
     # Locale of the chat message set by the client. Always set to en-us
     string locale?;
     # If the message was sent in a channel, represents identity of the channel
-    MicrosoftGraphChannelIdentity|record {} channelIdentity?;
-    MicrosoftGraphChatMessageType messageType?;
+    ChannelIdentity|record {} channelIdentity?;
+    ChatMessageType messageType?;
     # Read-only. Link to the message in Microsoft Teams
     string? webUrl?;
     # List of entities mentioned in the chat message. Supported entities are: user, bot, team, channel, chat, and tag
-    MicrosoftGraphChatMessageMention[] mentions?;
+    ChatMessageMention[] mentions?;
     # List of activity history of a message item, including modification time and actions, such as reactionAdded, reactionRemoved, or reaction changes, on the message
-    MicrosoftGraphChatMessageHistoryItem[] messageHistory?;
+    ChatMessageHistoryItem[] messageHistory?;
     # Read-only. Version number of the chat message
     string? etag?;
     # Details of the sender of the chat message. Can only be set during migration
-    MicrosoftGraphChatMessageFromIdentitySet|record {} 'from?;
+    ChatMessageFromIdentitySet|record {} 'from?;
     # Reactions for this chat message (for example, Like)
-    MicrosoftGraphChatMessageReaction[] reactions?;
+    ChatMessageReaction[] reactions?;
     # Read-only. If present, represents details of an event that happened in a chat, a channel, or a team, for example, adding new members. For event messages, the messageType property will be set to systemEventMessage
-    MicrosoftGraphEventMessageDetail|record {} eventDetail?;
+    EventMessageDetail|record {} eventDetail?;
 };
 
-public type MicrosoftGraphTeamsTabCollectionResponse record {
+public type TeamsTabCollectionResponse record {
     *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphTeamsTab[] value?;
+    TeamsTab[] value?;
 };
 
 # Represents the Headers record for the operation: deleteChannelMessage
@@ -1600,7 +1600,7 @@ public type DeleteChannelMessageHeaders record {
 };
 
 public type ReplyWithQuoteRequest record {
-    MicrosoftGraphChatMessage|record {} replyMessage?;
+    ChatMessage|record {} replyMessage?;
     string[] messageIds?;
 };
 
@@ -1637,14 +1637,14 @@ public type DeleteTeamHeaders record {
     string ifMatch?;
 };
 
-public type MicrosoftGraphChatMessagePolicyViolationUserActionTypes "none"|"override"|"reportFalsePositive";
+public type ChatMessagePolicyViolationUserActionTypes "none"|"override"|"reportFalsePositive";
 
-public type MicrosoftGraphTeamworkNotificationRecipient record {
+public type TeamworkNotificationRecipient record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
 };
 
-public type MicrosoftGraphTeamworkActivityTopicSource "entityUrl"|"text";
+public type TeamworkActivityTopicSource "entityUrl"|"text";
 
 # Represents the Queries record for the operation: getChannelMessageReplyHostedContent
 public type GetChannelMessageReplyHostedContentQueries record {
@@ -1656,7 +1656,7 @@ public type GetChannelMessageReplyHostedContentQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphChannelIdentity record {
+public type ChannelIdentity record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # The identity of the team in which the message was posted
@@ -1675,7 +1675,7 @@ public type CountTagMembersQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphFileSystemInfo record {
+public type FileSystemInfo record {
     # The UTC date and time the file was last accessed. Available for the recent file list only
     string? lastAccessedDateTime?;
     # The UTC date and time the file was last modified on a client
@@ -1724,14 +1724,14 @@ public type CountChannelMembersQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphEntity record {
+public type Entity record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # The unique identifier for an entity. Read-only
     string id?;
 };
 
-public type MicrosoftGraphAudio record {
+public type Audio record {
     # Indicates if the file is protected with digital rights management
     boolean? hasDrm?;
     # The name of the composer of the audio file
@@ -1770,7 +1770,7 @@ public type MicrosoftGraphAudio record {
 
 public type ActionResultPartCollectionResponse record {
     *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphActionResultPart[] value?;
+    ActionResultPart[] value?;
 };
 
 # Represents the Queries record for the operation: getChannelMessageRepliesDelta
@@ -1801,7 +1801,7 @@ public type GetChannelMessageRepliesDeltaQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphChatMessagePolicyViolationDlpActionTypes "none"|"notifySender"|"blockAccess"|"blockAccessExternal";
+public type ChatMessagePolicyViolationDlpActionTypes "none"|"notifySender"|"blockAccess"|"blockAccessExternal";
 
 # Represents the Headers record for the operation: deleteMember
 public type DeleteMemberHeaders record {
@@ -1858,11 +1858,11 @@ public type GetPrimaryChannelFilesFolderQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphActionResultPart record {
+public type ActionResultPart record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # The error that occurred, if any, during the bulk operation
-    MicrosoftGraphPublicError|record {} 'error?;
+    PublicError|record {} 'error?;
 };
 
 # Represents the Queries record for the operation: listChannelMessages
@@ -1903,10 +1903,10 @@ public type GetChannelTabQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphTeamsApp record {
-    *MicrosoftGraphEntity;
+public type TeamsApp record {
+    *Entity;
     # The method of distribution for the app. Read-only
-    MicrosoftGraphTeamsAppDistributionMethod|record {} distributionMethod?;
+    TeamsAppDistributionMethod|record {} distributionMethod?;
     # The name of the catalog app provided by the app developer in the Microsoft Teams zip app package
     string? displayName?;
     @jsondata:Name {value: "@odata.type"}
@@ -1915,8 +1915,8 @@ public type MicrosoftGraphTeamsApp record {
     string? externalId?;
 };
 
-public type MicrosoftGraphTeamworkHostedContent record {
-    *MicrosoftGraphEntity;
+public type TeamworkHostedContent record {
+    *Entity;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Write only. Bytes for the hosted content (such as images)
@@ -1925,7 +1925,7 @@ public type MicrosoftGraphTeamworkHostedContent record {
     string? contentType?;
 };
 
-public type MicrosoftGraphKeyValuePair record {
+public type KeyValuePair record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Name for this key-value pair
@@ -1934,9 +1934,9 @@ public type MicrosoftGraphKeyValuePair record {
     string? value?;
 };
 
-public type MicrosoftGraphChannelCollectionResponse record {
+public type ChannelCollectionResponse record {
     *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphChannel[] value?;
+    Channel[] value?;
 };
 
 # Represents the Queries record for the operation: getChannelMember
@@ -1994,9 +1994,9 @@ public type DeletePrimaryChannelMessageHeaders record {
     string ifMatch?;
 };
 
-public type MicrosoftGraphFolder record {
+public type Folder record {
     # A collection of properties defining the recommended view for the folder
-    MicrosoftGraphFolderView|record {} view?;
+    FolderView|record {} view?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Number of children contained immediately within this container
@@ -2007,22 +2007,22 @@ public type SendActivityNotificationRequest record {
     string? teamsAppId?;
     string? iconId?;
     decimal? chainId?;
-    MicrosoftGraphKeyValuePair[] templateParameters?;
-    MicrosoftGraphTeamworkNotificationRecipient|record {} recipient?;
-    MicrosoftGraphTeamworkActivityTopic|record {} topic?;
+    KeyValuePair[] templateParameters?;
+    TeamworkNotificationRecipient|record {} recipient?;
+    TeamworkActivityTopic|record {} topic?;
     string? activityType?;
-    MicrosoftGraphItemBody|record {} previewText?;
+    ItemBody|record {} previewText?;
 };
 
-public type MicrosoftGraphChatMessageHistoryItem record {
+public type ChatMessageHistoryItem record {
     # The reaction in the modified message
-    MicrosoftGraphChatMessageReaction|record {} reaction?;
+    ChatMessageReaction|record {} reaction?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # The date and time when the message was modified
     @constraint:String {pattern: re `^[0-9]{4,}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]([.][0-9]{1,12})?(Z|[+-][0-9][0-9]:[0-9][0-9])$`}
     string modifiedDateTime?;
-    MicrosoftGraphChatMessageActions actions?;
+    ChatMessageActions actions?;
 };
 
 public type BaseDeltaFunctionResponse record {
@@ -2032,7 +2032,7 @@ public type BaseDeltaFunctionResponse record {
     string? atOdataNextLink?;
 };
 
-public type MicrosoftGraphChannelLayoutType "post"|"chat"|"unknownFutureValue";
+public type ChannelLayoutType "post"|"chat"|"unknownFutureValue";
 
 # Represents the Queries record for the operation: getChannelTabTeamsApp
 public type GetChannelTabTeamsAppQueries record {
@@ -2044,7 +2044,7 @@ public type GetChannelTabTeamsAppQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphGeoCoordinates record {
+public type GeoCoordinates record {
     # Optional. The altitude (height), in feet,  above sea level for the item. Read-only
     decimal|string|ReferenceNumeric? altitude?;
     @jsondata:Name {value: "@odata.type"}
@@ -2065,37 +2065,37 @@ public type CountChannelAllMembersQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphRemoteItem record {
+public type RemoteItem record {
     # Image metadata, if the item is an image. Read-only
-    MicrosoftGraphImage|record {} image?;
+    Image|record {} image?;
     # Indicates that the item has been shared with others and provides information about the shared state of the item. Read-only
-    MicrosoftGraphShared|record {} shared?;
+    Shared|record {} shared?;
     # Date and time the item was last modified. Read-only
     string? lastModifiedDateTime?;
     # If present, indicates that this item is a package instead of a folder or file. Packages are treated like files in some contexts and folders in others. Read-only
-    MicrosoftGraphPackage|record {} package?;
+    Package|record {} package?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Identity of the user, device, and application which last modified the item. Read-only
-    MicrosoftGraphIdentitySet|record {} lastModifiedBy?;
+    IdentitySet|record {} lastModifiedBy?;
     # Date and time of item creation. Read-only
     string? createdDateTime?;
     # DAV compatible URL for the item
     string? webDavUrl?;
     # Video metadata, if the item is a video. Read-only
-    MicrosoftGraphVideo|record {} video?;
+    Video|record {} video?;
     # Provides interop between items in OneDrive for Business and SharePoint with the full set of item identifiers. Read-only
-    MicrosoftGraphSharepointIds|record {} sharepointIds?;
+    SharepointIds|record {} sharepointIds?;
     # Properties of the parent of the remote item. Read-only
-    MicrosoftGraphItemReference|record {} parentReference?;
+    ItemReference|record {} parentReference?;
     # Indicates that the remote item is a file. Read-only
-    MicrosoftGraphFile|record {} file?;
+    File|record {} file?;
     # Indicates that the remote item is a folder. Read-only
-    MicrosoftGraphFolder|record {} folder?;
+    Folder|record {} folder?;
     # Size of the remote item. Read-only
     decimal? size?;
     # Identity of the user, device, and application which created the item. Read-only
-    MicrosoftGraphIdentitySet|record {} createdBy?;
+    IdentitySet|record {} createdBy?;
     # URL that displays the resource in the browser. Read-only
     string? webUrl?;
     # Optional. Filename of the remote item. Read-only
@@ -2103,13 +2103,13 @@ public type MicrosoftGraphRemoteItem record {
     # Unique identifier for the remote item in its drive. Read-only
     string? id?;
     # If the current item is also available as a special folder, this facet is returned. Read-only
-    MicrosoftGraphSpecialFolder|record {} specialFolder?;
+    SpecialFolder|record {} specialFolder?;
     # Information about the remote item from the local file system. Read-only
-    MicrosoftGraphFileSystemInfo|record {} fileSystemInfo?;
+    FileSystemInfo|record {} fileSystemInfo?;
 };
 
-public type MicrosoftGraphTeamworkTagMember record {
-    *MicrosoftGraphEntity;
+public type TeamworkTagMember record {
+    *Entity;
     # The member's display name
     string? displayName?;
     @jsondata:Name {value: "@odata.type"}
@@ -2121,7 +2121,7 @@ public type MicrosoftGraphTeamworkTagMember record {
 };
 
 public type AddMembersRequest record {
-    MicrosoftGraphConversationMember[] values?;
+    ConversationMember[] values?;
 };
 
 # Represents the Queries record for the operation: countChannelMessages
@@ -2134,10 +2134,10 @@ public type CountChannelMessagesQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphTeamsTab record {
-    *MicrosoftGraphEntity;
+public type TeamsTab record {
+    *Entity;
     # Container for custom settings applied to a tab. The tab is considered configured only once this property is set
-    MicrosoftGraphTeamsTabConfiguration|record {} configuration?;
+    TeamsTabConfiguration|record {} configuration?;
     # Name of the tab
     string? displayName?;
     # Deep link URL of the tab instance. Read-only
@@ -2156,22 +2156,22 @@ public type CountPrimaryChannelMessageHostedContentsQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphMigrationMode "inProgress"|"completed"|"unknownFutureValue";
+public type MigrationMode "inProgress"|"completed"|"unknownFutureValue";
 
-public type MicrosoftGraphBaseItem record {
-    *MicrosoftGraphEntity;
+public type BaseItem record {
+    *Entity;
     # Parent information, if the item has a parent. Read-write
-    MicrosoftGraphItemReference|record {} parentReference?;
+    ItemReference|record {} parentReference?;
     # Date and time the item was last modified. Read-only
     string lastModifiedDateTime?;
     # Identity of the user, device, or application that created the item. Read-only
-    MicrosoftGraphIdentitySet|record {} createdBy?;
+    IdentitySet|record {} createdBy?;
     # URL that either displays the resource in the browser (for Office file formats), or is a direct link to the file (for other formats). Read-only
     string? webUrl?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Identity of the user, device, and application that last modified the item. Read-only
-    MicrosoftGraphIdentitySet|record {} lastModifiedBy?;
+    IdentitySet|record {} lastModifiedBy?;
     # The name of the item. Read-write
     string? name?;
     # Date and time of item creation. Read-only
@@ -2182,7 +2182,7 @@ public type MicrosoftGraphBaseItem record {
     string? eTag?;
 };
 
-public type MicrosoftGraphTeamSummary record {
+public type TeamSummary record {
     # Count of members in a team
     decimal? membersCount?;
     # Count of guests in a team
@@ -2193,7 +2193,7 @@ public type MicrosoftGraphTeamSummary record {
     decimal? ownersCount?;
 };
 
-public type MicrosoftGraphHashes record {
+public type Hashes record {
     # This property isn't supported. Don't use
     string? sha256Hash?;
     # A proprietary hash of the file that can be used to determine if the contents of the file change (if available). Read-only
@@ -2282,7 +2282,7 @@ public type GetPrimaryChannelTabQueries record {
 public type EmptyResponse record {
 };
 
-public type MicrosoftGraphTeamVisibilityType "private"|"public"|"hiddenMembership"|"unknownFutureValue";
+public type TeamVisibilityType "private"|"public"|"hiddenMembership"|"unknownFutureValue";
 
 # Represents the Queries record for the operation: getTagMember
 public type GetTagMemberQueries record {
@@ -2324,7 +2324,7 @@ public type ListPrimaryChannelMembersQueries record {
 
 public type ChatMessageCollectionResponse record {
     *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphChatMessage[] value?;
+    ChatMessage[] value?;
 };
 
 # Represents the Queries record for the operation: getPrimaryChannel
@@ -2382,12 +2382,12 @@ public type ListPrimaryChannelMessageHostedContentsQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphEventMessageDetail record {
+public type EventMessageDetail record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
 };
 
-public type MicrosoftGraphFolderView record {
+public type FolderView record {
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # If true, indicates that items should be sorted in descending order. Otherwise, items should be sorted ascending
@@ -2408,7 +2408,7 @@ public type CountTagsQueries record {
     string dollarSearch?;
 };
 
-public type MicrosoftGraphChannelMembershipType "standard"|"private"|"unknownFutureValue"|"shared";
+public type ChannelMembershipType "standard"|"private"|"unknownFutureValue"|"shared";
 
 # Represents the Headers record for the operation: deleteChannel
 public type DeleteChannelHeaders record {
@@ -2427,8 +2427,8 @@ public type GetPrimaryChannelMessageQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphTeamworkTag record {
-    *MicrosoftGraphEntity;
+public type TeamworkTag record {
+    *Entity;
     # The name of the tag as it appears to the user in Microsoft Teams
     string? displayName?;
     @jsondata:Name {value: "@odata.type"}
@@ -2438,12 +2438,12 @@ public type MicrosoftGraphTeamworkTag record {
     # ID of the team in which the tag is defined
     string? teamId?;
     # The type of the tag. Default is standard
-    MicrosoftGraphTeamworkTagType|record {} tagType?;
+    TeamworkTagType|record {} tagType?;
     # The description of the tag as it appears to the user in Microsoft Teams. A teamworkTag can't have more than 200 teamworkTagMembers
     string? description?;
 };
 
-public type MicrosoftGraphTeamSpecialization "none"|"educationStandard"|"educationClass"|"educationProfessionalLearningCommunity"|"educationStaff"|"healthcareStandard"|"healthcareCareCoordination"|"unknownFutureValue";
+public type TeamSpecialization "none"|"educationStandard"|"educationClass"|"educationProfessionalLearningCommunity"|"educationStaff"|"healthcareStandard"|"healthcareCareCoordination"|"unknownFutureValue";
 
 # Represents the Queries record for the operation: listPrimaryChannelEnabledApps
 public type ListPrimaryChannelEnabledAppsQueries record {
@@ -2473,25 +2473,25 @@ public type ListPrimaryChannelEnabledAppsQueries record {
     string[] dollarSelect?;
 };
 
-public type MicrosoftGraphChatMessagePolicyViolation record {
+public type ChatMessagePolicyViolation record {
     # Justification text provided by the sender of the message when overriding a policy violation
     string? justificationText?;
     # Indicates the action taken by the user on a message blocked by the DLP provider. Supported values are: NoneOverrideReportFalsePositiveWhen the DLP provider is updating the message for blocking sensitive content, userAction isn't required
-    MicrosoftGraphChatMessagePolicyViolationUserActionTypes|record {} userAction?;
+    ChatMessagePolicyViolationUserActionTypes|record {} userAction?;
     # Information to display to the message sender about why the message was flagged as a violation
-    MicrosoftGraphChatMessagePolicyViolationPolicyTip|record {} policyTip?;
+    ChatMessagePolicyViolationPolicyTip|record {} policyTip?;
     # The action taken by the DLP provider on the message with sensitive content. Supported values are: NoneNotifySender -- Inform the sender of the violation but allow readers to read the message.BlockAccess -- Block readers from reading the message.BlockAccessExternal -- Block users outside the organization from reading the message, while allowing users within the organization to read the message
-    MicrosoftGraphChatMessagePolicyViolationDlpActionTypes|record {} dlpAction?;
+    ChatMessagePolicyViolationDlpActionTypes|record {} dlpAction?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType?;
     # Indicates what actions the sender may take in response to the policy violation. Supported values are: NoneAllowFalsePositiveOverride -- Allows the sender to declare the policyViolation to be an error in the DLP app and its rules, and allow readers to see the message again if the dlpAction hides it.AllowOverrideWithoutJustification -- Allows the sender to override the DLP violation and allow readers to see the message again if the dlpAction hides it, without needing to provide an explanation for doing so. AllowOverrideWithJustification -- Allows the sender to override the DLP violation and allow readers to see the message again if the dlpAction hides it, after providing an explanation for doing so.AllowOverrideWithoutJustification and AllowOverrideWithJustification are mutually exclusive
-    MicrosoftGraphChatMessagePolicyViolationVerdictDetailsTypes|record {} verdictDetails?;
+    ChatMessagePolicyViolationVerdictDetailsTypes|record {} verdictDetails?;
 };
 
-public type MicrosoftGraphTeamworkConversationIdentity record {
-    *MicrosoftGraphIdentity;
+public type TeamworkConversationIdentity record {
+    *Identity;
     # Type of conversation. The possible values are: team, channel, chat, and unknownFutureValue
-    MicrosoftGraphTeamworkConversationIdentityType|record {} conversationIdentityType?;
+    TeamworkConversationIdentityType|record {} conversationIdentityType?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType = "#microsoft.graph.teamworkConversationIdentity";
 };
@@ -2513,7 +2513,7 @@ public type DeletePrimaryChannelAllMemberHeaders record {
     string ifMatch?;
 };
 
-public type MicrosoftGraphChatMessageReaction record {
+public type ChatMessageReaction record {
     # The reaction type. Supported values include Unicode characters, custom, and some backward-compatible reaction types, such as like, angry, sad, laugh, heart, and surprised
     string reactionType?;
     # The name of the reaction
@@ -2525,61 +2525,61 @@ public type MicrosoftGraphChatMessageReaction record {
     # The timestamp type represents date and time information using ISO 8601 format and is always in UTC. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z
     @constraint:String {pattern: re `^[0-9]{4,}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]([.][0-9]{1,12})?(Z|[+-][0-9][0-9]:[0-9][0-9])$`}
     string createdDateTime?;
-    MicrosoftGraphChatMessageReactionIdentitySet user?;
+    ChatMessageReactionIdentitySet user?;
 };
 
-public type MicrosoftGraphDriveItem record {
-    *MicrosoftGraphBaseItem;
+public type DriveItem record {
+    *BaseItem;
     # Search metadata, if the item is from a search result. Read-only
-    MicrosoftGraphSearchResult|record {} searchResult?;
+    SearchResult|record {} searchResult?;
     # Indicates that the item was shared with others and provides information about the shared state of the item. Read-only
-    MicrosoftGraphShared|record {} shared?;
+    Shared|record {} shared?;
     @jsondata:Name {value: "@odata.type"}
     string atOdataType = "#microsoft.graph.driveItem";
     # Video metadata, if the item is a video. Read-only
-    MicrosoftGraphVideo|record {} video?;
+    Video|record {} video?;
     # Returns identifiers useful for SharePoint REST compatibility. Read-only
-    MicrosoftGraphSharepointIds|record {} sharepointIds?;
+    SharepointIds|record {} sharepointIds?;
     # The content stream, if the item represents a file
     string? content?;
     # File metadata, if the item is a file. Read-only
-    MicrosoftGraphFile|record {} file?;
+    File|record {} file?;
     # If present, indicates that one or more operations that might affect the state of the driveItem are pending completion. Read-only
-    MicrosoftGraphPendingOperations|record {} pendingOperations?;
+    PendingOperations|record {} pendingOperations?;
     # Provides information about the published or checked-out state of an item, in locations that support such actions. This property isn't returned by default. Read-only
-    MicrosoftGraphPublicationFacet|record {} publication?;
+    PublicationFacet|record {} publication?;
     # If this property is non-null, it indicates that the driveItem is the top-most driveItem in the drive
-    MicrosoftGraphRoot|record {} root?;
+    Root|record {} root?;
     # An eTag for the content of the item. This eTag isn't changed if only the metadata is changed. Note This property isn't returned if the item is a folder. Read-only
     string? cTag?;
     # Audio metadata, if the item is an audio file. Read-only. Read-only. Only on OneDrive Personal
-    MicrosoftGraphAudio|record {} audio?;
+    Audio|record {} audio?;
     # Bundle metadata, if the item is a bundle. Read-only
-    MicrosoftGraphBundle|record {} bundle?;
+    Bundle|record {} bundle?;
     # Image metadata, if the item is an image. Read-only
-    MicrosoftGraphImage|record {} image?;
+    Image|record {} image?;
     # Malware metadata, if the item was detected to contain malware. Read-only
-    MicrosoftGraphMalware|record {} malware?;
+    Malware|record {} malware?;
     # If present, indicates that this item is a package instead of a folder or file. Packages are treated like files in some contexts and folders in others. Read-only
-    MicrosoftGraphPackage|record {} package?;
+    Package|record {} package?;
     # Photo metadata, if the item is a photo. Read-only
-    MicrosoftGraphPhoto|record {} photo?;
+    Photo|record {} photo?;
     # WebDAV compatible URL for the item
     string? webDavUrl?;
     # Information about the deleted state of the item. Read-only
-    MicrosoftGraphDeleted|record {} deleted?;
+    Deleted|record {} deleted?;
     # Folder metadata, if the item is a folder. Read-only
-    MicrosoftGraphFolder|record {} folder?;
+    Folder|record {} folder?;
     # Size of the item in bytes. Read-only
     decimal? size?;
     # Remote item data, if the item is shared from a drive other than the one being accessed. Read-only
-    MicrosoftGraphRemoteItem|record {} remoteItem?;
+    RemoteItem|record {} remoteItem?;
     # Location metadata, if the item has location data. Read-only
-    MicrosoftGraphGeoCoordinates|record {} location?;
+    GeoCoordinates|record {} location?;
     # If the current item is also available as a special folder, this facet is returned. Read-only
-    MicrosoftGraphSpecialFolder|record {} specialFolder?;
+    SpecialFolder|record {} specialFolder?;
     # File system information on client. Read-write
-    MicrosoftGraphFileSystemInfo|record {} fileSystemInfo?;
+    FileSystemInfo|record {} fileSystemInfo?;
 };
 
 # Represents the Queries record for the operation: listChannelAllMembers
@@ -2610,11 +2610,7 @@ public type ListChannelAllMembersQueries record {
     string[] dollarSelect?;
 };
 
-public type ChatMessageResponse MicrosoftGraphChatMessage|EmptyResponse?;
+public type ChatMessageResponse ChatMessage|EmptyResponse?;
 
-public type MicrosoftGraphChatMessageImportance "normal"|"high"|"urgent"|"unknownFutureValue";
+public type ChatMessageImportance "normal"|"high"|"urgent"|"unknownFutureValue";
 
-public type MicrosoftGraphChatMessageCollectionResponse record {
-    *BaseCollectionPaginationCountResponse;
-    MicrosoftGraphChatMessage[] value?;
-};

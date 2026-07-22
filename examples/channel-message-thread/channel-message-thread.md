@@ -1,6 +1,6 @@
-# Team tag management
+# Channel message thread
 
-This example creates a teamwork tag on a team — seeded with one member, as Microsoft Graph requires a new tag to have at least one member — and then lists all tags defined on that team.
+This example starts a threaded conversation in a channel: it posts a root message, replies to it to form a thread, and then lists every reply in the thread.
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ This example creates a teamwork tag on a team — seeded with one member, as Mic
 
 2. **Configuration**
 
-   Create a `Config.toml` file in the example directory and add your credentials, the target team, and the object id of a team member to seed the tag with:
+   Create a `Config.toml` file in the example directory and add your credentials and the target team and channel:
 
    ```toml
    clientId = "<client-id>"
@@ -17,8 +17,7 @@ This example creates a teamwork tag on a team — seeded with one member, as Mic
    refreshToken = "<refresh-token>"
    tenantId = "<tenant-id>"
    teamId = "<team-id>"
-   # Object id of a team member to seed the new tag with
-   userId = "<user-object-id>"
+   channelId = "<channel-id>"
    ```
 
 ## Run the example

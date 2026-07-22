@@ -1,6 +1,6 @@
-// Copyright (c) 2026 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com).
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -45,24 +45,12 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request
     # + payload - The team to create
     # + return - Created entity 
-    remote isolated function createTeam(MicrosoftGraphTeam payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeam|error {
+    remote isolated function createTeam(Team payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
-        // Team creation is asynchronous: Graph responds 202 Accepted with an empty body and the new
-        // team's location in a header, so the raw response is inspected rather than bound directly.
-        http:Response response = check self.clientEp->post(resourcePath, request, headers);
-        check validateResponse(response);
-        if response.statusCode == 202 || response.statusCode == 204 {
-            string? teamId = asyncCreatedId(response, "teams");
-            if teamId is string {
-                return {id: teamId};
-            }
-            return error("Team was created asynchronously but its id was not returned in the response headers");
-        }
-        json responseBody = check response.getJsonPayload();
-        return jsondata:parseAsType(responseBody);
+        return self.clientEp->post(resourcePath, request, headers);
     }
 
     # Get team
@@ -71,7 +59,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved entity 
-    remote isolated function getTeam(string teamId, map<string|string[]> headers = {}, *GetTeamQueries queries) returns MicrosoftGraphTeam|error {
+    remote isolated function getTeam(string teamId, map<string|string[]> headers = {}, *GetTeamQueries queries) returns Team|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -98,19 +86,12 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - New property values 
     # + return - Success 
-    remote isolated function updateTeam(string teamId, MicrosoftGraphTeam payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeam|error {
+    remote isolated function updateTeam(string teamId, Team payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
-        // A team PATCH returns 204 No Content; re-fetch so the updated entity can still be returned.
-        http:Response response = check self.clientEp->patch(resourcePath, request, headers);
-        check validateResponse(response);
-        if response.statusCode == 204 {
-            return self.clientEp->get(resourcePath);
-        }
-        json responseBody = check response.getJsonPayload();
-        return jsondata:parseAsType(responseBody);
+        return self.clientEp->patch(resourcePath, request, headers);
     }
 
     # List allChannels
@@ -119,7 +100,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listAllChannels(string teamId, map<string|string[]> headers = {}, *ListAllChannelsQueries queries) returns MicrosoftGraphChannelCollectionResponse|error {
+    remote isolated function listAllChannels(string teamId, map<string|string[]> headers = {}, *ListAllChannelsQueries queries) returns ChannelCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/allChannels`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -133,7 +114,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved channel
-    remote isolated function getAllChannel(string teamId, string channelId, map<string|string[]> headers = {}, *GetAllChannelQueries queries) returns MicrosoftGraphChannel|error {
+    remote isolated function getAllChannel(string teamId, string channelId, map<string|string[]> headers = {}, *GetAllChannelQueries queries) returns Channel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/allChannels/${getEncodedUri(channelId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -158,7 +139,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listChannels(string teamId, map<string|string[]> headers = {}, *ListChannelsQueries queries) returns MicrosoftGraphChannelCollectionResponse|error {
+    remote isolated function listChannels(string teamId, map<string|string[]> headers = {}, *ListChannelsQueries queries) returns ChannelCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -177,25 +158,12 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The channel to create
     # + return - The created channel
-    remote isolated function createChannel(string teamId, MicrosoftGraphChannel payload, map<string|string[]> headers = {}) returns MicrosoftGraphChannel|error {
+    remote isolated function createChannel(string teamId, Channel payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
-        // Standard channels are created synchronously (201 with the channel body), but private and
-        // shared channels are created asynchronously (202 Accepted, empty body, id in a header), so
-        // both shapes are handled here.
-        http:Response response = check self.clientEp->post(resourcePath, request, headers);
-        check validateResponse(response);
-        if response.statusCode == 202 || response.statusCode == 204 {
-            string? channelId = asyncCreatedId(response, "channels");
-            if channelId is string {
-                return {id: channelId};
-            }
-            return error("Channel was created asynchronously but its id was not returned in the response headers");
-        }
-        json responseBody = check response.getJsonPayload();
-        return jsondata:parseAsType(responseBody);
+        return self.clientEp->post(resourcePath, request, headers);
     }
 
     # Get channel
@@ -205,7 +173,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved channel
-    remote isolated function getChannel(string teamId, string channelId, map<string|string[]> headers = {}, *GetChannelQueries queries) returns MicrosoftGraphChannel|error {
+    remote isolated function getChannel(string teamId, string channelId, map<string|string[]> headers = {}, *GetChannelQueries queries) returns Channel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -234,19 +202,12 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The channel properties to update
     # + return - Success 
-    remote isolated function updateChannel(string teamId, string channelId, MicrosoftGraphChannel payload, map<string|string[]> headers = {}) returns MicrosoftGraphChannel|error {
+    remote isolated function updateChannel(string teamId, string channelId, Channel payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
-        // A channel PATCH returns 204 No Content; re-fetch so the updated entity can still be returned.
-        http:Response response = check self.clientEp->patch(resourcePath, request, headers);
-        check validateResponse(response);
-        if response.statusCode == 204 {
-            return self.clientEp->get(resourcePath);
-        }
-        json responseBody = check response.getJsonPayload();
-        return jsondata:parseAsType(responseBody);
+        return self.clientEp->patch(resourcePath, request, headers);
     }
 
     # List allMembers
@@ -256,7 +217,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listChannelAllMembers(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelAllMembersQueries queries) returns MicrosoftGraphConversationMemberCollectionResponse|error {
+    remote isolated function listChannelAllMembers(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelAllMembersQueries queries) returns ConversationMemberCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -275,7 +236,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member to create
     # + return - The created member
-    remote isolated function createChannelAllMember(string teamId, string channelId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function createChannelAllMember(string teamId, string channelId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -291,7 +252,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved member
-    remote isolated function getChannelAllMember(string teamId, string channelId, string conversationMemberId, map<string|string[]> headers = {}, *GetChannelAllMemberQueries queries) returns MicrosoftGraphConversationMember|error {
+    remote isolated function getChannelAllMember(string teamId, string channelId, string conversationMemberId, map<string|string[]> headers = {}, *GetChannelAllMemberQueries queries) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -322,7 +283,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
     # + return - Success 
-    remote isolated function updateChannelAllMember(string teamId, string channelId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function updateChannelAllMember(string teamId, string channelId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -388,7 +349,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listChannelEnabledApps(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelEnabledAppsQueries queries) returns MicrosoftGraphTeamsAppCollectionResponse|error {
+    remote isolated function listChannelEnabledApps(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelEnabledAppsQueries queries) returns TeamsAppCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/enabledApps`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -403,7 +364,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved app
-    remote isolated function getChannelEnabledApp(string teamId, string channelId, string teamsAppId, map<string|string[]> headers = {}, *GetChannelEnabledAppQueries queries) returns MicrosoftGraphTeamsApp|error {
+    remote isolated function getChannelEnabledApp(string teamId, string channelId, string teamsAppId, map<string|string[]> headers = {}, *GetChannelEnabledAppQueries queries) returns TeamsApp|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/enabledApps/${getEncodedUri(teamsAppId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -430,7 +391,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved files folder
-    remote isolated function getChannelFilesFolder(string teamId, string channelId, map<string|string[]> headers = {}, *GetChannelFilesFolderQueries queries) returns MicrosoftGraphDriveItem|error {
+    remote isolated function getChannelFilesFolder(string teamId, string channelId, map<string|string[]> headers = {}, *GetChannelFilesFolderQueries queries) returns DriveItem|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/filesFolder`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -460,7 +421,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - New media content 
     # + return - Success 
-    remote isolated function updateChannelFilesFolderContent(string teamId, string channelId, byte[] payload, map<string|string[]> headers = {}) returns MicrosoftGraphDriveItem|error {
+    remote isolated function updateChannelFilesFolderContent(string teamId, string channelId, byte[] payload, map<string|string[]> headers = {}) returns DriveItem|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/filesFolder/content`;
         http:Request request = new;
         request.setPayload(payload, "application/octet-stream");
@@ -486,7 +447,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listChannelMembers(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelMembersQueries queries) returns MicrosoftGraphConversationMemberCollectionResponse|error {
+    remote isolated function listChannelMembers(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelMembersQueries queries) returns ConversationMemberCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -505,7 +466,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member to create
     # + return - The created member
-    remote isolated function createChannelMember(string teamId, string channelId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function createChannelMember(string teamId, string channelId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -521,7 +482,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved member
-    remote isolated function getChannelMember(string teamId, string channelId, string conversationMemberId, map<string|string[]> headers = {}, *GetChannelMemberQueries queries) returns MicrosoftGraphConversationMember|error {
+    remote isolated function getChannelMember(string teamId, string channelId, string conversationMemberId, map<string|string[]> headers = {}, *GetChannelMemberQueries queries) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -552,7 +513,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
     # + return - Success 
-    remote isolated function updateChannelMember(string teamId, string channelId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function updateChannelMember(string teamId, string channelId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -618,7 +579,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listChannelMessages(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelMessagesQueries queries) returns MicrosoftGraphChatMessageCollectionResponse|error {
+    remote isolated function listChannelMessages(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelMessagesQueries queries) returns ChatMessageCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -636,7 +597,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The message to create
     # + return - The created message
-    remote isolated function createChannelMessage(string teamId, string channelId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
+    remote isolated function createChannelMessage(string teamId, string channelId, ChatMessage payload, map<string|string[]> headers = {}) returns ChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -652,7 +613,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved message
-    remote isolated function getChannelMessage(string teamId, string channelId, string chatMessageId, map<string|string[]> headers = {}, *GetChannelMessageQueries queries) returns MicrosoftGraphChatMessage|error {
+    remote isolated function getChannelMessage(string teamId, string channelId, string chatMessageId, map<string|string[]> headers = {}, *GetChannelMessageQueries queries) returns ChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -683,20 +644,12 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The message properties to update
     # + return - Success 
-    remote isolated function updateChannelMessage(string teamId, string channelId, string chatMessageId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
+    remote isolated function updateChannelMessage(string teamId, string channelId, string chatMessageId, ChatMessage payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
-        // A delegated chatMessage PATCH returns 204 No Content; re-fetch so the updated entity can
-        // still be returned (an application/policyViolation update returns 200 with a body).
-        http:Response response = check self.clientEp->patch(resourcePath, request, headers);
-        check validateResponse(response);
-        if response.statusCode == 204 {
-            return self.clientEp->get(resourcePath);
-        }
-        json responseBody = check response.getJsonPayload();
-        return jsondata:parseAsType(responseBody);
+        return self.clientEp->patch(resourcePath, request, headers);
     }
 
     # List hostedContents
@@ -707,7 +660,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listChannelMessageHostedContents(string teamId, string channelId, string chatMessageId, map<string|string[]> headers = {}, *ListChannelMessageHostedContentsQueries queries) returns MicrosoftGraphChatMessageHostedContentCollectionResponse|error {
+    remote isolated function listChannelMessageHostedContents(string teamId, string channelId, string chatMessageId, map<string|string[]> headers = {}, *ListChannelMessageHostedContentsQueries queries) returns ChatMessageHostedContentCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/hostedContents`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -726,7 +679,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content to create
     # + return - The created hosted content
-    remote isolated function createChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function createChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/hostedContents`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -743,7 +696,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved hosted content
-    remote isolated function getChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetChannelMessageHostedContentQueries queries) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function getChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetChannelMessageHostedContentQueries queries) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -776,7 +729,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content properties to update
     # + return - Success 
-    remote isolated function updateChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageHostedContentId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function updateChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageHostedContentId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -915,7 +868,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listChannelMessageReplies(string teamId, string channelId, string chatMessageId, map<string|string[]> headers = {}, *ListChannelMessageRepliesQueries queries) returns MicrosoftGraphChatMessageCollectionResponse|error {
+    remote isolated function listChannelMessageReplies(string teamId, string channelId, string chatMessageId, map<string|string[]> headers = {}, *ListChannelMessageRepliesQueries queries) returns ChatMessageCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -934,7 +887,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The message to create
     # + return - The created message
-    remote isolated function createChannelMessageReply(string teamId, string channelId, string chatMessageId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
+    remote isolated function createChannelMessageReply(string teamId, string channelId, string chatMessageId, ChatMessage payload, map<string|string[]> headers = {}) returns ChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -951,7 +904,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved message
-    remote isolated function getChannelMessageReply(string teamId, string channelId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *GetChannelMessageReplyQueries queries) returns MicrosoftGraphChatMessage|error {
+    remote isolated function getChannelMessageReply(string teamId, string channelId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *GetChannelMessageReplyQueries queries) returns ChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -984,7 +937,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The message properties to update
     # + return - Success 
-    remote isolated function updateChannelMessageReply(string teamId, string channelId, string chatMessageId, string chatMessageId1, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
+    remote isolated function updateChannelMessageReply(string teamId, string channelId, string chatMessageId, string chatMessageId1, ChatMessage payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1001,7 +954,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listChannelMessageReplyHostedContents(string teamId, string channelId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *ListChannelMessageReplyHostedContentsQueries queries) returns MicrosoftGraphChatMessageHostedContentCollectionResponse|error {
+    remote isolated function listChannelMessageReplyHostedContents(string teamId, string channelId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *ListChannelMessageReplyHostedContentsQueries queries) returns ChatMessageHostedContentCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1021,7 +974,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content to create
     # + return - The created hosted content
-    remote isolated function createChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function createChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1039,7 +992,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved hosted content
-    remote isolated function getChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetChannelMessageReplyHostedContentQueries queries) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function getChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetChannelMessageReplyHostedContentQueries queries) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1074,7 +1027,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content properties to update
     # + return - Success 
-    remote isolated function updateChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function updateChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1315,7 +1268,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listChannelTabs(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelTabsQueries queries) returns MicrosoftGraphTeamsTabCollectionResponse|error {
+    remote isolated function listChannelTabs(string teamId, string channelId, map<string|string[]> headers = {}, *ListChannelTabsQueries queries) returns TeamsTabCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1334,7 +1287,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The tab to create
     # + return - The created tab
-    remote isolated function createChannelTab(string teamId, string channelId, MicrosoftGraphTeamsTab payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamsTab|error {
+    remote isolated function createChannelTab(string teamId, string channelId, TeamsTab payload, map<string|string[]> headers = {}) returns TeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1350,7 +1303,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved tab
-    remote isolated function getChannelTab(string teamId, string channelId, string teamsTabId, map<string|string[]> headers = {}, *GetChannelTabQueries queries) returns MicrosoftGraphTeamsTab|error {
+    remote isolated function getChannelTab(string teamId, string channelId, string teamsTabId, map<string|string[]> headers = {}, *GetChannelTabQueries queries) returns TeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs/${getEncodedUri(teamsTabId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1381,7 +1334,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The tab properties to update
     # + return - Success 
-    remote isolated function updateChannelTab(string teamId, string channelId, string teamsTabId, MicrosoftGraphTeamsTab payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamsTab|error {
+    remote isolated function updateChannelTab(string teamId, string channelId, string teamsTabId, TeamsTab payload, map<string|string[]> headers = {}) returns TeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs/${getEncodedUri(teamsTabId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1397,7 +1350,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved app
-    remote isolated function getChannelTabTeamsApp(string teamId, string channelId, string teamsTabId, map<string|string[]> headers = {}, *GetChannelTabTeamsAppQueries queries) returns MicrosoftGraphTeamsApp|error {
+    remote isolated function getChannelTabTeamsApp(string teamId, string channelId, string teamsTabId, map<string|string[]> headers = {}, *GetChannelTabTeamsAppQueries queries) returns TeamsApp|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs/${getEncodedUri(teamsTabId)}/teamsApp`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1461,7 +1414,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listIncomingChannels(string teamId, map<string|string[]> headers = {}, *ListIncomingChannelsQueries queries) returns MicrosoftGraphChannelCollectionResponse|error {
+    remote isolated function listIncomingChannels(string teamId, map<string|string[]> headers = {}, *ListIncomingChannelsQueries queries) returns ChannelCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/incomingChannels`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1475,7 +1428,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved channel
-    remote isolated function getIncomingChannel(string teamId, string channelId, map<string|string[]> headers = {}, *GetIncomingChannelQueries queries) returns MicrosoftGraphChannel|error {
+    remote isolated function getIncomingChannel(string teamId, string channelId, map<string|string[]> headers = {}, *GetIncomingChannelQueries queries) returns Channel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/incomingChannels/${getEncodedUri(channelId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1500,7 +1453,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listMembers(string teamId, map<string|string[]> headers = {}, *ListMembersQueries queries) returns MicrosoftGraphConversationMemberCollectionResponse|error {
+    remote isolated function listMembers(string teamId, map<string|string[]> headers = {}, *ListMembersQueries queries) returns ConversationMemberCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1517,7 +1470,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member to create
     # + return - The created member
-    remote isolated function createMember(string teamId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function createMember(string teamId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1532,7 +1485,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved member
-    remote isolated function getMember(string teamId, string conversationMemberId, map<string|string[]> headers = {}, *GetMemberQueries queries) returns MicrosoftGraphConversationMember|error {
+    remote isolated function getMember(string teamId, string conversationMemberId, map<string|string[]> headers = {}, *GetMemberQueries queries) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1561,7 +1514,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
     # + return - Success 
-    remote isolated function updateMember(string teamId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function updateMember(string teamId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1642,7 +1595,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved channel
-    remote isolated function getPrimaryChannel(string teamId, map<string|string[]> headers = {}, *GetPrimaryChannelQueries queries) returns MicrosoftGraphChannel|error {
+    remote isolated function getPrimaryChannel(string teamId, map<string|string[]> headers = {}, *GetPrimaryChannelQueries queries) returns Channel|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1669,7 +1622,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The channel properties to update
     # + return - Success 
-    remote isolated function updatePrimaryChannel(string teamId, MicrosoftGraphChannel payload, map<string|string[]> headers = {}) returns MicrosoftGraphChannel|error {
+    remote isolated function updatePrimaryChannel(string teamId, Channel payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1683,7 +1636,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listPrimaryChannelAllMembers(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelAllMembersQueries queries) returns MicrosoftGraphConversationMemberCollectionResponse|error {
+    remote isolated function listPrimaryChannelAllMembers(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelAllMembersQueries queries) returns ConversationMemberCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1701,7 +1654,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member to create
     # + return - The created member
-    remote isolated function createPrimaryChannelAllMember(string teamId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function createPrimaryChannelAllMember(string teamId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1716,7 +1669,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved member
-    remote isolated function getPrimaryChannelAllMember(string teamId, string conversationMemberId, map<string|string[]> headers = {}, *GetPrimaryChannelAllMemberQueries queries) returns MicrosoftGraphConversationMember|error {
+    remote isolated function getPrimaryChannelAllMember(string teamId, string conversationMemberId, map<string|string[]> headers = {}, *GetPrimaryChannelAllMemberQueries queries) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1745,7 +1698,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
     # + return - Success 
-    remote isolated function updatePrimaryChannelAllMember(string teamId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function updatePrimaryChannelAllMember(string teamId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1807,7 +1760,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listPrimaryChannelEnabledApps(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelEnabledAppsQueries queries) returns MicrosoftGraphTeamsAppCollectionResponse|error {
+    remote isolated function listPrimaryChannelEnabledApps(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelEnabledAppsQueries queries) returns TeamsAppCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/enabledApps`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1821,7 +1774,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved app
-    remote isolated function getPrimaryChannelEnabledApp(string teamId, string teamsAppId, map<string|string[]> headers = {}, *GetPrimaryChannelEnabledAppQueries queries) returns MicrosoftGraphTeamsApp|error {
+    remote isolated function getPrimaryChannelEnabledApp(string teamId, string teamsAppId, map<string|string[]> headers = {}, *GetPrimaryChannelEnabledAppQueries queries) returns TeamsApp|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/enabledApps/${getEncodedUri(teamsAppId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1846,7 +1799,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved files folder
-    remote isolated function getPrimaryChannelFilesFolder(string teamId, map<string|string[]> headers = {}, *GetPrimaryChannelFilesFolderQueries queries) returns MicrosoftGraphDriveItem|error {
+    remote isolated function getPrimaryChannelFilesFolder(string teamId, map<string|string[]> headers = {}, *GetPrimaryChannelFilesFolderQueries queries) returns DriveItem|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/filesFolder`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1874,7 +1827,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - New media content 
     # + return - Success 
-    remote isolated function updatePrimaryChannelFilesFolderContent(string teamId, byte[] payload, map<string|string[]> headers = {}) returns MicrosoftGraphDriveItem|error {
+    remote isolated function updatePrimaryChannelFilesFolderContent(string teamId, byte[] payload, map<string|string[]> headers = {}) returns DriveItem|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/filesFolder/content`;
         http:Request request = new;
         request.setPayload(payload, "application/octet-stream");
@@ -1898,7 +1851,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listPrimaryChannelMembers(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelMembersQueries queries) returns MicrosoftGraphConversationMemberCollectionResponse|error {
+    remote isolated function listPrimaryChannelMembers(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelMembersQueries queries) returns ConversationMemberCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1916,7 +1869,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member to create
     # + return - The created member
-    remote isolated function createPrimaryChannelMember(string teamId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function createPrimaryChannelMember(string teamId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -1931,7 +1884,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved member
-    remote isolated function getPrimaryChannelMember(string teamId, string conversationMemberId, map<string|string[]> headers = {}, *GetPrimaryChannelMemberQueries queries) returns MicrosoftGraphConversationMember|error {
+    remote isolated function getPrimaryChannelMember(string teamId, string conversationMemberId, map<string|string[]> headers = {}, *GetPrimaryChannelMemberQueries queries) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members/${getEncodedUri(conversationMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -1960,7 +1913,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
     # + return - Success 
-    remote isolated function updatePrimaryChannelMember(string teamId, string conversationMemberId, MicrosoftGraphConversationMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphConversationMember|error {
+    remote isolated function updatePrimaryChannelMember(string teamId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2022,7 +1975,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listPrimaryChannelMessages(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelMessagesQueries queries) returns MicrosoftGraphChatMessageCollectionResponse|error {
+    remote isolated function listPrimaryChannelMessages(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelMessagesQueries queries) returns ChatMessageCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2039,7 +1992,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The message to create
     # + return - The created message
-    remote isolated function createPrimaryChannelMessage(string teamId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
+    remote isolated function createPrimaryChannelMessage(string teamId, ChatMessage payload, map<string|string[]> headers = {}) returns ChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2054,7 +2007,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved message
-    remote isolated function getPrimaryChannelMessage(string teamId, string chatMessageId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageQueries queries) returns MicrosoftGraphChatMessage|error {
+    remote isolated function getPrimaryChannelMessage(string teamId, string chatMessageId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageQueries queries) returns ChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2083,7 +2036,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The message properties to update
     # + return - Success 
-    remote isolated function updatePrimaryChannelMessage(string teamId, string chatMessageId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
+    remote isolated function updatePrimaryChannelMessage(string teamId, string chatMessageId, ChatMessage payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2098,7 +2051,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listPrimaryChannelMessageHostedContents(string teamId, string chatMessageId, map<string|string[]> headers = {}, *ListPrimaryChannelMessageHostedContentsQueries queries) returns MicrosoftGraphChatMessageHostedContentCollectionResponse|error {
+    remote isolated function listPrimaryChannelMessageHostedContents(string teamId, string chatMessageId, map<string|string[]> headers = {}, *ListPrimaryChannelMessageHostedContentsQueries queries) returns ChatMessageHostedContentCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/hostedContents`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2116,7 +2069,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content to create
     # + return - The created hosted content
-    remote isolated function createPrimaryChannelMessageHostedContent(string teamId, string chatMessageId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function createPrimaryChannelMessageHostedContent(string teamId, string chatMessageId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/hostedContents`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2132,7 +2085,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved hosted content
-    remote isolated function getPrimaryChannelMessageHostedContent(string teamId, string chatMessageId, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageHostedContentQueries queries) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function getPrimaryChannelMessageHostedContent(string teamId, string chatMessageId, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageHostedContentQueries queries) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2163,7 +2116,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content properties to update
     # + return - Success 
-    remote isolated function updatePrimaryChannelMessageHostedContent(string teamId, string chatMessageId, string chatMessageHostedContentId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function updatePrimaryChannelMessageHostedContent(string teamId, string chatMessageId, string chatMessageHostedContentId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2293,7 +2246,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listPrimaryChannelMessageReplies(string teamId, string chatMessageId, map<string|string[]> headers = {}, *ListPrimaryChannelMessageRepliesQueries queries) returns MicrosoftGraphChatMessageCollectionResponse|error {
+    remote isolated function listPrimaryChannelMessageReplies(string teamId, string chatMessageId, map<string|string[]> headers = {}, *ListPrimaryChannelMessageRepliesQueries queries) returns ChatMessageCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2311,7 +2264,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The message to create
     # + return - The created message
-    remote isolated function createPrimaryChannelMessageReply(string teamId, string chatMessageId, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
+    remote isolated function createPrimaryChannelMessageReply(string teamId, string chatMessageId, ChatMessage payload, map<string|string[]> headers = {}) returns ChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2327,7 +2280,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved message
-    remote isolated function getPrimaryChannelMessageReply(string teamId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *GetPrimaryChannelMessageReplyQueries queries) returns MicrosoftGraphChatMessage|error {
+    remote isolated function getPrimaryChannelMessageReply(string teamId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *GetPrimaryChannelMessageReplyQueries queries) returns ChatMessage|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2358,7 +2311,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The message properties to update
     # + return - Success 
-    remote isolated function updatePrimaryChannelMessageReply(string teamId, string chatMessageId, string chatMessageId1, MicrosoftGraphChatMessage payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessage|error {
+    remote isolated function updatePrimaryChannelMessageReply(string teamId, string chatMessageId, string chatMessageId1, ChatMessage payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2374,7 +2327,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listPrimaryChannelMessageReplyHostedContents(string teamId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *ListPrimaryChannelMessageReplyHostedContentsQueries queries) returns MicrosoftGraphChatMessageHostedContentCollectionResponse|error {
+    remote isolated function listPrimaryChannelMessageReplyHostedContents(string teamId, string chatMessageId, string chatMessageId1, map<string|string[]> headers = {}, *ListPrimaryChannelMessageReplyHostedContentsQueries queries) returns ChatMessageHostedContentCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2393,7 +2346,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content to create
     # + return - The created hosted content
-    remote isolated function createPrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function createPrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2410,7 +2363,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved hosted content
-    remote isolated function getPrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageReplyHostedContentQueries queries) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function getPrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageReplyHostedContentQueries queries) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2443,7 +2396,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content properties to update
     # + return - Success 
-    remote isolated function updatePrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, MicrosoftGraphChatMessageHostedContent payload, map<string|string[]> headers = {}) returns MicrosoftGraphChatMessageHostedContent|error {
+    remote isolated function updatePrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2669,7 +2622,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listPrimaryChannelTabs(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelTabsQueries queries) returns MicrosoftGraphTeamsTabCollectionResponse|error {
+    remote isolated function listPrimaryChannelTabs(string teamId, map<string|string[]> headers = {}, *ListPrimaryChannelTabsQueries queries) returns TeamsTabCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2687,7 +2640,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The tab to create
     # + return - The created tab
-    remote isolated function createPrimaryChannelTab(string teamId, MicrosoftGraphTeamsTab payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamsTab|error {
+    remote isolated function createPrimaryChannelTab(string teamId, TeamsTab payload, map<string|string[]> headers = {}) returns TeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2702,7 +2655,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved tab
-    remote isolated function getPrimaryChannelTab(string teamId, string teamsTabId, map<string|string[]> headers = {}, *GetPrimaryChannelTabQueries queries) returns MicrosoftGraphTeamsTab|error {
+    remote isolated function getPrimaryChannelTab(string teamId, string teamsTabId, map<string|string[]> headers = {}, *GetPrimaryChannelTabQueries queries) returns TeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs/${getEncodedUri(teamsTabId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2731,7 +2684,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The tab properties to update
     # + return - Success 
-    remote isolated function updatePrimaryChannelTab(string teamId, string teamsTabId, MicrosoftGraphTeamsTab payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamsTab|error {
+    remote isolated function updatePrimaryChannelTab(string teamId, string teamsTabId, TeamsTab payload, map<string|string[]> headers = {}) returns TeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs/${getEncodedUri(teamsTabId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2746,7 +2699,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved app
-    remote isolated function getPrimaryChannelTabTeamsApp(string teamId, string teamsTabId, map<string|string[]> headers = {}, *GetPrimaryChannelTabTeamsAppQueries queries) returns MicrosoftGraphTeamsApp|error {
+    remote isolated function getPrimaryChannelTabTeamsApp(string teamId, string teamsTabId, map<string|string[]> headers = {}, *GetPrimaryChannelTabTeamsAppQueries queries) returns TeamsApp|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs/${getEncodedUri(teamsTabId)}/teamsApp`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2771,7 +2724,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listTags(string teamId, map<string|string[]> headers = {}, *ListTagsQueries queries) returns MicrosoftGraphTeamworkTagCollectionResponse|error {
+    remote isolated function listTags(string teamId, map<string|string[]> headers = {}, *ListTagsQueries queries) returns TeamworkTagCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2787,7 +2740,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The tag to create
     # + return - The created tag
-    remote isolated function createTag(string teamId, MicrosoftGraphTeamworkTag payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamworkTag|error {
+    remote isolated function createTag(string teamId, TeamworkTag payload, map<string|string[]> headers = {}) returns TeamworkTag|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2802,7 +2755,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved tag
-    remote isolated function getTag(string teamId, string teamworkTagId, map<string|string[]> headers = {}, *GetTagQueries queries) returns MicrosoftGraphTeamworkTag|error {
+    remote isolated function getTag(string teamId, string teamworkTagId, map<string|string[]> headers = {}, *GetTagQueries queries) returns TeamworkTag|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2830,7 +2783,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The tag properties to update
     # + return - Success 
-    remote isolated function updateTag(string teamId, string teamworkTagId, MicrosoftGraphTeamworkTag payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamworkTag|error {
+    remote isolated function updateTag(string teamId, string teamworkTagId, TeamworkTag payload, map<string|string[]> headers = {}) returns TeamworkTag|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2845,7 +2798,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Retrieved collection 
-    remote isolated function listTagMembers(string teamId, string teamworkTagId, map<string|string[]> headers = {}, *ListTagMembersQueries queries) returns MicrosoftGraphTeamworkTagMemberCollectionResponse|error {
+    remote isolated function listTagMembers(string teamId, string teamworkTagId, map<string|string[]> headers = {}, *ListTagMembersQueries queries) returns TeamworkTagMemberCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}/members`;
         map<Encoding> queryParamEncoding = {"$orderby": {style: FORM, explode: false}, "$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2861,7 +2814,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The tag member to create
     # + return - The created tag member
-    remote isolated function createTagMember(string teamId, string teamworkTagId, MicrosoftGraphTeamworkTagMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamworkTagMember|error {
+    remote isolated function createTagMember(string teamId, string teamworkTagId, TeamworkTagMember payload, map<string|string[]> headers = {}) returns TeamworkTagMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}/members`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -2877,7 +2830,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - The retrieved tag member
-    remote isolated function getTagMember(string teamId, string teamworkTagId, string teamworkTagMemberId, map<string|string[]> headers = {}, *GetTagMemberQueries queries) returns MicrosoftGraphTeamworkTagMember|error {
+    remote isolated function getTagMember(string teamId, string teamworkTagId, string teamworkTagMemberId, map<string|string[]> headers = {}, *GetTagMemberQueries queries) returns TeamworkTagMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}/members/${getEncodedUri(teamworkTagMemberId)}`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
         resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
@@ -2908,7 +2861,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + payload - The tag member properties to update
     # + return - Success 
-    remote isolated function updateTagMember(string teamId, string teamworkTagId, string teamworkTagMemberId, MicrosoftGraphTeamworkTagMember payload, map<string|string[]> headers = {}) returns MicrosoftGraphTeamworkTagMember|error {
+    remote isolated function updateTagMember(string teamId, string teamworkTagId, string teamworkTagMemberId, TeamworkTagMember payload, map<string|string[]> headers = {}) returns TeamworkTagMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}/members/${getEncodedUri(teamworkTagMemberId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);

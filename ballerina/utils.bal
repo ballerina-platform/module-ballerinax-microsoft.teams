@@ -1,6 +1,6 @@
-// Copyright (c) 2026 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com).
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -18,71 +18,6 @@ import ballerina/http;
 import ballerina/url;
 
 type SimpleBasicType string|boolean|int|float|decimal;
-
-// Raises an error for a non-2xx response, embedding the response body for context.
-// (Methods that read the raw `http:Response` must surface status-code failures themselves, since
-// the client only maps 4xx/5xx to errors when binding to a typed payload.)
-isolated function validateResponse(http:Response response) returns error? {
-    int status = response.statusCode;
-    if status >= 200 && status < 300 {
-        return;
-    }
-    string detail = "";
-    string|error body = response.getTextPayload();
-    if body is string {
-        detail = body;
-    }
-    return error(string `request failed: HTTP ${status} ${detail}`);
-}
-
-// Some Microsoft Graph resources are created asynchronously: the POST returns 202 Accepted (or 204)
-// with an empty body and the new resource's location in the `Location`/`Content-Location` header
-// (for example `.../teams('<id>')/operations('<op-id>')` for a team, or `.../channels/<id>` for a
-// private/shared channel). Returns the created resource's id parsed from that header, if present.
-isolated function asyncCreatedId(http:Response response, string segment) returns string? {
-    string location = "";
-    string|error loc = response.getHeader("Location");
-    if loc is string {
-        location = loc;
-    } else {
-        string|error contentLoc = response.getHeader("Content-Location");
-        if contentLoc is string {
-            location = contentLoc;
-        }
-    }
-    return idAfterSegment(location, segment);
-}
-
-// Extracts the id immediately following `segment` in an OData path, handling both the
-// `segment('<id>')` key form and the `segment/<id>` path form.
-isolated function idAfterSegment(string location, string segment) returns string? {
-    int? segIdx = location.indexOf(segment);
-    if segIdx is () {
-        return;
-    }
-    string rest = location.substring(segIdx + segment.length());
-    if rest.startsWith("('") {
-        int? end = rest.indexOf("')");
-        if end is int {
-            return rest.substring(2, end);
-        }
-        return;
-    }
-    if rest.startsWith("/") {
-        string tail = rest.substring(1);
-        int cut = tail.length();
-        int? slash = tail.indexOf("/");
-        if slash is int && slash < cut {
-            cut = slash;
-        }
-        int? question = tail.indexOf("?");
-        if question is int && question < cut {
-            cut = question;
-        }
-        return tail.substring(0, cut);
-    }
-    return;
-}
 
 # Represents encoding mechanism details.
 type Encoding record {
