@@ -69,7 +69,7 @@ final string replyId = "1784140530431";
 // payloads since the live tenant has no second user to reference.
 final string myUserId = "71f6175d-3e35-4554-ac0d-6ebe54bde96d";
 
-@test:Config {groups: ["live_tests", "mock_tests"]}
+@test:Config {groups: ["mock_tests"]}
 isolated function test_createTeam() returns error? {
     http:Response response = check teams->createTeam({
         displayName: "Ballerina Connector Test Team",
@@ -79,13 +79,13 @@ isolated function test_createTeam() returns error? {
     test:assertTrue(response.statusCode >= 200 && response.statusCode < 300);
 }
 
-@test:Config {groups: ["live_tests", "mock_tests"]}
+@test:Config {groups: ["mock_tests"]}
 isolated function test_getTeam() returns error? {
     Team response = check teams->getTeam(teamId);
     test:assertTrue(response.id is string);
 }
 
-@test:Config {groups: ["live_tests", "mock_tests"]}
+@test:Config {groups: ["mock_tests"]}
 isolated function test_deleteTeam() returns error? {
     error? response = teams->deleteTeam(teamId);
     test:assertTrue(response is ());
@@ -138,7 +138,7 @@ isolated function test_getChannel() returns error? {
     test:assertTrue(response.id is string);
 }
 
-@test:Config {groups: ["live_tests", "mock_tests"]}
+@test:Config {groups: ["mock_tests"]}
 isolated function test_deleteChannel() returns error? {
     error? response = teams->deleteChannel(teamId, channelId);
     test:assertTrue(response is ());

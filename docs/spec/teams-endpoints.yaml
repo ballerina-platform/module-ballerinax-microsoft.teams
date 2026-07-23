@@ -41,7 +41,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.team'
+              $ref: '#/components/schemas/Team'
         required: true
       responses:
         2XX:
@@ -93,7 +93,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.team'
+                $ref: '#/components/schemas/Team'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -113,7 +113,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.team'
+              $ref: '#/components/schemas/Team'
         required: true
       responses:
         2XX:
@@ -203,7 +203,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.channelCollectionResponse'
+          $ref: '#/components/responses/ChannelCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -255,7 +255,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.channel'
+                $ref: '#/components/schemas/Channel'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -350,7 +350,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.channelCollectionResponse'
+          $ref: '#/components/responses/ChannelCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -373,7 +373,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.channel'
+              $ref: '#/components/schemas/Channel'
         required: true
       responses:
         2XX:
@@ -433,7 +433,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.channel'
+                $ref: '#/components/schemas/Channel'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -453,7 +453,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.channel'
+              $ref: '#/components/schemas/Channel'
         required: true
       responses:
         2XX:
@@ -554,7 +554,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.conversationMemberCollectionResponse'
+          $ref: '#/components/responses/ConversationMemberCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -573,7 +573,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -581,7 +581,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -639,7 +639,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -655,7 +655,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -663,7 +663,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -765,7 +765,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -781,7 +781,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -831,7 +831,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -847,7 +847,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -925,7 +925,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.teamsAppCollectionResponse'
+          $ref: '#/components/responses/TeamsAppCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -989,7 +989,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsApp'
+                $ref: '#/components/schemas/TeamsApp'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1089,7 +1089,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.driveItem'
+                $ref: '#/components/schemas/DriveItem'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1158,7 +1158,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.driveItem'
+                $ref: '#/components/schemas/DriveItem'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1246,7 +1246,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.conversationMemberCollectionResponse'
+          $ref: '#/components/responses/ConversationMemberCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1269,7 +1269,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -1277,7 +1277,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1338,7 +1338,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1358,7 +1358,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -1366,7 +1366,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1472,7 +1472,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -1488,7 +1488,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1538,7 +1538,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -1554,7 +1554,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1632,7 +1632,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.chatMessageCollectionResponse'
+          $ref: '#/components/responses/ChatMessageCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1655,7 +1655,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessage'
+              $ref: '#/components/schemas/ChatMessage'
         required: true
       responses:
         2XX:
@@ -1663,7 +1663,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1724,7 +1724,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1744,7 +1744,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessage'
+              $ref: '#/components/schemas/ChatMessage'
         required: true
       responses:
         2XX:
@@ -1850,7 +1850,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.chatMessageHostedContentCollectionResponse'
+          $ref: '#/components/responses/ChatMessageHostedContentCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1869,7 +1869,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+              $ref: '#/components/schemas/ChatMessageHostedContent'
         required: true
       responses:
         2XX:
@@ -1877,7 +1877,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1944,7 +1944,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -1960,7 +1960,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+              $ref: '#/components/schemas/ChatMessageHostedContent'
         required: true
       responses:
         2XX:
@@ -1968,7 +1968,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -2400,7 +2400,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.chatMessageCollectionResponse'
+          $ref: '#/components/responses/ChatMessageCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -2423,7 +2423,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessage'
+              $ref: '#/components/schemas/ChatMessage'
         required: true
       responses:
         2XX:
@@ -2431,7 +2431,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -2499,7 +2499,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -2515,7 +2515,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessage'
+              $ref: '#/components/schemas/ChatMessage'
         required: true
       responses:
         2XX:
@@ -2628,7 +2628,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.chatMessageHostedContentCollectionResponse'
+          $ref: '#/components/responses/ChatMessageHostedContentCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -2647,7 +2647,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+              $ref: '#/components/schemas/ChatMessageHostedContent'
         required: true
       responses:
         2XX:
@@ -2655,7 +2655,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -2729,7 +2729,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -2745,7 +2745,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+              $ref: '#/components/schemas/ChatMessageHostedContent'
         required: true
       responses:
         2XX:
@@ -2753,7 +2753,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -3286,7 +3286,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                          $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -3345,7 +3345,7 @@ paths:
                     type: string
                 replyMessage:
                   anyOf:
-                    - $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                    - $ref: '#/components/schemas/ChatMessage'
                     - type: object
                       nullable: true
         required: true
@@ -3356,7 +3356,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                  - $ref: '#/components/schemas/ChatMessage'
                   - type: object
                     nullable: true
         4XX:
@@ -3484,7 +3484,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                          $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -3536,7 +3536,7 @@ paths:
                     type: string
                 replyMessage:
                   anyOf:
-                    - $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                    - $ref: '#/components/schemas/ChatMessage'
                     - type: object
                       nullable: true
         required: true
@@ -3547,7 +3547,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                  - $ref: '#/components/schemas/ChatMessage'
                   - type: object
                     nullable: true
         4XX:
@@ -3623,7 +3623,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.teamsTabCollectionResponse'
+          $ref: '#/components/responses/TeamsTabCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -3646,7 +3646,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.teamsTab'
+              $ref: '#/components/schemas/TeamsTab'
         required: true
       responses:
         2XX:
@@ -3654,7 +3654,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsTab'
+                $ref: '#/components/schemas/TeamsTab'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -3715,7 +3715,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsTab'
+                $ref: '#/components/schemas/TeamsTab'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -3735,7 +3735,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.teamsTab'
+              $ref: '#/components/schemas/TeamsTab'
         required: true
       responses:
         2XX:
@@ -3743,7 +3743,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsTab'
+                $ref: '#/components/schemas/TeamsTab'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -3831,7 +3831,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsApp'
+                $ref: '#/components/schemas/TeamsApp'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -3985,7 +3985,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                          $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4066,7 +4066,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                          $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4132,7 +4132,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.channelCollectionResponse'
+          $ref: '#/components/responses/ChannelCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4184,7 +4184,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.channel'
+                $ref: '#/components/schemas/Channel'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4279,7 +4279,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.conversationMemberCollectionResponse'
+          $ref: '#/components/responses/ConversationMemberCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4302,7 +4302,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -4310,7 +4310,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4362,7 +4362,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4382,7 +4382,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -4390,7 +4390,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4480,7 +4480,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -4496,7 +4496,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4539,7 +4539,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -4555,7 +4555,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4597,7 +4597,7 @@ paths:
               properties:
                 topic:
                   anyOf:
-                    - $ref: '#/components/schemas/microsoft.graph.teamworkActivityTopic'
+                    - $ref: '#/components/schemas/TeamworkActivityTopic'
                     - type: object
                       nullable: true
                 activityType:
@@ -4609,7 +4609,7 @@ paths:
                   nullable: true
                 previewText:
                   anyOf:
-                    - $ref: '#/components/schemas/microsoft.graph.itemBody'
+                    - $ref: '#/components/schemas/ItemBody'
                     - type: object
                       nullable: true
                 teamsAppId:
@@ -4618,10 +4618,10 @@ paths:
                 templateParameters:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.keyValuePair'
+                    $ref: '#/components/schemas/KeyValuePair'
                 recipient:
                   anyOf:
-                    - $ref: '#/components/schemas/microsoft.graph.teamworkNotificationRecipient'
+                    - $ref: '#/components/schemas/TeamworkNotificationRecipient'
                     - type: object
                       nullable: true
                 iconId:
@@ -4682,7 +4682,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.channel'
+                $ref: '#/components/schemas/Channel'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4698,7 +4698,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.channel'
+              $ref: '#/components/schemas/Channel'
         required: true
       responses:
         2XX:
@@ -4785,7 +4785,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.conversationMemberCollectionResponse'
+          $ref: '#/components/responses/ConversationMemberCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4804,7 +4804,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -4812,7 +4812,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4863,7 +4863,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4879,7 +4879,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -4887,7 +4887,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -4975,7 +4975,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -4991,7 +4991,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5034,7 +5034,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -5050,7 +5050,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5118,7 +5118,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.teamsAppCollectionResponse'
+          $ref: '#/components/responses/TeamsAppCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5172,7 +5172,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsApp'
+                $ref: '#/components/schemas/TeamsApp'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5255,7 +5255,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.driveItem'
+                $ref: '#/components/schemas/DriveItem'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5317,7 +5317,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.driveItem'
+                $ref: '#/components/schemas/DriveItem'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5395,7 +5395,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.conversationMemberCollectionResponse'
+          $ref: '#/components/responses/ConversationMemberCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5414,7 +5414,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -5422,7 +5422,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5473,7 +5473,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5489,7 +5489,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.conversationMember'
+              $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -5497,7 +5497,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                $ref: '#/components/schemas/ConversationMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5585,7 +5585,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -5601,7 +5601,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5644,7 +5644,7 @@ paths:
                 values:
                   type: array
                   items:
-                    $ref: '#/components/schemas/microsoft.graph.conversationMember'
+                    $ref: '#/components/schemas/ConversationMember'
         required: true
       responses:
         2XX:
@@ -5660,7 +5660,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.actionResultPart'
+                          $ref: '#/components/schemas/ActionResultPart'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5728,7 +5728,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.chatMessageCollectionResponse'
+          $ref: '#/components/responses/ChatMessageCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5747,7 +5747,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessage'
+              $ref: '#/components/schemas/ChatMessage'
         required: true
       responses:
         2XX:
@@ -5755,7 +5755,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5806,7 +5806,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5822,7 +5822,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessage'
+              $ref: '#/components/schemas/ChatMessage'
         required: true
       responses:
         2XX:
@@ -5918,7 +5918,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.chatMessageHostedContentCollectionResponse'
+          $ref: '#/components/responses/ChatMessageHostedContentCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -5937,7 +5937,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+              $ref: '#/components/schemas/ChatMessageHostedContent'
         required: true
       responses:
         2XX:
@@ -5945,7 +5945,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6005,7 +6005,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6021,7 +6021,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+              $ref: '#/components/schemas/ChatMessageHostedContent'
         required: true
       responses:
         2XX:
@@ -6029,7 +6029,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6406,7 +6406,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.chatMessageCollectionResponse'
+          $ref: '#/components/responses/ChatMessageCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6425,7 +6425,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessage'
+              $ref: '#/components/schemas/ChatMessage'
         required: true
       responses:
         2XX:
@@ -6433,7 +6433,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6491,7 +6491,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6507,7 +6507,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessage'
+              $ref: '#/components/schemas/ChatMessage'
         required: true
       responses:
         2XX:
@@ -6610,7 +6610,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.chatMessageHostedContentCollectionResponse'
+          $ref: '#/components/responses/ChatMessageHostedContentCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6629,7 +6629,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+              $ref: '#/components/schemas/ChatMessageHostedContent'
         required: true
       responses:
         2XX:
@@ -6637,7 +6637,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6704,7 +6704,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -6720,7 +6720,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+              $ref: '#/components/schemas/ChatMessageHostedContent'
         required: true
       responses:
         2XX:
@@ -6728,7 +6728,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
+                $ref: '#/components/schemas/ChatMessageHostedContent'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7202,7 +7202,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                          $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7254,7 +7254,7 @@ paths:
                     type: string
                 replyMessage:
                   anyOf:
-                    - $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                    - $ref: '#/components/schemas/ChatMessage'
                     - type: object
                       nullable: true
         required: true
@@ -7265,7 +7265,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                  - $ref: '#/components/schemas/ChatMessage'
                   - type: object
                     nullable: true
         4XX:
@@ -7379,7 +7379,7 @@ paths:
                       value:
                         type: array
                         items:
-                          $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                          $ref: '#/components/schemas/ChatMessage'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7424,7 +7424,7 @@ paths:
                     type: string
                 replyMessage:
                   anyOf:
-                    - $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                    - $ref: '#/components/schemas/ChatMessage'
                     - type: object
                       nullable: true
         required: true
@@ -7435,7 +7435,7 @@ paths:
             application/json:
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/microsoft.graph.chatMessage'
+                  - $ref: '#/components/schemas/ChatMessage'
                   - type: object
                     nullable: true
         4XX:
@@ -7501,7 +7501,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.teamsTabCollectionResponse'
+          $ref: '#/components/responses/TeamsTabCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7520,7 +7520,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.teamsTab'
+              $ref: '#/components/schemas/TeamsTab'
         required: true
       responses:
         2XX:
@@ -7528,7 +7528,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsTab'
+                $ref: '#/components/schemas/TeamsTab'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7579,7 +7579,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsTab'
+                $ref: '#/components/schemas/TeamsTab'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7595,7 +7595,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.teamsTab'
+              $ref: '#/components/schemas/TeamsTab'
         required: true
       responses:
         2XX:
@@ -7603,7 +7603,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsTab'
+                $ref: '#/components/schemas/TeamsTab'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7680,7 +7680,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamsApp'
+                $ref: '#/components/schemas/TeamsApp'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7777,7 +7777,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.teamworkTagCollectionResponse'
+          $ref: '#/components/responses/TeamworkTagCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7800,7 +7800,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.teamworkTag'
+              $ref: '#/components/schemas/TeamworkTag'
         required: true
       responses:
         2XX:
@@ -7808,7 +7808,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamworkTag'
+                $ref: '#/components/schemas/TeamworkTag'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7860,7 +7860,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamworkTag'
+                $ref: '#/components/schemas/TeamworkTag'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7880,7 +7880,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.teamworkTag'
+              $ref: '#/components/schemas/TeamworkTag'
         required: true
       responses:
         2XX:
@@ -7888,7 +7888,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamworkTag'
+                $ref: '#/components/schemas/TeamworkTag'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -7981,7 +7981,7 @@ paths:
               type: string
       responses:
         2XX:
-          $ref: '#/components/responses/microsoft.graph.teamworkTagMemberCollectionResponse'
+          $ref: '#/components/responses/TeamworkTagMemberCollectionResponse'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -8004,7 +8004,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.teamworkTagMember'
+              $ref: '#/components/schemas/TeamworkTagMember'
         required: true
       responses:
         2XX:
@@ -8012,7 +8012,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamworkTagMember'
+                $ref: '#/components/schemas/TeamworkTagMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -8071,7 +8071,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamworkTagMember'
+                $ref: '#/components/schemas/TeamworkTagMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -8087,7 +8087,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/microsoft.graph.teamworkTagMember'
+              $ref: '#/components/schemas/TeamworkTagMember'
         required: true
       responses:
         2XX:
@@ -8095,7 +8095,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/microsoft.graph.teamworkTagMember'
+                $ref: '#/components/schemas/TeamworkTagMember'
         4XX:
           $ref: '#/components/responses/error'
         5XX:
@@ -8254,9 +8254,9 @@ components:
               (e.g. Team.ReadBasic.All, TeamMember.ReadWrite.All,
               ChannelMessage.Read.All, Teamwork.Migrate.All). Requires admin consent.
   schemas:
-    microsoft.graph.baseItem:
+    BaseItem:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: baseItem
           required:
             - '@odata.type'
@@ -8264,7 +8264,7 @@ components:
           properties:
             createdBy:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.identitySet'
+                - $ref: '#/components/schemas/IdentitySet'
                 - type: object
                   nullable: true
               description: 'Identity of the user, device, or application that created the item. Read-only.'
@@ -8283,7 +8283,7 @@ components:
               nullable: true
             lastModifiedBy:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.identitySet'
+                - $ref: '#/components/schemas/IdentitySet'
                 - type: object
                   nullable: true
               description: 'Identity of the user, device, and application that last modified the item. Read-only.'
@@ -8298,7 +8298,7 @@ components:
               nullable: true
             parentReference:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.itemReference'
+                - $ref: '#/components/schemas/ItemReference'
                 - type: object
                   nullable: true
               description: 'Parent information, if the item has a parent. Read-write.'
@@ -8308,9 +8308,9 @@ components:
               nullable: true
             '@odata.type':
               type: string
-    microsoft.graph.channel:
+    Channel:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: channel
           required:
             - '@odata.type'
@@ -8343,19 +8343,19 @@ components:
               nullable: true
             layoutType:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.channelLayoutType'
+                - $ref: '#/components/schemas/ChannelLayoutType'
                 - type: object
                   nullable: true
               description: 'The layout type of the channel. It can be set during creation and updated later. The possible values are: post, chat, unknownFutureValue. The default value is post. Channels with the post layout use a traditional post‑reply conversation format, and channels with the chat layout provide a chat‑like threading experience similar to group chats.'
             membershipType:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.channelMembershipType'
+                - $ref: '#/components/schemas/ChannelMembershipType'
                 - type: object
                   nullable: true
               description: 'The type of the channel. Can be set during creation and can''t be changed. The possible values are: standard, private, unknownFutureValue, shared. The default value is standard. Use the Prefer: include-unknown-enum-members request header to get the following members in this evolvable enum: shared.'
             migrationMode:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.migrationMode'
+                - $ref: '#/components/schemas/MigrationMode'
                 - type: object
                   nullable: true
               description: 'Indicates whether a channel is in migration mode. This value is null for channels that never entered migration mode. The possible values are: inProgress, completed, unknownFutureValue.'
@@ -8367,7 +8367,7 @@ components:
               nullable: true
             summary:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.channelSummary'
+                - $ref: '#/components/schemas/ChannelSummary'
                 - type: object
                   nullable: true
               description: 'Contains summary information about the channel, including number of owners, members, guests, and an indicator for members from other tenants. The summary property will only be returned if it is specified in the $select clause of the Get channel method.'
@@ -8382,9 +8382,9 @@ components:
             '@odata.type':
               type: string
       x-ms-discriminator-value: '#microsoft.graph.channel'
-    microsoft.graph.chatMessage:
+    ChatMessage:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: chatMessage
           required:
             - '@odata.type'
@@ -8393,13 +8393,13 @@ components:
             attachments:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageAttachment'
+                $ref: '#/components/schemas/ChatMessageAttachment'
               description: 'References to attached objects like files, tabs, meetings etc.'
             body:
-              $ref: '#/components/schemas/microsoft.graph.itemBody'
+              $ref: '#/components/schemas/ItemBody'
             channelIdentity:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.channelIdentity'
+                - $ref: '#/components/schemas/ChannelIdentity'
                 - type: object
                   nullable: true
               description: 'If the message was sent in a channel, represents identity of the channel.'
@@ -8425,18 +8425,18 @@ components:
               nullable: true
             eventDetail:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.eventMessageDetail'
+                - $ref: '#/components/schemas/EventMessageDetail'
                 - type: object
                   nullable: true
               description: 'Read-only. If present, represents details of an event that happened in a chat, a channel, or a team, for example, adding new members. For event messages, the messageType property will be set to systemEventMessage.'
             from:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.chatMessageFromIdentitySet'
+                - $ref: '#/components/schemas/ChatMessageFromIdentitySet'
                 - type: object
                   nullable: true
               description: Details of the sender of the chat message. Can only be set during migration.
             importance:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageImportance'
+              $ref: '#/components/schemas/ChatMessageImportance'
             lastEditedDateTime:
               pattern: '^[0-9]{4,}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]([.][0-9]{1,12})?(Z|[+-][0-9][0-9]:[0-9][0-9])$'
               type: string
@@ -8455,25 +8455,25 @@ components:
             mentions:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageMention'
+                $ref: '#/components/schemas/ChatMessageMention'
               description: 'List of entities mentioned in the chat message. Supported entities are: user, bot, team, channel, chat, and tag.'
             messageHistory:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHistoryItem'
+                $ref: '#/components/schemas/ChatMessageHistoryItem'
               description: 'List of activity history of a message item, including modification time and actions, such as reactionAdded, reactionRemoved, or reaction changes, on the message.'
             messageType:
-              $ref: '#/components/schemas/microsoft.graph.chatMessageType'
+              $ref: '#/components/schemas/ChatMessageType'
             policyViolation:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.chatMessagePolicyViolation'
+                - $ref: '#/components/schemas/ChatMessagePolicyViolation'
                 - type: object
                   nullable: true
               description: Defines the properties of a policy violation set by a data loss prevention (DLP) application.
             reactions:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageReaction'
+                $ref: '#/components/schemas/ChatMessageReaction'
               description: 'Reactions for this chat message (for example, Like).'
             replyToId:
               type: string
@@ -8493,9 +8493,9 @@ components:
               nullable: true
             '@odata.type':
               type: string
-    microsoft.graph.chatMessageHostedContent:
+    ChatMessageHostedContent:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.teamworkHostedContent'
+        - $ref: '#/components/schemas/TeamworkHostedContent'
         - title: chatMessageHostedContent
           required:
             - '@odata.type'
@@ -8504,9 +8504,9 @@ components:
             '@odata.type':
               type: string
       x-ms-discriminator-value: '#microsoft.graph.chatMessageHostedContent'
-    microsoft.graph.conversationMember:
+    ConversationMember:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: conversationMember
           required:
             - '@odata.type'
@@ -8530,9 +8530,9 @@ components:
               nullable: true
             '@odata.type':
               type: string
-    microsoft.graph.driveItem:
+    DriveItem:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.baseItem'
+        - $ref: '#/components/schemas/BaseItem'
         - title: driveItem
           required:
             - '@odata.type'
@@ -8540,13 +8540,13 @@ components:
           properties:
             audio:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.audio'
+                - $ref: '#/components/schemas/Audio'
                 - type: object
                   nullable: true
               description: 'Audio metadata, if the item is an audio file. Read-only. Read-only. Only on OneDrive Personal.'
             bundle:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.bundle'
+                - $ref: '#/components/schemas/Bundle'
                 - type: object
                   nullable: true
               description: 'Bundle metadata, if the item is a bundle. Read-only.'
@@ -8561,97 +8561,97 @@ components:
               nullable: true
             deleted:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.deleted'
+                - $ref: '#/components/schemas/Deleted'
                 - type: object
                   nullable: true
               description: Information about the deleted state of the item. Read-only.
             file:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.file'
+                - $ref: '#/components/schemas/File'
                 - type: object
                   nullable: true
               description: 'File metadata, if the item is a file. Read-only.'
             fileSystemInfo:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.fileSystemInfo'
+                - $ref: '#/components/schemas/FileSystemInfo'
                 - type: object
                   nullable: true
               description: File system information on client. Read-write.
             folder:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.folder'
+                - $ref: '#/components/schemas/Folder'
                 - type: object
                   nullable: true
               description: 'Folder metadata, if the item is a folder. Read-only.'
             image:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.image'
+                - $ref: '#/components/schemas/Image'
                 - type: object
                   nullable: true
               description: 'Image metadata, if the item is an image. Read-only.'
             location:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.geoCoordinates'
+                - $ref: '#/components/schemas/GeoCoordinates'
                 - type: object
                   nullable: true
               description: 'Location metadata, if the item has location data. Read-only.'
             malware:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.malware'
+                - $ref: '#/components/schemas/Malware'
                 - type: object
                   nullable: true
               description: 'Malware metadata, if the item was detected to contain malware. Read-only.'
             package:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.package'
+                - $ref: '#/components/schemas/Package'
                 - type: object
                   nullable: true
               description: 'If present, indicates that this item is a package instead of a folder or file. Packages are treated like files in some contexts and folders in others. Read-only.'
             pendingOperations:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.pendingOperations'
+                - $ref: '#/components/schemas/PendingOperations'
                 - type: object
                   nullable: true
               description: 'If present, indicates that one or more operations that might affect the state of the driveItem are pending completion. Read-only.'
             photo:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.photo'
+                - $ref: '#/components/schemas/Photo'
                 - type: object
                   nullable: true
               description: 'Photo metadata, if the item is a photo. Read-only.'
             publication:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.publicationFacet'
+                - $ref: '#/components/schemas/PublicationFacet'
                 - type: object
                   nullable: true
               description: 'Provides information about the published or checked-out state of an item, in locations that support such actions. This property isn''t returned by default. Read-only.'
             remoteItem:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.remoteItem'
+                - $ref: '#/components/schemas/RemoteItem'
                 - type: object
                   nullable: true
               description: 'Remote item data, if the item is shared from a drive other than the one being accessed. Read-only.'
             root:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.root'
+                - $ref: '#/components/schemas/Root'
                 - type: object
                   nullable: true
               description: 'If this property is non-null, it indicates that the driveItem is the top-most driveItem in the drive.'
             searchResult:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.searchResult'
+                - $ref: '#/components/schemas/SearchResult'
                 - type: object
                   nullable: true
               description: 'Search metadata, if the item is from a search result. Read-only.'
             shared:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.shared'
+                - $ref: '#/components/schemas/Shared'
                 - type: object
                   nullable: true
               description: Indicates that the item was shared with others and provides information about the shared state of the item. Read-only.
             sharepointIds:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.sharepointIds'
+                - $ref: '#/components/schemas/SharepointIds'
                 - type: object
                   nullable: true
               description: Returns identifiers useful for SharePoint REST compatibility. Read-only.
@@ -8662,13 +8662,13 @@ components:
               nullable: true
             specialFolder:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.specialFolder'
+                - $ref: '#/components/schemas/SpecialFolder'
                 - type: object
                   nullable: true
               description: 'If the current item is also available as a special folder, this facet is returned. Read-only.'
             video:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.video'
+                - $ref: '#/components/schemas/Video'
                 - type: object
                   nullable: true
               description: 'Video metadata, if the item is a video. Read-only.'
@@ -8680,7 +8680,7 @@ components:
               type: string
               default: '#microsoft.graph.driveItem'
       x-ms-discriminator-value: '#microsoft.graph.driveItem'
-    microsoft.graph.entity:
+    Entity:
       title: entity
       required:
         - '@odata.type'
@@ -8691,9 +8691,9 @@ components:
           description: The unique identifier for an entity. Read-only.
         '@odata.type':
           type: string
-    microsoft.graph.team:
+    Team:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: team
           required:
             - '@odata.type'
@@ -8723,13 +8723,13 @@ components:
               nullable: true
             funSettings:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamFunSettings'
+                - $ref: '#/components/schemas/TeamFunSettings'
                 - type: object
                   nullable: true
               description: 'Settings to configure use of Giphy, memes, and stickers in the team.'
             guestSettings:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamGuestSettings'
+                - $ref: '#/components/schemas/TeamGuestSettings'
                 - type: object
                   nullable: true
               description: 'Settings to configure whether guests can create, update, or delete channels in the team.'
@@ -8743,25 +8743,25 @@ components:
               nullable: true
             memberSettings:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamMemberSettings'
+                - $ref: '#/components/schemas/TeamMemberSettings'
                 - type: object
                   nullable: true
               description: 'Settings to configure whether members can perform certain actions, for example, create channels and add bots, in the team.'
             messagingSettings:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamMessagingSettings'
+                - $ref: '#/components/schemas/TeamMessagingSettings'
                 - type: object
                   nullable: true
               description: Settings to configure messaging and mentions in the team.
             specialization:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamSpecialization'
+                - $ref: '#/components/schemas/TeamSpecialization'
                 - type: object
                   nullable: true
               description: Optional. Indicates whether the team is intended for a particular use case. Each team specialization has access to unique behaviors and experiences targeted to its use case.
             summary:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamSummary'
+                - $ref: '#/components/schemas/TeamSummary'
                 - type: object
                   nullable: true
               description: 'Contains summary information about the team, including number of owners, members, and guests.'
@@ -8771,7 +8771,7 @@ components:
               nullable: true
             visibility:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamVisibilityType'
+                - $ref: '#/components/schemas/TeamVisibilityType'
                 - type: object
                   nullable: true
               description: The visibility of the group and team. Defaults to Public.
@@ -8782,9 +8782,9 @@ components:
             '@odata.type':
               type: string
       x-ms-discriminator-value: '#microsoft.graph.team'
-    microsoft.graph.teamsApp:
+    TeamsApp:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: teamsApp
           required:
             - '@odata.type'
@@ -8796,7 +8796,7 @@ components:
               nullable: true
             distributionMethod:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamsAppDistributionMethod'
+                - $ref: '#/components/schemas/TeamsAppDistributionMethod'
                 - type: object
                   nullable: true
               description: The method of distribution for the app. Read-only.
@@ -8807,9 +8807,9 @@ components:
             '@odata.type':
               type: string
       x-ms-discriminator-value: '#microsoft.graph.teamsApp'
-    microsoft.graph.teamsTab:
+    TeamsTab:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: teamsTab
           required:
             - '@odata.type'
@@ -8817,7 +8817,7 @@ components:
           properties:
             configuration:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamsTabConfiguration'
+                - $ref: '#/components/schemas/TeamsTabConfiguration'
                 - type: object
                   nullable: true
               description: Container for custom settings applied to a tab. The tab is considered configured only once this property is set.
@@ -8832,9 +8832,9 @@ components:
             '@odata.type':
               type: string
       x-ms-discriminator-value: '#microsoft.graph.teamsTab'
-    microsoft.graph.teamworkHostedContent:
+    TeamworkHostedContent:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: teamworkHostedContent
           required:
             - '@odata.type'
@@ -8851,9 +8851,9 @@ components:
               nullable: true
             '@odata.type':
               type: string
-    microsoft.graph.teamworkTag:
+    TeamworkTag:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: teamworkTag
           required:
             - '@odata.type'
@@ -8876,7 +8876,7 @@ components:
               nullable: true
             tagType:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamworkTagType'
+                - $ref: '#/components/schemas/TeamworkTagType'
                 - type: object
                   nullable: true
               description: The type of the tag. Default is standard.
@@ -8887,9 +8887,9 @@ components:
             '@odata.type':
               type: string
       x-ms-discriminator-value: '#microsoft.graph.teamworkTag'
-    microsoft.graph.teamworkTagMember:
+    TeamworkTagMember:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.entity'
+        - $ref: '#/components/schemas/Entity'
         - title: teamworkTagMember
           required:
             - '@odata.type'
@@ -8910,7 +8910,7 @@ components:
             '@odata.type':
               type: string
       x-ms-discriminator-value: '#microsoft.graph.teamworkTagMember'
-    microsoft.graph.actionResultPart:
+    ActionResultPart:
       title: actionResultPart
       required:
         - '@odata.type'
@@ -8918,13 +8918,13 @@ components:
       properties:
         error:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.publicError'
+            - $ref: '#/components/schemas/PublicError'
             - type: object
               nullable: true
           description: 'The error that occurred, if any, during the bulk operation.'
         '@odata.type':
           type: string
-    microsoft.graph.album:
+    Album:
       title: album
       required:
         - '@odata.type'
@@ -8936,7 +8936,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.audio:
+    Audio:
       title: audio
       required:
         - '@odata.type'
@@ -9025,7 +9025,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.bundle:
+    Bundle:
       title: bundle
       required:
         - '@odata.type'
@@ -9033,7 +9033,7 @@ components:
       properties:
         album:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.album'
+            - $ref: '#/components/schemas/Album'
             - type: object
               nullable: true
           description: 'If the bundle is an album, then the album property is included'
@@ -9046,7 +9046,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.channelIdentity:
+    ChannelIdentity:
       title: channelIdentity
       required:
         - '@odata.type'
@@ -9062,7 +9062,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.channelSummary:
+    ChannelSummary:
       title: channelSummary
       required:
         - '@odata.type'
@@ -9095,7 +9095,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.chatMessageAttachment:
+    ChatMessageAttachment:
       title: chatMessageAttachment
       required:
         - '@odata.type'
@@ -9131,9 +9131,9 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.chatMessageFromIdentitySet:
+    ChatMessageFromIdentitySet:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.identitySet'
+        - $ref: '#/components/schemas/IdentitySet'
         - title: chatMessageFromIdentitySet
           required:
             - '@odata.type'
@@ -9143,14 +9143,14 @@ components:
               type: string
               default: '#microsoft.graph.chatMessageFromIdentitySet'
       x-ms-discriminator-value: '#microsoft.graph.chatMessageFromIdentitySet'
-    microsoft.graph.chatMessageHistoryItem:
+    ChatMessageHistoryItem:
       title: chatMessageHistoryItem
       required:
         - '@odata.type'
       type: object
       properties:
         actions:
-          $ref: '#/components/schemas/microsoft.graph.chatMessageActions'
+          $ref: '#/components/schemas/ChatMessageActions'
         modifiedDateTime:
           pattern: '^[0-9]{4,}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]([.][0-9]{1,12})?(Z|[+-][0-9][0-9]:[0-9][0-9])$'
           type: string
@@ -9158,13 +9158,13 @@ components:
           format: date-time
         reaction:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.chatMessageReaction'
+            - $ref: '#/components/schemas/ChatMessageReaction'
             - type: object
               nullable: true
           description: The reaction in the modified message.
         '@odata.type':
           type: string
-    microsoft.graph.chatMessageMention:
+    ChatMessageMention:
       title: chatMessageMention
       required:
         - '@odata.type'
@@ -9179,7 +9179,7 @@ components:
           nullable: true
         mentioned:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.chatMessageMentionedIdentitySet'
+            - $ref: '#/components/schemas/ChatMessageMentionedIdentitySet'
             - type: object
               nullable: true
           description: 'The entity (user, application, team, channel, or chat) that was @mentioned.'
@@ -9189,9 +9189,9 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.chatMessageMentionedIdentitySet:
+    ChatMessageMentionedIdentitySet:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.identitySet'
+        - $ref: '#/components/schemas/IdentitySet'
         - title: chatMessageMentionedIdentitySet
           required:
             - '@odata.type'
@@ -9199,7 +9199,7 @@ components:
           properties:
             conversation:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamworkConversationIdentity'
+                - $ref: '#/components/schemas/TeamworkConversationIdentity'
                 - type: object
                   nullable: true
               description: 'If present, represents a conversation (for example, team, channel, or chat) @mentioned in a message.'
@@ -9207,7 +9207,7 @@ components:
               type: string
               default: '#microsoft.graph.chatMessageMentionedIdentitySet'
       x-ms-discriminator-value: '#microsoft.graph.chatMessageMentionedIdentitySet'
-    microsoft.graph.chatMessagePolicyViolation:
+    ChatMessagePolicyViolation:
       title: chatMessagePolicyViolation
       required:
         - '@odata.type'
@@ -9215,7 +9215,7 @@ components:
       properties:
         dlpAction:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.chatMessagePolicyViolationDlpActionTypes'
+            - $ref: '#/components/schemas/ChatMessagePolicyViolationDlpActionTypes'
             - type: object
               nullable: true
           description: 'The action taken by the DLP provider on the message with sensitive content. Supported values are: NoneNotifySender -- Inform the sender of the violation but allow readers to read the message.BlockAccess -- Block readers from reading the message.BlockAccessExternal -- Block users outside the organization from reading the message, while allowing users within the organization to read the message.'
@@ -9225,25 +9225,25 @@ components:
           nullable: true
         policyTip:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.chatMessagePolicyViolationPolicyTip'
+            - $ref: '#/components/schemas/ChatMessagePolicyViolationPolicyTip'
             - type: object
               nullable: true
           description: Information to display to the message sender about why the message was flagged as a violation.
         userAction:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.chatMessagePolicyViolationUserActionTypes'
+            - $ref: '#/components/schemas/ChatMessagePolicyViolationUserActionTypes'
             - type: object
               nullable: true
           description: 'Indicates the action taken by the user on a message blocked by the DLP provider. Supported values are: NoneOverrideReportFalsePositiveWhen the DLP provider is updating the message for blocking sensitive content, userAction isn''t required.'
         verdictDetails:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.chatMessagePolicyViolationVerdictDetailsTypes'
+            - $ref: '#/components/schemas/ChatMessagePolicyViolationVerdictDetailsTypes'
             - type: object
               nullable: true
           description: 'Indicates what actions the sender may take in response to the policy violation. Supported values are: NoneAllowFalsePositiveOverride -- Allows the sender to declare the policyViolation to be an error in the DLP app and its rules, and allow readers to see the message again if the dlpAction hides it.AllowOverrideWithoutJustification -- Allows the sender to override the DLP violation and allow readers to see the message again if the dlpAction hides it, without needing to provide an explanation for doing so. AllowOverrideWithJustification -- Allows the sender to override the DLP violation and allow readers to see the message again if the dlpAction hides it, after providing an explanation for doing so.AllowOverrideWithoutJustification and AllowOverrideWithJustification are mutually exclusive.'
         '@odata.type':
           type: string
-    microsoft.graph.chatMessagePolicyViolationPolicyTip:
+    ChatMessagePolicyViolationPolicyTip:
       title: chatMessagePolicyViolationPolicyTip
       required:
         - '@odata.type'
@@ -9265,7 +9265,7 @@ components:
           description: 'The list of improper data in the message that was detected by the data loss prevention app. Each DLP app defines its own conditions, examples include ''Credit Card Number'' and ''Social Security Number''.'
         '@odata.type':
           type: string
-    microsoft.graph.chatMessageReaction:
+    ChatMessageReaction:
       title: chatMessageReaction
       required:
         - '@odata.type'
@@ -9288,12 +9288,12 @@ components:
           type: string
           description: 'The reaction type. Supported values include Unicode characters, custom, and some backward-compatible reaction types, such as like, angry, sad, laugh, heart, and surprised.'
         user:
-          $ref: '#/components/schemas/microsoft.graph.chatMessageReactionIdentitySet'
+          $ref: '#/components/schemas/ChatMessageReactionIdentitySet'
         '@odata.type':
           type: string
-    microsoft.graph.chatMessageReactionIdentitySet:
+    ChatMessageReactionIdentitySet:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.identitySet'
+        - $ref: '#/components/schemas/IdentitySet'
         - title: chatMessageReactionIdentitySet
           required:
             - '@odata.type'
@@ -9303,7 +9303,7 @@ components:
               type: string
               default: '#microsoft.graph.chatMessageReactionIdentitySet'
       x-ms-discriminator-value: '#microsoft.graph.chatMessageReactionIdentitySet'
-    microsoft.graph.deleted:
+    Deleted:
       title: deleted
       required:
         - '@odata.type'
@@ -9315,7 +9315,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.eventMessageDetail:
+    EventMessageDetail:
       title: eventMessageDetail
       required:
         - '@odata.type'
@@ -9323,7 +9323,7 @@ components:
       properties:
         '@odata.type':
           type: string
-    microsoft.graph.file:
+    File:
       title: file
       required:
         - '@odata.type'
@@ -9331,7 +9331,7 @@ components:
       properties:
         hashes:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.hashes'
+            - $ref: '#/components/schemas/Hashes'
             - type: object
               nullable: true
           description: 'Hashes of the file''s binary content, if available. Read-only.'
@@ -9344,7 +9344,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.fileSystemInfo:
+    FileSystemInfo:
       title: fileSystemInfo
       required:
         - '@odata.type'
@@ -9370,7 +9370,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.folder:
+    Folder:
       title: folder
       required:
         - '@odata.type'
@@ -9385,13 +9385,13 @@ components:
           nullable: true
         view:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.folderView'
+            - $ref: '#/components/schemas/FolderView'
             - type: object
               nullable: true
           description: A collection of properties defining the recommended view for the folder.
         '@odata.type':
           type: string
-    microsoft.graph.folderView:
+    FolderView:
       title: folderView
       required:
         - '@odata.type'
@@ -9411,7 +9411,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.geoCoordinates:
+    GeoCoordinates:
       title: geoCoordinates
       required:
         - '@odata.type'
@@ -9446,7 +9446,7 @@ components:
           description: 'Optional. The longitude, in decimal, for the item. Read-only.'
         '@odata.type':
           type: string
-    microsoft.graph.hashes:
+    Hashes:
       title: hashes
       required:
         - '@odata.type'
@@ -9470,7 +9470,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.identity:
+    Identity:
       title: identity
       required:
         - '@odata.type'
@@ -9486,7 +9486,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.identitySet:
+    IdentitySet:
       title: identitySet
       required:
         - '@odata.type'
@@ -9494,25 +9494,25 @@ components:
       properties:
         application:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.identity'
+            - $ref: '#/components/schemas/Identity'
             - type: object
               nullable: true
           description: Optional. The application associated with this action.
         device:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.identity'
+            - $ref: '#/components/schemas/Identity'
             - type: object
               nullable: true
           description: Optional. The device associated with this action.
         user:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.identity'
+            - $ref: '#/components/schemas/Identity'
             - type: object
               nullable: true
           description: Optional. The user associated with this action.
         '@odata.type':
           type: string
-    microsoft.graph.image:
+    Image:
       title: image
       required:
         - '@odata.type'
@@ -9534,7 +9534,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.itemBody:
+    ItemBody:
       title: itemBody
       required:
         - '@odata.type'
@@ -9546,13 +9546,13 @@ components:
           nullable: true
         contentType:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.bodyType'
+            - $ref: '#/components/schemas/BodyType'
             - type: object
               nullable: true
           description: The type of the content. Possible values are text and html.
         '@odata.type':
           type: string
-    microsoft.graph.itemReference:
+    ItemReference:
       title: itemReference
       required:
         - '@odata.type'
@@ -9584,7 +9584,7 @@ components:
           nullable: true
         sharepointIds:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.sharepointIds'
+            - $ref: '#/components/schemas/SharepointIds'
             - type: object
               nullable: true
           description: Returns identifiers useful for SharePoint REST compatibility. Read-only.
@@ -9594,7 +9594,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.keyValuePair:
+    KeyValuePair:
       title: keyValuePair
       required:
         - '@odata.type'
@@ -9609,7 +9609,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.malware:
+    Malware:
       title: malware
       required:
         - '@odata.type'
@@ -9621,7 +9621,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.package:
+    Package:
       title: package
       required:
         - '@odata.type'
@@ -9633,7 +9633,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.pendingContentUpdate:
+    PendingContentUpdate:
       title: pendingContentUpdate
       required:
         - '@odata.type'
@@ -9647,7 +9647,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.pendingOperations:
+    PendingOperations:
       title: pendingOperations
       required:
         - '@odata.type'
@@ -9655,13 +9655,13 @@ components:
       properties:
         pendingContentUpdate:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.pendingContentUpdate'
+            - $ref: '#/components/schemas/PendingContentUpdate'
             - type: object
               nullable: true
           description: A property that indicates that an operation that might update the binary content of a file is pending completion.
         '@odata.type':
           type: string
-    microsoft.graph.photo:
+    Photo:
       title: photo
       required:
         - '@odata.type'
@@ -9733,7 +9733,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.publicationFacet:
+    PublicationFacet:
       title: publicationFacet
       required:
         - '@odata.type'
@@ -9741,7 +9741,7 @@ components:
       properties:
         checkedOutBy:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.identitySet'
+            - $ref: '#/components/schemas/IdentitySet'
             - type: object
               nullable: true
           description: The user who checked out the file.
@@ -9755,7 +9755,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.publicError:
+    PublicError:
       title: publicError
       required:
         - '@odata.type'
@@ -9768,11 +9768,11 @@ components:
         details:
           type: array
           items:
-            $ref: '#/components/schemas/microsoft.graph.publicErrorDetail'
+            $ref: '#/components/schemas/PublicErrorDetail'
           description: Details of the error.
         innerError:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.publicInnerError'
+            - $ref: '#/components/schemas/PublicInnerError'
             - type: object
               nullable: true
           description: Details of the inner error.
@@ -9786,7 +9786,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.publicErrorDetail:
+    PublicErrorDetail:
       title: publicErrorDetail
       required:
         - '@odata.type'
@@ -9806,7 +9806,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.publicInnerError:
+    PublicInnerError:
       title: publicInnerError
       required:
         - '@odata.type'
@@ -9819,7 +9819,7 @@ components:
         details:
           type: array
           items:
-            $ref: '#/components/schemas/microsoft.graph.publicErrorDetail'
+            $ref: '#/components/schemas/PublicErrorDetail'
           description: A collection of error details.
         message:
           type: string
@@ -9831,7 +9831,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.remoteItem:
+    RemoteItem:
       title: remoteItem
       required:
         - '@odata.type'
@@ -9839,7 +9839,7 @@ components:
       properties:
         createdBy:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.identitySet'
+            - $ref: '#/components/schemas/IdentitySet'
             - type: object
               nullable: true
           description: 'Identity of the user, device, and application which created the item. Read-only.'
@@ -9851,19 +9851,19 @@ components:
           nullable: true
         file:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.file'
+            - $ref: '#/components/schemas/File'
             - type: object
               nullable: true
           description: Indicates that the remote item is a file. Read-only.
         fileSystemInfo:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.fileSystemInfo'
+            - $ref: '#/components/schemas/FileSystemInfo'
             - type: object
               nullable: true
           description: Information about the remote item from the local file system. Read-only.
         folder:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.folder'
+            - $ref: '#/components/schemas/Folder'
             - type: object
               nullable: true
           description: Indicates that the remote item is a folder. Read-only.
@@ -9873,13 +9873,13 @@ components:
           nullable: true
         image:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.image'
+            - $ref: '#/components/schemas/Image'
             - type: object
               nullable: true
           description: 'Image metadata, if the item is an image. Read-only.'
         lastModifiedBy:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.identitySet'
+            - $ref: '#/components/schemas/IdentitySet'
             - type: object
               nullable: true
           description: 'Identity of the user, device, and application which last modified the item. Read-only.'
@@ -9895,25 +9895,25 @@ components:
           nullable: true
         package:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.package'
+            - $ref: '#/components/schemas/Package'
             - type: object
               nullable: true
           description: 'If present, indicates that this item is a package instead of a folder or file. Packages are treated like files in some contexts and folders in others. Read-only.'
         parentReference:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.itemReference'
+            - $ref: '#/components/schemas/ItemReference'
             - type: object
               nullable: true
           description: Properties of the parent of the remote item. Read-only.
         shared:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.shared'
+            - $ref: '#/components/schemas/Shared'
             - type: object
               nullable: true
           description: Indicates that the item has been shared with others and provides information about the shared state of the item. Read-only.
         sharepointIds:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.sharepointIds'
+            - $ref: '#/components/schemas/SharepointIds'
             - type: object
               nullable: true
           description: Provides interop between items in OneDrive for Business and SharePoint with the full set of item identifiers. Read-only.
@@ -9924,13 +9924,13 @@ components:
           nullable: true
         specialFolder:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.specialFolder'
+            - $ref: '#/components/schemas/SpecialFolder'
             - type: object
               nullable: true
           description: 'If the current item is also available as a special folder, this facet is returned. Read-only.'
         video:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.video'
+            - $ref: '#/components/schemas/Video'
             - type: object
               nullable: true
           description: 'Video metadata, if the item is a video. Read-only.'
@@ -9944,7 +9944,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.root:
+    Root:
       title: root
       required:
         - '@odata.type'
@@ -9952,7 +9952,7 @@ components:
       properties:
         '@odata.type':
           type: string
-    microsoft.graph.searchResult:
+    SearchResult:
       title: searchResult
       required:
         - '@odata.type'
@@ -9964,7 +9964,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.shared:
+    Shared:
       title: shared
       required:
         - '@odata.type'
@@ -9972,7 +9972,7 @@ components:
       properties:
         owner:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.identitySet'
+            - $ref: '#/components/schemas/IdentitySet'
             - type: object
               nullable: true
           description: The identity of the owner of the shared item. Read-only.
@@ -9982,7 +9982,7 @@ components:
           nullable: true
         sharedBy:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.identitySet'
+            - $ref: '#/components/schemas/IdentitySet'
             - type: object
               nullable: true
           description: The identity of the user who shared the item. Read-only.
@@ -9994,7 +9994,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.sharepointIds:
+    SharepointIds:
       title: sharepointIds
       required:
         - '@odata.type'
@@ -10030,7 +10030,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.specialFolder:
+    SpecialFolder:
       title: specialFolder
       required:
         - '@odata.type'
@@ -10042,7 +10042,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.teamFunSettings:
+    TeamFunSettings:
       title: teamFunSettings
       required:
         - '@odata.type'
@@ -10062,13 +10062,13 @@ components:
           nullable: true
         giphyContentRating:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.giphyRatingType'
+            - $ref: '#/components/schemas/GiphyRatingType'
             - type: object
               nullable: true
           description: 'Giphy content rating. The possible values are: moderate, strict.'
         '@odata.type':
           type: string
-    microsoft.graph.teamGuestSettings:
+    TeamGuestSettings:
       title: teamGuestSettings
       required:
         - '@odata.type'
@@ -10084,7 +10084,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.teamMemberSettings:
+    TeamMemberSettings:
       title: teamMemberSettings
       required:
         - '@odata.type'
@@ -10116,7 +10116,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.teamMessagingSettings:
+    TeamMessagingSettings:
       title: teamMessagingSettings
       required:
         - '@odata.type'
@@ -10144,7 +10144,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.teamsTabConfiguration:
+    TeamsTabConfiguration:
       title: teamsTabConfiguration
       required:
         - '@odata.type'
@@ -10168,7 +10168,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.teamSummary:
+    TeamSummary:
       title: teamSummary
       required:
         - '@odata.type'
@@ -10197,7 +10197,7 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.teamworkActivityTopic:
+    TeamworkActivityTopic:
       title: teamworkActivityTopic
       required:
         - '@odata.type'
@@ -10205,7 +10205,7 @@ components:
       properties:
         source:
           anyOf:
-            - $ref: '#/components/schemas/microsoft.graph.teamworkActivityTopicSource'
+            - $ref: '#/components/schemas/TeamworkActivityTopicSource'
             - type: object
               nullable: true
           description: 'Type of source. The possible values are: entityUrl, text. For supported Microsoft Graph URLs, use entityUrl. For custom text, use text.'
@@ -10218,9 +10218,9 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.teamworkConversationIdentity:
+    TeamworkConversationIdentity:
       allOf:
-        - $ref: '#/components/schemas/microsoft.graph.identity'
+        - $ref: '#/components/schemas/Identity'
         - title: teamworkConversationIdentity
           required:
             - '@odata.type'
@@ -10228,7 +10228,7 @@ components:
           properties:
             conversationIdentityType:
               anyOf:
-                - $ref: '#/components/schemas/microsoft.graph.teamworkConversationIdentityType'
+                - $ref: '#/components/schemas/TeamworkConversationIdentityType'
                 - type: object
                   nullable: true
               description: 'Type of conversation. The possible values are: team, channel, chat, and unknownFutureValue.'
@@ -10236,7 +10236,7 @@ components:
               type: string
               default: '#microsoft.graph.teamworkConversationIdentity'
       x-ms-discriminator-value: '#microsoft.graph.teamworkConversationIdentity'
-    microsoft.graph.teamworkNotificationRecipient:
+    TeamworkNotificationRecipient:
       title: teamworkNotificationRecipient
       required:
         - '@odata.type'
@@ -10244,7 +10244,7 @@ components:
       properties:
         '@odata.type':
           type: string
-    microsoft.graph.video:
+    Video:
       title: video
       required:
         - '@odata.type'
@@ -10316,20 +10316,20 @@ components:
           nullable: true
         '@odata.type':
           type: string
-    microsoft.graph.bodyType:
+    BodyType:
       title: bodyType
       enum:
         - text
         - html
       type: string
-    microsoft.graph.channelLayoutType:
+    ChannelLayoutType:
       title: channelLayoutType
       enum:
         - post
         - chat
         - unknownFutureValue
       type: string
-    microsoft.graph.channelMembershipType:
+    ChannelMembershipType:
       title: channelMembershipType
       enum:
         - standard
@@ -10337,7 +10337,7 @@ components:
         - unknownFutureValue
         - shared
       type: string
-    microsoft.graph.chatMessageActions:
+    ChatMessageActions:
       title: chatMessageActions
       enum:
         - reactionAdded
@@ -10347,7 +10347,7 @@ components:
       type: string
       x-ms-enum-flags:
         isFlags: true
-    microsoft.graph.chatMessageImportance:
+    ChatMessageImportance:
       title: chatMessageImportance
       enum:
         - normal
@@ -10355,7 +10355,7 @@ components:
         - urgent
         - unknownFutureValue
       type: string
-    microsoft.graph.chatMessagePolicyViolationDlpActionTypes:
+    ChatMessagePolicyViolationDlpActionTypes:
       title: chatMessagePolicyViolationDlpActionTypes
       enum:
         - none
@@ -10365,7 +10365,7 @@ components:
       type: string
       x-ms-enum-flags:
         isFlags: true
-    microsoft.graph.chatMessagePolicyViolationUserActionTypes:
+    ChatMessagePolicyViolationUserActionTypes:
       title: chatMessagePolicyViolationUserActionTypes
       enum:
         - none
@@ -10374,7 +10374,7 @@ components:
       type: string
       x-ms-enum-flags:
         isFlags: true
-    microsoft.graph.chatMessagePolicyViolationVerdictDetailsTypes:
+    ChatMessagePolicyViolationVerdictDetailsTypes:
       title: chatMessagePolicyViolationVerdictDetailsTypes
       enum:
         - none
@@ -10384,7 +10384,7 @@ components:
       type: string
       x-ms-enum-flags:
         isFlags: true
-    microsoft.graph.chatMessageType:
+    ChatMessageType:
       title: chatMessageType
       enum:
         - message
@@ -10393,21 +10393,21 @@ components:
         - unknownFutureValue
         - systemEventMessage
       type: string
-    microsoft.graph.giphyRatingType:
+    GiphyRatingType:
       title: giphyRatingType
       enum:
         - strict
         - moderate
         - unknownFutureValue
       type: string
-    microsoft.graph.migrationMode:
+    MigrationMode:
       title: migrationMode
       enum:
         - inProgress
         - completed
         - unknownFutureValue
       type: string
-    microsoft.graph.teamsAppDistributionMethod:
+    TeamsAppDistributionMethod:
       title: teamsAppDistributionMethod
       enum:
         - store
@@ -10415,7 +10415,7 @@ components:
         - sideloaded
         - unknownFutureValue
       type: string
-    microsoft.graph.teamSpecialization:
+    TeamSpecialization:
       title: teamSpecialization
       enum:
         - none
@@ -10427,7 +10427,7 @@ components:
         - healthcareCareCoordination
         - unknownFutureValue
       type: string
-    microsoft.graph.teamVisibilityType:
+    TeamVisibilityType:
       title: teamVisibilityType
       enum:
         - private
@@ -10435,13 +10435,13 @@ components:
         - hiddenMembership
         - unknownFutureValue
       type: string
-    microsoft.graph.teamworkActivityTopicSource:
+    TeamworkActivityTopicSource:
       title: teamworkActivityTopicSource
       enum:
         - entityUrl
         - text
       type: string
-    microsoft.graph.teamworkConversationIdentityType:
+    TeamworkConversationIdentityType:
       title: teamworkConversationIdentityType
       enum:
         - team
@@ -10449,20 +10449,20 @@ components:
         - chat
         - unknownFutureValue
       type: string
-    microsoft.graph.teamworkTagType:
+    TeamworkTagType:
       title: teamworkTagType
       enum:
         - standard
         - unknownFutureValue
       type: string
-    microsoft.graph.ODataErrors.ODataError:
+    ODataErrorsODataError:
       required:
         - error
       type: object
       properties:
         error:
-          $ref: '#/components/schemas/microsoft.graph.ODataErrors.MainError'
-    microsoft.graph.ODataErrors.MainError:
+          $ref: '#/components/schemas/ODataErrorsMainError'
+    ODataErrorsMainError:
       required:
         - code
         - message
@@ -10479,10 +10479,10 @@ components:
         details:
           type: array
           items:
-            $ref: '#/components/schemas/microsoft.graph.ODataErrors.ErrorDetails'
+            $ref: '#/components/schemas/ODataErrorsErrorDetails'
         innerError:
-          $ref: '#/components/schemas/microsoft.graph.ODataErrors.InnerError'
-    microsoft.graph.ODataErrors.ErrorDetails:
+          $ref: '#/components/schemas/ODataErrorsInnerError'
+    ODataErrorsErrorDetails:
       required:
         - code
         - message
@@ -10495,7 +10495,7 @@ components:
         target:
           type: string
           nullable: true
-    microsoft.graph.ODataErrors.InnerError:
+    ODataErrorsInnerError:
       title: InnerError
       required:
         - '@odata.type'
@@ -10520,7 +10520,7 @@ components:
     ODataCountResponse:
       type: integer
       format: int32
-    microsoft.graph.teamsAppCollectionResponse:
+    TeamsAppCollectionResponse:
       title: Collection of teamsApp
       type: object
       allOf:
@@ -10530,8 +10530,8 @@ components:
             value:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.teamsApp'
-    microsoft.graph.conversationMemberCollectionResponse:
+                $ref: '#/components/schemas/TeamsApp'
+    ConversationMemberCollectionResponse:
       title: Collection of conversationMember
       type: object
       allOf:
@@ -10541,8 +10541,8 @@ components:
             value:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.conversationMember'
-    microsoft.graph.chatMessageCollectionResponse:
+                $ref: '#/components/schemas/ConversationMember'
+    ChatMessageCollectionResponse:
       title: Collection of chatMessage
       type: object
       allOf:
@@ -10552,8 +10552,8 @@ components:
             value:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.chatMessage'
-    microsoft.graph.teamsTabCollectionResponse:
+                $ref: '#/components/schemas/ChatMessage'
+    TeamsTabCollectionResponse:
       title: Collection of teamsTab
       type: object
       allOf:
@@ -10563,8 +10563,8 @@ components:
             value:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.teamsTab'
-    microsoft.graph.chatMessageHostedContentCollectionResponse:
+                $ref: '#/components/schemas/TeamsTab'
+    ChatMessageHostedContentCollectionResponse:
       title: Collection of chatMessageHostedContent
       type: object
       allOf:
@@ -10574,8 +10574,8 @@ components:
             value:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContent'
-    microsoft.graph.channelCollectionResponse:
+                $ref: '#/components/schemas/ChatMessageHostedContent'
+    ChannelCollectionResponse:
       title: Collection of channel
       type: object
       allOf:
@@ -10585,8 +10585,8 @@ components:
             value:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.channel'
-    microsoft.graph.teamworkTagCollectionResponse:
+                $ref: '#/components/schemas/Channel'
+    TeamworkTagCollectionResponse:
       title: Collection of teamworkTag
       type: object
       allOf:
@@ -10596,8 +10596,8 @@ components:
             value:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.teamworkTag'
-    microsoft.graph.teamworkTagMemberCollectionResponse:
+                $ref: '#/components/schemas/TeamworkTag'
+    TeamworkTagMemberCollectionResponse:
       title: Collection of teamworkTagMember
       type: object
       allOf:
@@ -10607,7 +10607,7 @@ components:
             value:
               type: array
               items:
-                $ref: '#/components/schemas/microsoft.graph.teamworkTagMember'
+                $ref: '#/components/schemas/TeamworkTagMember'
     ReferenceNumeric:
       enum:
         - '-INF'
@@ -10642,61 +10642,61 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/microsoft.graph.ODataErrors.ODataError'
+            $ref: '#/components/schemas/ODataErrorsODataError'
     ODataCountResponse:
       description: The count of the resource
       content:
         text/plain:
           schema:
             $ref: '#/components/schemas/ODataCountResponse'
-    microsoft.graph.teamsAppCollectionResponse:
+    TeamsAppCollectionResponse:
       description: Retrieved collection
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/microsoft.graph.teamsAppCollectionResponse'
-    microsoft.graph.conversationMemberCollectionResponse:
+            $ref: '#/components/schemas/TeamsAppCollectionResponse'
+    ConversationMemberCollectionResponse:
       description: Retrieved collection
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/microsoft.graph.conversationMemberCollectionResponse'
-    microsoft.graph.chatMessageCollectionResponse:
+            $ref: '#/components/schemas/ConversationMemberCollectionResponse'
+    ChatMessageCollectionResponse:
       description: Retrieved collection
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/microsoft.graph.chatMessageCollectionResponse'
-    microsoft.graph.teamsTabCollectionResponse:
+            $ref: '#/components/schemas/ChatMessageCollectionResponse'
+    TeamsTabCollectionResponse:
       description: Retrieved collection
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/microsoft.graph.teamsTabCollectionResponse'
-    microsoft.graph.chatMessageHostedContentCollectionResponse:
+            $ref: '#/components/schemas/TeamsTabCollectionResponse'
+    ChatMessageHostedContentCollectionResponse:
       description: Retrieved collection
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/microsoft.graph.chatMessageHostedContentCollectionResponse'
-    microsoft.graph.channelCollectionResponse:
+            $ref: '#/components/schemas/ChatMessageHostedContentCollectionResponse'
+    ChannelCollectionResponse:
       description: Retrieved collection
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/microsoft.graph.channelCollectionResponse'
-    microsoft.graph.teamworkTagCollectionResponse:
+            $ref: '#/components/schemas/ChannelCollectionResponse'
+    TeamworkTagCollectionResponse:
       description: Retrieved collection
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/microsoft.graph.teamworkTagCollectionResponse'
-    microsoft.graph.teamworkTagMemberCollectionResponse:
+            $ref: '#/components/schemas/TeamworkTagCollectionResponse'
+    TeamworkTagMemberCollectionResponse:
       description: Retrieved collection
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/microsoft.graph.teamworkTagMemberCollectionResponse'
+            $ref: '#/components/schemas/TeamworkTagMemberCollectionResponse'
   parameters:
     top:
       name: $top

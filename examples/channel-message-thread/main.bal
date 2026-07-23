@@ -40,7 +40,7 @@ public function main() returns error? {
     teams:ChatMessage rootMessage = check teamsClient->createChannelMessage(teamId, channelId, {
         body: {content: "Kicking off the release checklist for this sprint. Please reply with your status."}
     });
-    string messageId = rootMessage.id ?: "";
+    string messageId = check requireId(rootMessage.id, "message id");
     io:println("Posted root message: ", messageId);
 
     // Step 2: Reply to the root message, forming a thread.
@@ -49,11 +49,17 @@ public function main() returns error? {
     });
     io:println("Posted reply: ", reply.id ?: "");
 
-    // Step 3: List every reply in the thread.
+    // Step 3: List the replies in the thread. The reply collection is paginated; this prints the
+    // first page only. To read the whole thread, follow the response's odata nextLink until it is absent.
     teams:ChatMessageCollectionResponse replies =
         check teamsClient->listChannelMessageReplies(teamId, channelId, messageId);
-    io:println("Thread replies:");
+    io:println("Thread replies (first page):");
     foreach teams:ChatMessage r in replies.value ?: [] {
         io:println("  - ", r.body?.content ?: "");
     }
+}
+
+// Returns the id when present, or a clear error when the API response omits it.
+isolated function requireId(string? id, string what) returns string|error {
+    return id ?: error(string `Expected a ${what} in the response but none was returned`);
 }

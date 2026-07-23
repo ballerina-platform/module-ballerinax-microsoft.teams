@@ -46,7 +46,7 @@ public function main() returns error? {
             {"userId": userId}
         ]
     });
-    string tagId = newTag.id ?: "";
+    string tagId = check requireId(newTag.id, "tag id");
     io:println("Created tag with id: ", tagId);
 
     // Step 2: List all tags defined on the team.
@@ -63,4 +63,9 @@ public function main() returns error? {
     // Step 4: Delete the tag.
     check teamsClient->deleteTag(teamId, tagId);
     io:println("Deleted tag: ", tagId);
+}
+
+// Returns the id when present, or a clear error when the API response omits it.
+isolated function requireId(string? id, string what) returns string|error {
+    return id ?: error(string `Expected a ${what} in the response but none was returned`);
 }

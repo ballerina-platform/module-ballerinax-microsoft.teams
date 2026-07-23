@@ -41,14 +41,14 @@ public function main() returns error? {
 
     // Step 1: Read the team's primary channel to obtain its id.
     teams:Channel primaryChannel = check teamsClient->getPrimaryChannel(teamId);
-    string channelId = primaryChannel.id ?: "";
+    string channelId = check requireId(primaryChannel.id, "primary channel id");
     io:println("Primary channel: ", primaryChannel?.displayName ?: channelId);
 
     // Step 2: Post a message to the primary channel.
     teams:ChatMessage message = check teamsClient->createChannelMessage(teamId, channelId, {
         body: {content: "Welcome to the team! React with a 👍 if you're onboard."}
     });
-    string messageId = message.id ?: "";
+    string messageId = check requireId(message.id, "message id");
     io:println("Posted message: ", messageId);
 
     // Step 3: Add a 👍 reaction to the message. Graph expects the reaction type as a Unicode emoji.
@@ -62,4 +62,9 @@ public function main() returns error? {
     foreach teams:ChatMessage m in messages.value ?: [] {
         io:println("  - ", m.body?.content ?: "");
     }
+}
+
+// Returns the id when present, or a clear error when the API response omits it.
+isolated function requireId(string? id, string what) returns string|error {
+    return id ?: error(string `Expected a ${what} in the response but none was returned`);
 }

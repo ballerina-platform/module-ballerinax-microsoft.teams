@@ -139,6 +139,7 @@ To use the `Microsoft Teams` connector in your Ballerina application, modify the
 ### Step 1: Import the module
 
 ```ballerina
+import ballerina/io;
 import ballerinax/microsoft.teams;
 ```
 
