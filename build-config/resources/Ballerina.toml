@@ -11,6 +11,3 @@ repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.
 
 [build-options]
 observabilityIncluded = true
-
-[platform.java21]
-graalvmCompatible = true
