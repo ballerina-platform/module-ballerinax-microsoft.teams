@@ -12744,9 +12744,6 @@
     "schemas": {
       "TeamFunSettings": {
         "title": "teamFunSettings",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "allowCustomMemes": {
@@ -12784,9 +12781,6 @@
       },
       "Malware": {
         "title": "malware",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -12836,9 +12830,6 @@
           },
           {
             "title": "team",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "summary": {
@@ -12983,9 +12974,6 @@
       },
       "PendingOperations": {
         "title": "pendingOperations",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "pendingContentUpdate": {
@@ -13018,9 +13006,6 @@
       },
       "TeamMemberSettings": {
         "title": "teamMemberSettings",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "allowCreatePrivateChannels": {
@@ -13081,9 +13066,6 @@
       },
       "Identity": {
         "title": "identity",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "displayName": {
@@ -13104,9 +13086,6 @@
       },
       "PendingContentUpdate": {
         "title": "pendingContentUpdate",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "queuedDateTime": {
@@ -13129,9 +13108,6 @@
           },
           {
             "title": "chatMessageReactionIdentitySet",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "@odata.type": {
@@ -13146,9 +13122,6 @@
       },
       "SharepointIds": {
         "title": "sharepointIds",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "listId": {
@@ -13207,9 +13180,6 @@
       },
       "ChatMessageMention": {
         "title": "chatMessageMention",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "mentionText": {
@@ -13250,9 +13220,6 @@
           },
           {
             "title": "chatMessageHostedContent",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "@odata.type": {
@@ -13271,9 +13238,6 @@
           },
           {
             "title": "channel",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "summary": {
@@ -13383,9 +13347,6 @@
       },
       "File": {
         "title": "file",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "processingMetadata": {
@@ -13422,9 +13383,6 @@
           },
           {
             "title": "chatMessage",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "summary": {
@@ -13624,9 +13582,6 @@
       },
       "ChannelSummary": {
         "title": "channelSummary",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "membersCount": {
@@ -13691,9 +13646,6 @@
       },
       "Video": {
         "title": "video",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "duration": {
@@ -13793,9 +13745,6 @@
       },
       "ChannelIdentity": {
         "title": "channelIdentity",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -13836,9 +13785,6 @@
       },
       "FileSystemInfo": {
         "title": "fileSystemInfo",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "lastAccessedDateTime": {
@@ -13870,9 +13816,6 @@
       },
       "Audio": {
         "title": "audio",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "hasDrm": {
@@ -13980,9 +13923,6 @@
       },
       "Entity": {
         "title": "entity",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -13997,9 +13937,6 @@
       },
       "SpecialFolder": {
         "title": "specialFolder",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -14023,9 +13960,6 @@
       },
       "Image": {
         "title": "image",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -14065,9 +13999,6 @@
       },
       "Shared": {
         "title": "shared",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "owner": {
@@ -14114,9 +14045,6 @@
       },
       "Photo": {
         "title": "photo",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "exposureNumerator": {
@@ -14239,9 +14167,6 @@
       },
       "ODataErrorsInnerError": {
         "title": "InnerError",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "date": {
@@ -14271,9 +14196,6 @@
       },
       "ActionResultPart": {
         "title": "actionResultPart",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -14301,9 +14223,6 @@
           },
           {
             "title": "teamsApp",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "distributionMethod": {
@@ -14344,9 +14263,6 @@
           },
           {
             "title": "teamworkHostedContent",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "@odata.type": {
@@ -14381,9 +14297,6 @@
       },
       "Bundle": {
         "title": "bundle",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "album": {
@@ -14427,9 +14340,6 @@
       },
       "KeyValuePair": {
         "title": "keyValuePair",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -14474,9 +14384,6 @@
           },
           {
             "title": "chatMessageFromIdentitySet",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "@odata.type": {
@@ -14495,9 +14402,6 @@
       },
       "Folder": {
         "title": "folder",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "view": {
@@ -14528,9 +14432,6 @@
       },
       "SearchResult": {
         "title": "searchResult",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "onClickTelemetryUrl": {
@@ -14546,9 +14447,6 @@
       },
       "TeamsTabConfiguration": {
         "title": "teamsTabConfiguration",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "contentUrl": {
@@ -14595,9 +14493,6 @@
       },
       "ChatMessageHistoryItem": {
         "title": "chatMessageHistoryItem",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "reaction": {
@@ -14638,9 +14533,6 @@
       },
       "GeoCoordinates": {
         "title": "geoCoordinates",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "altitude": {
@@ -14702,9 +14594,6 @@
       },
       "TeamGuestSettings": {
         "title": "teamGuestSettings",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -14725,9 +14614,6 @@
       },
       "Deleted": {
         "title": "deleted",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -14743,9 +14629,6 @@
       },
       "PublicErrorDetail": {
         "title": "publicErrorDetail",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "code": {
@@ -14771,9 +14654,6 @@
       },
       "TeamworkActivityTopic": {
         "title": "teamworkActivityTopic",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "webUrl": {
@@ -14805,9 +14685,6 @@
       },
       "PublicInnerError": {
         "title": "publicInnerError",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "code": {
@@ -14845,9 +14722,6 @@
           },
           {
             "title": "teamworkTagMember",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "displayName": {
@@ -14876,9 +14750,6 @@
       },
       "RemoteItem": {
         "title": "remoteItem",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "image": {
@@ -15078,9 +14949,6 @@
           },
           {
             "title": "teamsTab",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "configuration": {
@@ -15145,9 +15013,6 @@
       },
       "ItemReference": {
         "title": "itemReference",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "path": {
@@ -15205,9 +15070,6 @@
       },
       "ItemBody": {
         "title": "itemBody",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -15257,9 +15119,6 @@
           },
           {
             "title": "baseItem",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "parentReference": {
@@ -15340,9 +15199,6 @@
       },
       "Hashes": {
         "title": "hashes",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "sha256Hash": {
@@ -15373,9 +15229,6 @@
       },
       "TeamSummary": {
         "title": "teamSummary",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "membersCount": {
@@ -15410,9 +15263,6 @@
       },
       "TeamMessagingSettings": {
         "title": "teamMessagingSettings",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "allowUserDeleteMessages": {
@@ -15456,9 +15306,6 @@
       },
       "Root": {
         "title": "root",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -15469,9 +15316,6 @@
       },
       "PublicationFacet": {
         "title": "publicationFacet",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "versionId": {
@@ -15514,9 +15358,6 @@
       },
       "Package": {
         "title": "package",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -15532,9 +15373,6 @@
       },
       "EventMessageDetail": {
         "title": "eventMessageDetail",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -15545,9 +15383,6 @@
       },
       "FolderView": {
         "title": "folderView",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "@odata.type": {
@@ -15573,9 +15408,6 @@
       },
       "ChatMessageAttachment": {
         "title": "chatMessageAttachment",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "teamsAppId": {
@@ -15621,9 +15453,6 @@
       },
       "ChatMessagePolicyViolationPolicyTip": {
         "title": "chatMessagePolicyViolationPolicyTip",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "complianceUrl": {
@@ -15667,9 +15496,6 @@
           },
           {
             "title": "chatMessageMentionedIdentitySet",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "@odata.type": {
@@ -15711,9 +15537,6 @@
           },
           {
             "title": "teamworkTag",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "displayName": {
@@ -15802,9 +15625,6 @@
       },
       "IdentitySet": {
         "title": "identitySet",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "application": {
@@ -15865,9 +15685,6 @@
       },
       "ChatMessagePolicyViolation": {
         "title": "chatMessagePolicyViolation",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "justificationText": {
@@ -15936,9 +15753,6 @@
           },
           {
             "title": "teamworkConversationIdentity",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "conversationIdentityType": {
@@ -15965,9 +15779,6 @@
       },
       "ChatMessageReaction": {
         "title": "chatMessageReaction",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "reactionType": {
@@ -16006,9 +15817,6 @@
           },
           {
             "title": "driveItem",
-            "required": [
-              "@odata.type"
-            ],
             "type": "object",
             "properties": {
               "searchResult": {
@@ -16303,9 +16111,6 @@
       },
       "PublicError": {
         "title": "publicError",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "code": {
@@ -16360,9 +16165,6 @@
       },
       "Album": {
         "title": "album",
-        "required": [
-          "@odata.type"
-        ],
         "type": "object",
         "properties": {
           "coverImageItemId": {

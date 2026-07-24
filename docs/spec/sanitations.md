@@ -1,6 +1,6 @@
 _Author_: Ballerina \
 _Created_: 2026-07-15 \
-_Updated_: 2026-07-22 \
+_Updated_: 2026-07-24 \
 _Edition_: Swan Lake
 
 # Sanitation for OpenAPI specification
@@ -266,10 +266,15 @@ These changes are done in order to improve the overall usability, and as workaro
     - Updated: Manually added an OAuth2 security scheme (`azureaadv2`) under `components.securitySchemes`, together with a global `security` requirement. It declares both flows the connector supports: `authorizationCode` (delegated / on-behalf-of-user, including `offline_access` for refresh tokens) and `clientCredentials` (app-only, using the `https://graph.microsoft.com/.default` scope). The relevant Microsoft Graph permission scopes (for example `Team.ReadBasic.All`, `ChannelMessage.Send`, `TeamsTab.ReadWrite.All`, `TeamworkTag.ReadWrite`) are enumerated under each flow. Applied to both `teams-endpoints.yaml` and `aligned_ballerina_openapi.json`.
     - Reason: Documents how callers authenticate against Microsoft Graph and lets the tooling surface the supported OAuth2 flows and the scopes each operation needs, instead of leaving the API appearing unauthenticated.
 
-8. **Make the generated `atOdataType` (`@odata.type`) field optional**
-    - Original: The spec marks `@odata.type` as `required` on the schemas where it appears, so the generated `MicrosoftGraph*` records in `ballerina/types.bal` declared `atOdataType` (the `@jsondata:Name`-mapped `@odata.type`) as a **required** field.
-    - Updated: Manually edited `ballerina/types.bal` after generation to make every `atOdataType` field optional (`string atOdataType?;`). The OpenAPI specification (both `teams-endpoints.yaml` and `aligned_ballerina_openapi.json`) and its `required` arrays were left unchanged.
-    - Reason: Microsoft Graph returns `@odata.type` only for polymorphic/derived instances, so most GET responses omit it. With the field required, response binding (`jsondata:parseAsType`) failed whenever `@odata.type` was absent; making it optional lets those responses bind. Note: this is a post-generation edit — regenerating the client from the spec reintroduces the required field, so it must be re-applied.
+8. **Make `@odata.type` required only on the two schemas that need it; optional everywhere else**
+    - Original: The flatten + align step marked `@odata.type` as `required` on **every** schema where it appears (68 component schemas), so `bal openapi` generated `atOdataType` (the `@jsondata:Name`-mapped `@odata.type`) as a **required** field on all of them. Because Microsoft Graph returns `@odata.type` only for polymorphic/derived instances and omits it from most responses, response binding (`jsondata:parseAsType`) then failed whenever it was absent. 
+    - Updated: Moved the fix into the **spec** (so regeneration reproduces it) and narrowed it. In both `docs/spec/aligned_ballerina_openapi.json` and `docs/spec/teams-endpoints.yaml`, `@odata.type` was removed from the `required` array of every schema (66 schemas) **except**:
+      - **`ConversationMember`** — Graph requires `@odata.type` = `#microsoft.graph.aadUserConversationMember` on every create/add/update-member request (`createMember`, `createChannelMember`, `updateMember`, the `add*`/`remove*` actions via `AddMembersRequest.values`, and their `primaryChannel`/`allMembers` variants). Kept **required**.
+      - **`TeamworkNotificationRecipient`** — the abstract `recipient` of `sendActivityNotification`; Graph requires `@odata.type` to select the concrete recipient subtype (`aadUserNotificationRecipient`, `channelMembersNotificationRecipient`, `teamMembersNotificationRecipient`). Kept **required**.
+
+      Correspondingly, `atOdataType` is now a **required** field (`string atOdataType;`) on those two records in `ballerina/types.bal` and optional (`string atOdataType?;`) on the other 66. The `@odata.type` property definitions and the `#microsoft.graph.*` discriminator values are unchanged, so the wire format is unchanged.
+    - Scope: `docs/spec/aligned_ballerina_openapi.json` (66 `required` arrays stripped), `docs/spec/teams-endpoints.yaml` (66 stripped), and the two now-required fields in `ballerina/types.bal`.
+    - Reason: Keeping `@odata.type` required only where Graph actually requires it makes those two request payloads self-enforcing while letting every other type (including all response-bound records) bind responses that omit `@odata.type`. Marking `ConversationMember.@odata.type` required is safe for its response paths because Graph returns the discriminator on every member read — including under `$select` (verified against live Graph v1.0: `GET /teams/{id}/members?$select=id,displayName,roles` still returns `"@odata.type": "#microsoft.graph.aadUserConversationMember"` for each member). Because the change now lives in the spec, regenerating the client reproduces it — no post-generation re-application required.
 
 9. **Make the OAuth2 token/refresh URL a required field**
     - Original: The generated grant-config records defaulted the endpoint URL to the multi-tenant `/common/` endpoint — `OAuth2ClientCredentialsGrantConfig.tokenUrl` and `OAuth2RefreshTokenGrantConfig.refreshUrl` were both `= "https://login.microsoftonline.com/common/oauth2/v2.0/token"`.

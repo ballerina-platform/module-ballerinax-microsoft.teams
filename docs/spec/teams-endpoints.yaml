@@ -8258,8 +8258,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Entity'
         - title: baseItem
-          required:
-            - '@odata.type'
           type: object
           properties:
             createdBy:
@@ -8312,8 +8310,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Entity'
         - title: channel
-          required:
-            - '@odata.type'
           type: object
           properties:
             createdDateTime:
@@ -8386,8 +8382,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Entity'
         - title: chatMessage
-          required:
-            - '@odata.type'
           type: object
           properties:
             attachments:
@@ -8497,8 +8491,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/TeamworkHostedContent'
         - title: chatMessageHostedContent
-          required:
-            - '@odata.type'
           type: object
           properties:
             '@odata.type':
@@ -8534,8 +8526,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/BaseItem'
         - title: driveItem
-          required:
-            - '@odata.type'
           type: object
           properties:
             audio:
@@ -8682,8 +8672,6 @@ components:
       x-ms-discriminator-value: '#microsoft.graph.driveItem'
     Entity:
       title: entity
-      required:
-        - '@odata.type'
       type: object
       properties:
         id:
@@ -8695,8 +8683,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Entity'
         - title: team
-          required:
-            - '@odata.type'
           type: object
           properties:
             classification:
@@ -8786,8 +8772,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Entity'
         - title: teamsApp
-          required:
-            - '@odata.type'
           type: object
           properties:
             displayName:
@@ -8811,8 +8795,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Entity'
         - title: teamsTab
-          required:
-            - '@odata.type'
           type: object
           properties:
             configuration:
@@ -8836,8 +8818,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Entity'
         - title: teamworkHostedContent
-          required:
-            - '@odata.type'
           type: object
           properties:
             contentBytes:
@@ -8855,8 +8835,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Entity'
         - title: teamworkTag
-          required:
-            - '@odata.type'
           type: object
           properties:
             description:
@@ -8891,8 +8869,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Entity'
         - title: teamworkTagMember
-          required:
-            - '@odata.type'
           type: object
           properties:
             displayName:
@@ -8912,8 +8888,6 @@ components:
       x-ms-discriminator-value: '#microsoft.graph.teamworkTagMember'
     ActionResultPart:
       title: actionResultPart
-      required:
-        - '@odata.type'
       type: object
       properties:
         error:
@@ -8926,8 +8900,6 @@ components:
           type: string
     Album:
       title: album
-      required:
-        - '@odata.type'
       type: object
       properties:
         coverImageItemId:
@@ -8938,8 +8910,6 @@ components:
           type: string
     Audio:
       title: audio
-      required:
-        - '@odata.type'
       type: object
       properties:
         album:
@@ -9027,8 +8997,6 @@ components:
           type: string
     Bundle:
       title: bundle
-      required:
-        - '@odata.type'
       type: object
       properties:
         album:
@@ -9048,8 +9016,6 @@ components:
           type: string
     ChannelIdentity:
       title: channelIdentity
-      required:
-        - '@odata.type'
       type: object
       properties:
         channelId:
@@ -9064,8 +9030,6 @@ components:
           type: string
     ChannelSummary:
       title: channelSummary
-      required:
-        - '@odata.type'
       type: object
       properties:
         guestsCount:
@@ -9097,8 +9061,6 @@ components:
           type: string
     ChatMessageAttachment:
       title: chatMessageAttachment
-      required:
-        - '@odata.type'
       type: object
       properties:
         content:
@@ -9135,8 +9097,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/IdentitySet'
         - title: chatMessageFromIdentitySet
-          required:
-            - '@odata.type'
           type: object
           properties:
             '@odata.type':
@@ -9145,8 +9105,6 @@ components:
       x-ms-discriminator-value: '#microsoft.graph.chatMessageFromIdentitySet'
     ChatMessageHistoryItem:
       title: chatMessageHistoryItem
-      required:
-        - '@odata.type'
       type: object
       properties:
         actions:
@@ -9166,8 +9124,6 @@ components:
           type: string
     ChatMessageMention:
       title: chatMessageMention
-      required:
-        - '@odata.type'
       type: object
       properties:
         id:
@@ -9193,8 +9149,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/IdentitySet'
         - title: chatMessageMentionedIdentitySet
-          required:
-            - '@odata.type'
           type: object
           properties:
             conversation:
@@ -9209,8 +9163,6 @@ components:
       x-ms-discriminator-value: '#microsoft.graph.chatMessageMentionedIdentitySet'
     ChatMessagePolicyViolation:
       title: chatMessagePolicyViolation
-      required:
-        - '@odata.type'
       type: object
       properties:
         dlpAction:
@@ -9245,8 +9197,6 @@ components:
           type: string
     ChatMessagePolicyViolationPolicyTip:
       title: chatMessagePolicyViolationPolicyTip
-      required:
-        - '@odata.type'
       type: object
       properties:
         complianceUrl:
@@ -9267,8 +9217,6 @@ components:
           type: string
     ChatMessageReaction:
       title: chatMessageReaction
-      required:
-        - '@odata.type'
       type: object
       properties:
         createdDateTime:
@@ -9295,8 +9243,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/IdentitySet'
         - title: chatMessageReactionIdentitySet
-          required:
-            - '@odata.type'
           type: object
           properties:
             '@odata.type':
@@ -9305,8 +9251,6 @@ components:
       x-ms-discriminator-value: '#microsoft.graph.chatMessageReactionIdentitySet'
     Deleted:
       title: deleted
-      required:
-        - '@odata.type'
       type: object
       properties:
         state:
@@ -9317,16 +9261,12 @@ components:
           type: string
     EventMessageDetail:
       title: eventMessageDetail
-      required:
-        - '@odata.type'
       type: object
       properties:
         '@odata.type':
           type: string
     File:
       title: file
-      required:
-        - '@odata.type'
       type: object
       properties:
         hashes:
@@ -9346,8 +9286,6 @@ components:
           type: string
     FileSystemInfo:
       title: fileSystemInfo
-      required:
-        - '@odata.type'
       type: object
       properties:
         createdDateTime:
@@ -9372,8 +9310,6 @@ components:
           type: string
     Folder:
       title: folder
-      required:
-        - '@odata.type'
       type: object
       properties:
         childCount:
@@ -9393,8 +9329,6 @@ components:
           type: string
     FolderView:
       title: folderView
-      required:
-        - '@odata.type'
       type: object
       properties:
         sortBy:
@@ -9413,8 +9347,6 @@ components:
           type: string
     GeoCoordinates:
       title: geoCoordinates
-      required:
-        - '@odata.type'
       type: object
       properties:
         altitude:
@@ -9448,8 +9380,6 @@ components:
           type: string
     Hashes:
       title: hashes
-      required:
-        - '@odata.type'
       type: object
       properties:
         crc32Hash:
@@ -9472,8 +9402,6 @@ components:
           type: string
     Identity:
       title: identity
-      required:
-        - '@odata.type'
       type: object
       properties:
         displayName:
@@ -9488,8 +9416,6 @@ components:
           type: string
     IdentitySet:
       title: identitySet
-      required:
-        - '@odata.type'
       type: object
       properties:
         application:
@@ -9514,8 +9440,6 @@ components:
           type: string
     Image:
       title: image
-      required:
-        - '@odata.type'
       type: object
       properties:
         height:
@@ -9536,8 +9460,6 @@ components:
           type: string
     ItemBody:
       title: itemBody
-      required:
-        - '@odata.type'
       type: object
       properties:
         content:
@@ -9554,8 +9476,6 @@ components:
           type: string
     ItemReference:
       title: itemReference
-      required:
-        - '@odata.type'
       type: object
       properties:
         driveId:
@@ -9596,8 +9516,6 @@ components:
           type: string
     KeyValuePair:
       title: keyValuePair
-      required:
-        - '@odata.type'
       type: object
       properties:
         name:
@@ -9611,8 +9529,6 @@ components:
           type: string
     Malware:
       title: malware
-      required:
-        - '@odata.type'
       type: object
       properties:
         description:
@@ -9623,8 +9539,6 @@ components:
           type: string
     Package:
       title: package
-      required:
-        - '@odata.type'
       type: object
       properties:
         type:
@@ -9635,8 +9549,6 @@ components:
           type: string
     PendingContentUpdate:
       title: pendingContentUpdate
-      required:
-        - '@odata.type'
       type: object
       properties:
         queuedDateTime:
@@ -9649,8 +9561,6 @@ components:
           type: string
     PendingOperations:
       title: pendingOperations
-      required:
-        - '@odata.type'
       type: object
       properties:
         pendingContentUpdate:
@@ -9663,8 +9573,6 @@ components:
           type: string
     Photo:
       title: photo
-      required:
-        - '@odata.type'
       type: object
       properties:
         cameraMake:
@@ -9735,8 +9643,6 @@ components:
           type: string
     PublicationFacet:
       title: publicationFacet
-      required:
-        - '@odata.type'
       type: object
       properties:
         checkedOutBy:
@@ -9757,8 +9663,6 @@ components:
           type: string
     PublicError:
       title: publicError
-      required:
-        - '@odata.type'
       type: object
       properties:
         code:
@@ -9788,8 +9692,6 @@ components:
           type: string
     PublicErrorDetail:
       title: publicErrorDetail
-      required:
-        - '@odata.type'
       type: object
       properties:
         code:
@@ -9808,8 +9710,6 @@ components:
           type: string
     PublicInnerError:
       title: publicInnerError
-      required:
-        - '@odata.type'
       type: object
       properties:
         code:
@@ -9833,8 +9733,6 @@ components:
           type: string
     RemoteItem:
       title: remoteItem
-      required:
-        - '@odata.type'
       type: object
       properties:
         createdBy:
@@ -9946,16 +9844,12 @@ components:
           type: string
     Root:
       title: root
-      required:
-        - '@odata.type'
       type: object
       properties:
         '@odata.type':
           type: string
     SearchResult:
       title: searchResult
-      required:
-        - '@odata.type'
       type: object
       properties:
         onClickTelemetryUrl:
@@ -9966,8 +9860,6 @@ components:
           type: string
     Shared:
       title: shared
-      required:
-        - '@odata.type'
       type: object
       properties:
         owner:
@@ -9996,8 +9888,6 @@ components:
           type: string
     SharepointIds:
       title: sharepointIds
-      required:
-        - '@odata.type'
       type: object
       properties:
         listId:
@@ -10032,8 +9922,6 @@ components:
           type: string
     SpecialFolder:
       title: specialFolder
-      required:
-        - '@odata.type'
       type: object
       properties:
         name:
@@ -10044,8 +9932,6 @@ components:
           type: string
     TeamFunSettings:
       title: teamFunSettings
-      required:
-        - '@odata.type'
       type: object
       properties:
         allowCustomMemes:
@@ -10070,8 +9956,6 @@ components:
           type: string
     TeamGuestSettings:
       title: teamGuestSettings
-      required:
-        - '@odata.type'
       type: object
       properties:
         allowCreateUpdateChannels:
@@ -10086,8 +9970,6 @@ components:
           type: string
     TeamMemberSettings:
       title: teamMemberSettings
-      required:
-        - '@odata.type'
       type: object
       properties:
         allowAddRemoveApps:
@@ -10118,8 +10000,6 @@ components:
           type: string
     TeamMessagingSettings:
       title: teamMessagingSettings
-      required:
-        - '@odata.type'
       type: object
       properties:
         allowChannelMentions:
@@ -10146,8 +10026,6 @@ components:
           type: string
     TeamsTabConfiguration:
       title: teamsTabConfiguration
-      required:
-        - '@odata.type'
       type: object
       properties:
         contentUrl:
@@ -10170,8 +10048,6 @@ components:
           type: string
     TeamSummary:
       title: teamSummary
-      required:
-        - '@odata.type'
       type: object
       properties:
         guestsCount:
@@ -10199,8 +10075,6 @@ components:
           type: string
     TeamworkActivityTopic:
       title: teamworkActivityTopic
-      required:
-        - '@odata.type'
       type: object
       properties:
         source:
@@ -10222,8 +10096,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/Identity'
         - title: teamworkConversationIdentity
-          required:
-            - '@odata.type'
           type: object
           properties:
             conversationIdentityType:
@@ -10246,8 +10118,6 @@ components:
           type: string
     Video:
       title: video
-      required:
-        - '@odata.type'
       type: object
       properties:
         audioBitsPerSample:
@@ -10497,8 +10367,6 @@ components:
           nullable: true
     ODataErrorsInnerError:
       title: InnerError
-      required:
-        - '@odata.type'
       type: object
       properties:
         request-id:

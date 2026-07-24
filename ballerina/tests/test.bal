@@ -183,6 +183,7 @@ isolated function test_deleteChannelAllMember() returns error? {
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updateChannelAllMember() returns error? {
     ConversationMember response = check teams->updateChannelAllMember(teamId, channelId, memberId, {
+        atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
@@ -287,6 +288,7 @@ isolated function test_deleteChannelMember() returns error? {
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updateChannelMember() returns error? {
     ConversationMember response = check teams->updateChannelMember(teamId, channelId, memberId, {
+        atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
@@ -741,6 +743,7 @@ isolated function test_deleteMember() returns error? {
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updateMember() returns error? {
     ConversationMember response = check teams->updateMember(teamId, memberId, {
+        atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
@@ -845,6 +848,7 @@ isolated function test_deletePrimaryChannelAllMember() returns error? {
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updatePrimaryChannelAllMember() returns error? {
     ConversationMember response = check teams->updatePrimaryChannelAllMember(teamId, memberId, {
+        atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
@@ -949,6 +953,7 @@ isolated function test_deletePrimaryChannelMember() returns error? {
 @test:Config {groups: ["mock_tests"]}
 isolated function test_updatePrimaryChannelMember() returns error? {
     ConversationMember response = check teams->updatePrimaryChannelMember(teamId, memberId, {
+        atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
     });
     test:assertTrue(response.id is string);
