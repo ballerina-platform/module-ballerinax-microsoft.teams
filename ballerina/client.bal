@@ -226,8 +226,8 @@ public isolated client class Client {
 
     # Add member to channel allMembers
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
-    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # Required payload fields: the `user@odata.bind` navigation binding
+    # (`https://graph.microsoft.com/v1.0/users('{user-id}')`) and
     # `roles` (`["owner"]` for an owner, `[]` for a standard member). Members can be added only to private
     # and shared channels, and the user must already belong to the parent team's roster.
     #
@@ -274,8 +274,8 @@ public isolated client class Client {
 
     # Update member in channel allMembers
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
-    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
+    # Required payload field: `roles` (the new role set — `["owner"]` to promote to owner, `[]` to
+    # demote to a standard member).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -306,9 +306,8 @@ public isolated client class Client {
 
     # Invoke action add
     #
-    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
-    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
-    # `roles` (`["owner"]` or `[]`).
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires the
+    # `user@odata.bind` binding and `roles` (`["owner"]` or `[]`).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -326,8 +325,7 @@ public isolated client class Client {
     # Invoke action remove
     #
     # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
-    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
-    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
+    # to remove by the `user@odata.bind` binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -456,8 +454,8 @@ public isolated client class Client {
 
     # Add member to channel
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
-    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # Required payload fields: the `user@odata.bind` navigation binding
+    # (`https://graph.microsoft.com/v1.0/users('{user-id}')`) and
     # `roles` (`["owner"]` for an owner, `[]` for a standard member). Members can be added only to private
     # and shared channels, and the user must already belong to the parent team's roster.
     #
@@ -504,8 +502,8 @@ public isolated client class Client {
 
     # Update member in channel
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
-    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
+    # Required payload field: `roles` (the new role set — `["owner"]` to promote to owner, `[]` to
+    # demote to a standard member).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -536,9 +534,8 @@ public isolated client class Client {
 
     # Invoke action add
     #
-    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
-    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
-    # `roles` (`["owner"]` or `[]`).
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires the
+    # `user@odata.bind` binding and `roles` (`["owner"]` or `[]`).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -556,8 +553,7 @@ public isolated client class Client {
     # Invoke action remove
     #
     # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
-    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
-    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
+    # to remove by the `user@odata.bind` binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
     #
     # + teamId - The unique identifier of team
     # + channelId - The unique identifier of channel
@@ -1462,8 +1458,8 @@ public isolated client class Client {
 
     # Add member to team
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
-    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # Required payload fields: the `user@odata.bind` navigation binding
+    # (`https://graph.microsoft.com/v1.0/users('{user-id}')`) and
     # `roles` (`["owner"]` for an owner, `[]` for a standard member).
     #
     # + teamId - The unique identifier of team
@@ -1506,8 +1502,8 @@ public isolated client class Client {
 
     # Update member in team
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
-    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
+    # Required payload field: `roles` (the new role set — `["owner"]` to promote to owner, `[]` to
+    # demote to a standard member).
     #
     # + teamId - The unique identifier of team
     # + conversationMemberId - The unique identifier of conversationMember
@@ -1536,9 +1532,8 @@ public isolated client class Client {
 
     # Invoke action add
     #
-    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
-    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
-    # `roles` (`["owner"]` or `[]`).
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires the
+    # `user@odata.bind` binding and `roles` (`["owner"]` or `[]`).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1555,8 +1550,7 @@ public isolated client class Client {
     # Invoke action remove
     #
     # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
-    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
-    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
+    # to remove by the `user@odata.bind` binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1645,8 +1639,8 @@ public isolated client class Client {
 
     # Add member to primary channel allMembers
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
-    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # Required payload fields: the `user@odata.bind` navigation binding
+    # (`https://graph.microsoft.com/v1.0/users('{user-id}')`) and
     # `roles` (`["owner"]` for an owner, `[]` for a standard member). Members can be added only to private
     # and shared channels, and the user must already belong to the parent team's roster.
     #
@@ -1690,8 +1684,8 @@ public isolated client class Client {
 
     # Update member in primary channel allMembers
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
-    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
+    # Required payload field: `roles` (the new role set — `["owner"]` to promote to owner, `[]` to
+    # demote to a standard member).
     #
     # + teamId - The unique identifier of team
     # + conversationMemberId - The unique identifier of conversationMember
@@ -1720,9 +1714,8 @@ public isolated client class Client {
 
     # Invoke action add
     #
-    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
-    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
-    # `roles` (`["owner"]` or `[]`).
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires the
+    # `user@odata.bind` binding and `roles` (`["owner"]` or `[]`).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1739,8 +1732,7 @@ public isolated client class Client {
     # Invoke action remove
     #
     # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
-    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
-    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
+    # to remove by the `user@odata.bind` binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1860,8 +1852,8 @@ public isolated client class Client {
 
     # Add member to primary channel
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the
-    # `user@odata.bind` navigation binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`), and
+    # Required payload fields: the `user@odata.bind` navigation binding
+    # (`https://graph.microsoft.com/v1.0/users('{user-id}')`) and
     # `roles` (`["owner"]` for an owner, `[]` for a standard member). Members can be added only to private
     # and shared channels, and the user must already belong to the parent team's roster.
     #
@@ -1905,8 +1897,8 @@ public isolated client class Client {
 
     # Update member in primary channel
     #
-    # Required payload fields: `@odata.type` = `#microsoft.graph.aadUserConversationMember` and `roles`
-    # (the new role set — `["owner"]` to promote to owner, `[]` to demote to a standard member).
+    # Required payload field: `roles` (the new role set — `["owner"]` to promote to owner, `[]` to
+    # demote to a standard member).
     #
     # + teamId - The unique identifier of team
     # + conversationMemberId - The unique identifier of conversationMember
@@ -1935,9 +1927,8 @@ public isolated client class Client {
 
     # Invoke action add
     #
-    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires
-    # `@odata.type` = `#microsoft.graph.aadUserConversationMember`, the `user@odata.bind` binding, and
-    # `roles` (`["owner"]` or `[]`).
+    # Required: a non-empty `values` array (up to 200 members per call). Each entry requires the
+    # `user@odata.bind` binding and `roles` (`["owner"]` or `[]`).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
@@ -1954,8 +1945,7 @@ public isolated client class Client {
     # Invoke action remove
     #
     # Required: a non-empty `values` array (up to 20 members per call). Each entry identifies the member
-    # to remove by `@odata.type` = `#microsoft.graph.aadUserConversationMember` and the `user@odata.bind`
-    # binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
+    # to remove by the `user@odata.bind` binding (`https://graph.microsoft.com/v1.0/users('{user-id}')`).
     #
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
