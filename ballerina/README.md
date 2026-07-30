@@ -1,4 +1,3 @@
-# Ballerina Microsoft Teams connector
 ## Overview
 
 [Microsoft Teams](https://www.microsoft.com/en-us/microsoft-teams/group-chat-software) is a proprietary business communication platform developed by Microsoft, offering workspace chat, video conferencing, file storage, and application integration.

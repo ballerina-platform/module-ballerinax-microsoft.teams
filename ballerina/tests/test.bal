@@ -70,7 +70,7 @@ final string replyId = "1784140530431";
 final string myUserId = "71f6175d-3e35-4554-ac0d-6ebe54bde96d";
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createTeam() returns error? {
+isolated function testCreateTeam() returns error? {
     http:Response response = check teams->createTeam({
         displayName: "Ballerina Connector Test Team",
         description: "Team created by the Ballerina Microsoft Teams connector test suite",
@@ -80,19 +80,19 @@ isolated function test_createTeam() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getTeam() returns error? {
+isolated function testGetTeam() returns error? {
     Team response = check teams->getTeam(teamId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteTeam() returns error? {
+isolated function testDeleteTeam() returns error? {
     error? response = teams->deleteTeam(teamId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_updateTeam() returns error? {
+isolated function testUpdateTeam() returns error? {
     http:Response response = check teams->updateTeam(teamId, {
         description: "Updated by the Ballerina Microsoft Teams connector test suite"
     });
@@ -100,31 +100,31 @@ isolated function test_updateTeam() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listAllChannels() returns error? {
+isolated function testListAllChannels() returns error? {
     ChannelCollectionResponse response = check teams->listAllChannels(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getAllChannel() returns error? {
+isolated function testGetAllChannel() returns error? {
     Channel response = check teams->getAllChannel(teamId, channelId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countAllChannels() returns error? {
+isolated function testCountAllChannels() returns error? {
     string response = check teams->countAllChannels(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_listChannels() returns error? {
+isolated function testListChannels() returns error? {
     ChannelCollectionResponse response = check teams->listChannels(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_createChannel() returns error? {
+isolated function testCreateChannel() returns error? {
     http:Response response = check teams->createChannel(teamId, {
         displayName: "Connector Test Channel",
         description: "Channel created by the Ballerina Microsoft Teams connector test suite"
@@ -133,19 +133,19 @@ isolated function test_createChannel() returns error? {
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_getChannel() returns error? {
+isolated function testGetChannel() returns error? {
     Channel response = check teams->getChannel(teamId, channelId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteChannel() returns error? {
+isolated function testDeleteChannel() returns error? {
     error? response = teams->deleteChannel(teamId, channelId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_updateChannel() returns error? {
+isolated function testUpdateChannel() returns error? {
     http:Response response = check teams->updateChannel(teamId, channelId, {
         description: "Updated by the Ballerina Microsoft Teams connector test suite"
     });
@@ -153,13 +153,13 @@ isolated function test_updateChannel() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listChannelAllMembers() returns error? {
+isolated function testListChannelAllMembers() returns error? {
     ConversationMemberCollectionResponse response = check teams->listChannelAllMembers(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createChannelAllMember() returns error? {
+isolated function testCreateChannelAllMember() returns error? {
     ConversationMember response = check teams->createChannelAllMember(teamId, channelId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
@@ -169,19 +169,19 @@ isolated function test_createChannelAllMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelAllMember() returns error? {
+isolated function testGetChannelAllMember() returns error? {
     ConversationMember response = check teams->getChannelAllMember(teamId, channelId, memberId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteChannelAllMember() returns error? {
+isolated function testDeleteChannelAllMember() returns error? {
     error? response = teams->deleteChannelAllMember(teamId, channelId, memberId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateChannelAllMember() returns error? {
+isolated function testUpdateChannelAllMember() returns error? {
     ConversationMember response = check teams->updateChannelAllMember(teamId, channelId, memberId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
@@ -190,13 +190,13 @@ isolated function test_updateChannelAllMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countChannelAllMembers() returns error? {
+isolated function testCountChannelAllMembers() returns error? {
     string response = check teams->countChannelAllMembers(teamId, channelId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_addChannelAllMembers() returns error? {
+isolated function testAddChannelAllMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->addChannelAllMembers(teamId, channelId, {
         values: [
             {
@@ -210,61 +210,61 @@ isolated function test_addChannelAllMembers() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_removeChannelAllMembers() returns error? {
+isolated function testRemoveChannelAllMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->removeChannelAllMembers(teamId, channelId, {});
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listChannelEnabledApps() returns error? {
+isolated function testListChannelEnabledApps() returns error? {
     TeamsAppCollectionResponse response = check teams->listChannelEnabledApps(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelEnabledApp() returns error? {
+isolated function testGetChannelEnabledApp() returns error? {
     TeamsApp response = check teams->getChannelEnabledApp(teamId, channelId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countChannelEnabledApps() returns error? {
+isolated function testCountChannelEnabledApps() returns error? {
     string response = check teams->countChannelEnabledApps(teamId, channelId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelFilesFolder() returns error? {
+isolated function testGetChannelFilesFolder() returns error? {
     DriveItem response = check teams->getChannelFilesFolder(teamId, channelId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelFilesFolderContent() returns error? {
+isolated function testGetChannelFilesFolderContent() returns error? {
     byte[] response = check teams->getChannelFilesFolderContent(teamId, channelId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateChannelFilesFolderContent() returns error? {
+isolated function testUpdateChannelFilesFolderContent() returns error? {
     DriveItem response = check teams->updateChannelFilesFolderContent(teamId, channelId, "mock-content".toBytes());
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteChannelFilesFolderContent() returns error? {
+isolated function testDeleteChannelFilesFolderContent() returns error? {
     error? response = teams->deleteChannelFilesFolderContent(teamId, channelId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_listChannelMembers() returns error? {
+isolated function testListChannelMembers() returns error? {
     ConversationMemberCollectionResponse response = check teams->listChannelMembers(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_createChannelMember() returns error? {
+isolated function testCreateChannelMember() returns error? {
     ConversationMember response = check teams->createChannelMember(teamId, channelId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
@@ -274,19 +274,19 @@ isolated function test_createChannelMember() returns error? {
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_getChannelMember() returns error? {
+isolated function testGetChannelMember() returns error? {
     ConversationMember response = check teams->getChannelMember(teamId, channelId, memberId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_deleteChannelMember() returns error? {
+isolated function testDeleteChannelMember() returns error? {
     error? response = teams->deleteChannelMember(teamId, channelId, memberId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateChannelMember() returns error? {
+isolated function testUpdateChannelMember() returns error? {
     ConversationMember response = check teams->updateChannelMember(teamId, channelId, memberId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
@@ -295,13 +295,13 @@ isolated function test_updateChannelMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countChannelMembers() returns error? {
+isolated function testCountChannelMembers() returns error? {
     string response = check teams->countChannelMembers(teamId, channelId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_addChannelMembers() returns error? {
+isolated function testAddChannelMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->addChannelMembers(teamId, channelId, {
         values: [
             {
@@ -315,19 +315,19 @@ isolated function test_addChannelMembers() returns error? {
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_removeChannelMembers() returns error? {
+isolated function testRemoveChannelMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->removeChannelMembers(teamId, channelId, {});
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_listChannelMessages() returns error? {
+isolated function testListChannelMessages() returns error? {
     ChatMessageCollectionResponse response = check teams->listChannelMessages(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_createChannelMessage() returns error? {
+isolated function testCreateChannelMessage() returns error? {
     ChatMessage response = check teams->createChannelMessage(teamId, channelId, {
         body: {
             contentType: "html",
@@ -338,19 +338,19 @@ isolated function test_createChannelMessage() returns error? {
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_getChannelMessage() returns error? {
+isolated function testGetChannelMessage() returns error? {
     ChatMessage response = check teams->getChannelMessage(teamId, channelId, messageId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_deleteChannelMessage() returns error? {
+isolated function testDeleteChannelMessage() returns error? {
     error? response = teams->deleteChannelMessage(teamId, channelId, messageId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_updateChannelMessage() returns error? {
+isolated function testUpdateChannelMessage() returns error? {
     http:Response response = check teams->updateChannelMessage(teamId, channelId, messageId, {
         body: {
             contentType: "html",
@@ -361,13 +361,13 @@ isolated function test_updateChannelMessage() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listChannelMessageHostedContents() returns error? {
+isolated function testListChannelMessageHostedContents() returns error? {
     ChatMessageHostedContentCollectionResponse response = check teams->listChannelMessageHostedContents(teamId, channelId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createChannelMessageHostedContent() returns error? {
+isolated function testCreateChannelMessageHostedContent() returns error? {
     ChatMessageHostedContent response = check teams->createChannelMessageHostedContent(teamId, channelId, messageId, {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
@@ -376,19 +376,19 @@ isolated function test_createChannelMessageHostedContent() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelMessageHostedContent() returns error? {
+isolated function testGetChannelMessageHostedContent() returns error? {
     ChatMessageHostedContent response = check teams->getChannelMessageHostedContent(teamId, channelId, messageId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteChannelMessageHostedContent() returns error? {
+isolated function testDeleteChannelMessageHostedContent() returns error? {
     error? response = teams->deleteChannelMessageHostedContent(teamId, channelId, messageId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateChannelMessageHostedContent() returns error? {
+isolated function testUpdateChannelMessageHostedContent() returns error? {
     // NOTE: "test-id" is not a real hostedContent id (would require chaining from a prior
     // createChannelMessageHostedContent call); this call is expected to 404 against the live API.
     ChatMessageHostedContent response = check teams->updateChannelMessageHostedContent(teamId, channelId, messageId, "test-id", {
@@ -399,61 +399,61 @@ isolated function test_updateChannelMessageHostedContent() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelMessageHostedContentValue() returns error? {
+isolated function testGetChannelMessageHostedContentValue() returns error? {
     byte[] response = check teams->getChannelMessageHostedContentValue(teamId, channelId, messageId, "test-id");
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateChannelMessageHostedContentValue() returns error? {
+isolated function testUpdateChannelMessageHostedContentValue() returns error? {
     error? response = teams->updateChannelMessageHostedContentValue(teamId, channelId, messageId, "test-id", "mock-content".toBytes());
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteChannelMessageHostedContentValue() returns error? {
+isolated function testDeleteChannelMessageHostedContentValue() returns error? {
     error? response = teams->deleteChannelMessageHostedContentValue(teamId, channelId, messageId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countChannelMessageHostedContents() returns error? {
+isolated function testCountChannelMessageHostedContents() returns error? {
     string response = check teams->countChannelMessageHostedContents(teamId, channelId, messageId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_setReactionChannelMessage() returns error? {
+isolated function testSetReactionChannelMessage() returns error? {
     error? response = teams->setReactionChannelMessage(teamId, channelId, messageId, {reactionType: "like"});
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_softDeleteChannelMessage() returns error? {
+isolated function testSoftDeleteChannelMessage() returns error? {
     error? response = teams->softDeleteChannelMessage(teamId, channelId, messageId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_undoSoftDeleteChannelMessage() returns error? {
+isolated function testUndoSoftDeleteChannelMessage() returns error? {
     error? response = teams->undoSoftDeleteChannelMessage(teamId, channelId, messageId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_unsetReactionChannelMessage() returns error? {
+isolated function testUnsetReactionChannelMessage() returns error? {
     error? response = teams->unsetReactionChannelMessage(teamId, channelId, messageId, {});
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_listChannelMessageReplies() returns error? {
+isolated function testListChannelMessageReplies() returns error? {
     ChatMessageCollectionResponse response = check teams->listChannelMessageReplies(teamId, channelId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_createChannelMessageReply() returns error? {
+isolated function testCreateChannelMessageReply() returns error? {
     ChatMessage response = check teams->createChannelMessageReply(teamId, channelId, messageId, {
         body: {
             contentType: "html",
@@ -464,19 +464,19 @@ isolated function test_createChannelMessageReply() returns error? {
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_getChannelMessageReply() returns error? {
+isolated function testGetChannelMessageReply() returns error? {
     ChatMessage response = check teams->getChannelMessageReply(teamId, channelId, messageId, replyId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteChannelMessageReply() returns error? {
+isolated function testDeleteChannelMessageReply() returns error? {
     error? response = teams->deleteChannelMessageReply(teamId, channelId, messageId, replyId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateChannelMessageReply() returns error? {
+isolated function testUpdateChannelMessageReply() returns error? {
     http:Response response = check teams->updateChannelMessageReply(teamId, channelId, messageId, replyId, {
         body: {
             contentType: "html",
@@ -487,13 +487,13 @@ isolated function test_updateChannelMessageReply() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listChannelMessageReplyHostedContents() returns error? {
+isolated function testListChannelMessageReplyHostedContents() returns error? {
     ChatMessageHostedContentCollectionResponse response = check teams->listChannelMessageReplyHostedContents(teamId, channelId, messageId, replyId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createChannelMessageReplyHostedContent() returns error? {
+isolated function testCreateChannelMessageReplyHostedContent() returns error? {
     ChatMessageHostedContent response = check teams->createChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
@@ -502,19 +502,19 @@ isolated function test_createChannelMessageReplyHostedContent() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelMessageReplyHostedContent() returns error? {
+isolated function testGetChannelMessageReplyHostedContent() returns error? {
     ChatMessageHostedContent response = check teams->getChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteChannelMessageReplyHostedContent() returns error? {
+isolated function testDeleteChannelMessageReplyHostedContent() returns error? {
     error? response = teams->deleteChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateChannelMessageReplyHostedContent() returns error? {
+isolated function testUpdateChannelMessageReplyHostedContent() returns error? {
     // NOTE: "test-id" is not a real hostedContent id (would require chaining from a prior
     // createChannelMessageReplyHostedContent call); this call is expected to 404 against the live API.
     ChatMessageHostedContent response = check teams->updateChannelMessageReplyHostedContent(teamId, channelId, messageId, replyId, "test-id", {
@@ -525,67 +525,67 @@ isolated function test_updateChannelMessageReplyHostedContent() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelMessageReplyHostedContentValue() returns error? {
+isolated function testGetChannelMessageReplyHostedContentValue() returns error? {
     byte[] response = check teams->getChannelMessageReplyHostedContentValue(teamId, channelId, messageId, replyId, "test-id");
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateChannelMessageReplyHostedContentValue() returns error? {
+isolated function testUpdateChannelMessageReplyHostedContentValue() returns error? {
     error? response = teams->updateChannelMessageReplyHostedContentValue(teamId, channelId, messageId, replyId, "test-id", "mock-content".toBytes());
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteChannelMessageReplyHostedContentValue() returns error? {
+isolated function testDeleteChannelMessageReplyHostedContentValue() returns error? {
     error? response = teams->deleteChannelMessageReplyHostedContentValue(teamId, channelId, messageId, replyId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countChannelMessageReplyHostedContents() returns error? {
+isolated function testCountChannelMessageReplyHostedContents() returns error? {
     string response = check teams->countChannelMessageReplyHostedContents(teamId, channelId, messageId, replyId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_setReactionChannelMessageReply() returns error? {
+isolated function testSetReactionChannelMessageReply() returns error? {
     error? response = teams->setReactionChannelMessageReply(teamId, channelId, messageId, replyId, {reactionType: "like"});
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_softDeleteChannelMessageReply() returns error? {
+isolated function testSoftDeleteChannelMessageReply() returns error? {
     error? response = teams->softDeleteChannelMessageReply(teamId, channelId, messageId, replyId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_undoSoftDeleteChannelMessageReply() returns error? {
+isolated function testUndoSoftDeleteChannelMessageReply() returns error? {
     error? response = teams->undoSoftDeleteChannelMessageReply(teamId, channelId, messageId, replyId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_unsetReactionChannelMessageReply() returns error? {
+isolated function testUnsetReactionChannelMessageReply() returns error? {
     error? response = teams->unsetReactionChannelMessageReply(teamId, channelId, messageId, replyId, {});
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countChannelMessageReplies() returns error? {
+isolated function testCountChannelMessageReplies() returns error? {
     string response = check teams->countChannelMessageReplies(teamId, channelId, messageId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelMessageRepliesDelta() returns error? {
+isolated function testGetChannelMessageRepliesDelta() returns error? {
     ChatMessageDeltaCollectionResponse response = check teams->getChannelMessageRepliesDelta(teamId, channelId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_replyWithQuoteChannelMessageReplies() returns error? {
+isolated function testReplyWithQuoteChannelMessageReplies() returns error? {
     ChatMessage quoteReply = {
         body: {
             contentType: "html",
@@ -600,19 +600,19 @@ isolated function test_replyWithQuoteChannelMessageReplies() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countChannelMessages() returns error? {
+isolated function testCountChannelMessages() returns error? {
     string response = check teams->countChannelMessages(teamId, channelId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelMessagesDelta() returns error? {
+isolated function testGetChannelMessagesDelta() returns error? {
     ChatMessageDeltaCollectionResponse response = check teams->getChannelMessagesDelta(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_replyWithQuoteChannelMessages() returns error? {
+isolated function testReplyWithQuoteChannelMessages() returns error? {
     ChatMessage quoteReply = {
         body: {
             contentType: "html",
@@ -627,13 +627,13 @@ isolated function test_replyWithQuoteChannelMessages() returns error? {
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_listChannelTabs() returns error? {
+isolated function testListChannelTabs() returns error? {
     TeamsTabCollectionResponse response = check teams->listChannelTabs(teamId, channelId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_createChannelTab() returns error? {
+isolated function testCreateChannelTab() returns error? {
     TeamsTab response = check teams->createChannelTab(teamId, channelId, {
         displayName: "Wiki",
         "teamsApp@odata.bind": "https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/com.microsoft.teamspace.tab.wiki",
@@ -643,19 +643,19 @@ isolated function test_createChannelTab() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelTab() returns error? {
+isolated function testGetChannelTab() returns error? {
     TeamsTab response = check teams->getChannelTab(teamId, channelId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteChannelTab() returns error? {
+isolated function testDeleteChannelTab() returns error? {
     error? response = teams->deleteChannelTab(teamId, channelId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateChannelTab() returns error? {
+isolated function testUpdateChannelTab() returns error? {
     // NOTE: "test-id" is not a real tab id (would require chaining from a prior createChannelTab
     // call); this call is expected to 404 against the live API.
     TeamsTab response = check teams->updateChannelTab(teamId, channelId, "test-id", {
@@ -665,61 +665,61 @@ isolated function test_updateChannelTab() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getChannelTabTeamsApp() returns error? {
+isolated function testGetChannelTabTeamsApp() returns error? {
     TeamsApp response = check teams->getChannelTabTeamsApp(teamId, channelId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countChannelTabs() returns error? {
+isolated function testCountChannelTabs() returns error? {
     string response = check teams->countChannelTabs(teamId, channelId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_countChannels() returns error? {
+isolated function testCountChannels() returns error? {
     string response = check teams->countChannels(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getAllChannelMessages() returns error? {
+isolated function testGetAllChannelMessages() returns error? {
     ChatMessageCollectionResponse response = check teams->getAllChannelMessages(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getAllRetainedChannelMessages() returns error? {
+isolated function testGetAllRetainedChannelMessages() returns error? {
     ChatMessageCollectionResponse response = check teams->getAllRetainedChannelMessages(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listIncomingChannels() returns error? {
+isolated function testListIncomingChannels() returns error? {
     ChannelCollectionResponse response = check teams->listIncomingChannels(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getIncomingChannel() returns error? {
+isolated function testGetIncomingChannel() returns error? {
     Channel response = check teams->getIncomingChannel(teamId, channelId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countIncomingChannels() returns error? {
+isolated function testCountIncomingChannels() returns error? {
     string response = check teams->countIncomingChannels(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listMembers() returns error? {
+isolated function testListMembers() returns error? {
     ConversationMemberCollectionResponse response = check teams->listMembers(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createMember() returns error? {
+isolated function testCreateMember() returns error? {
     ConversationMember response = check teams->createMember(teamId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
@@ -729,19 +729,19 @@ isolated function test_createMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getMember() returns error? {
+isolated function testGetMember() returns error? {
     ConversationMember response = check teams->getMember(teamId, memberId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteMember() returns error? {
+isolated function testDeleteMember() returns error? {
     error? response = teams->deleteMember(teamId, memberId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateMember() returns error? {
+isolated function testUpdateMember() returns error? {
     ConversationMember response = check teams->updateMember(teamId, memberId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
@@ -750,13 +750,13 @@ isolated function test_updateMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countMembers() returns error? {
+isolated function testCountMembers() returns error? {
     string response = check teams->countMembers(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_addMembers() returns error? {
+isolated function testAddMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->addMembers(teamId, {
         values: [
             {
@@ -770,13 +770,13 @@ isolated function test_addMembers() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_removeMembers() returns error? {
+isolated function testRemoveMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->removeMembers(teamId, {});
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_sendActivityNotification() returns error? {
+isolated function testSendActivityNotification() returns error? {
     // NOTE: requires a Teams app actually installed on this team whose manifest declares a
     // matching activity type; without one, Graph is expected to reject this even with valid shape.
     error? response = teams->sendActivityNotification(teamId, {
@@ -798,19 +798,19 @@ isolated function test_sendActivityNotification() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannel() returns error? {
+isolated function testGetPrimaryChannel() returns error? {
     Channel response = check teams->getPrimaryChannel(teamId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannel() returns error? {
+isolated function testDeletePrimaryChannel() returns error? {
     error? response = teams->deletePrimaryChannel(teamId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannel() returns error? {
+isolated function testUpdatePrimaryChannel() returns error? {
     http:Response response = check teams->updatePrimaryChannel(teamId, {
         description: "Updated by the Ballerina Microsoft Teams connector test suite"
     });
@@ -818,13 +818,13 @@ isolated function test_updatePrimaryChannel() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listPrimaryChannelAllMembers() returns error? {
+isolated function testListPrimaryChannelAllMembers() returns error? {
     ConversationMemberCollectionResponse response = check teams->listPrimaryChannelAllMembers(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createPrimaryChannelAllMember() returns error? {
+isolated function testCreatePrimaryChannelAllMember() returns error? {
     ConversationMember response = check teams->createPrimaryChannelAllMember(teamId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
@@ -834,19 +834,19 @@ isolated function test_createPrimaryChannelAllMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelAllMember() returns error? {
+isolated function testGetPrimaryChannelAllMember() returns error? {
     ConversationMember response = check teams->getPrimaryChannelAllMember(teamId, memberId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelAllMember() returns error? {
+isolated function testDeletePrimaryChannelAllMember() returns error? {
     error? response = teams->deletePrimaryChannelAllMember(teamId, memberId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelAllMember() returns error? {
+isolated function testUpdatePrimaryChannelAllMember() returns error? {
     ConversationMember response = check teams->updatePrimaryChannelAllMember(teamId, memberId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
@@ -855,13 +855,13 @@ isolated function test_updatePrimaryChannelAllMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countPrimaryChannelAllMembers() returns error? {
+isolated function testCountPrimaryChannelAllMembers() returns error? {
     string response = check teams->countPrimaryChannelAllMembers(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_addPrimaryChannelAllMembers() returns error? {
+isolated function testAddPrimaryChannelAllMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->addPrimaryChannelAllMembers(teamId, {
         values: [
             {
@@ -875,61 +875,61 @@ isolated function test_addPrimaryChannelAllMembers() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_removePrimaryChannelAllMembers() returns error? {
+isolated function testRemovePrimaryChannelAllMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->removePrimaryChannelAllMembers(teamId, {});
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listPrimaryChannelEnabledApps() returns error? {
+isolated function testListPrimaryChannelEnabledApps() returns error? {
     TeamsAppCollectionResponse response = check teams->listPrimaryChannelEnabledApps(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelEnabledApp() returns error? {
+isolated function testGetPrimaryChannelEnabledApp() returns error? {
     TeamsApp response = check teams->getPrimaryChannelEnabledApp(teamId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countPrimaryChannelEnabledApps() returns error? {
+isolated function testCountPrimaryChannelEnabledApps() returns error? {
     string response = check teams->countPrimaryChannelEnabledApps(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelFilesFolder() returns error? {
+isolated function testGetPrimaryChannelFilesFolder() returns error? {
     DriveItem response = check teams->getPrimaryChannelFilesFolder(teamId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelFilesFolderContent() returns error? {
+isolated function testGetPrimaryChannelFilesFolderContent() returns error? {
     byte[] response = check teams->getPrimaryChannelFilesFolderContent(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelFilesFolderContent() returns error? {
+isolated function testUpdatePrimaryChannelFilesFolderContent() returns error? {
     DriveItem response = check teams->updatePrimaryChannelFilesFolderContent(teamId, "mock-content".toBytes());
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelFilesFolderContent() returns error? {
+isolated function testDeletePrimaryChannelFilesFolderContent() returns error? {
     error? response = teams->deletePrimaryChannelFilesFolderContent(teamId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listPrimaryChannelMembers() returns error? {
+isolated function testListPrimaryChannelMembers() returns error? {
     ConversationMemberCollectionResponse response = check teams->listPrimaryChannelMembers(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createPrimaryChannelMember() returns error? {
+isolated function testCreatePrimaryChannelMember() returns error? {
     ConversationMember response = check teams->createPrimaryChannelMember(teamId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: [],
@@ -939,19 +939,19 @@ isolated function test_createPrimaryChannelMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelMember() returns error? {
+isolated function testGetPrimaryChannelMember() returns error? {
     ConversationMember response = check teams->getPrimaryChannelMember(teamId, memberId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelMember() returns error? {
+isolated function testDeletePrimaryChannelMember() returns error? {
     error? response = teams->deletePrimaryChannelMember(teamId, memberId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelMember() returns error? {
+isolated function testUpdatePrimaryChannelMember() returns error? {
     ConversationMember response = check teams->updatePrimaryChannelMember(teamId, memberId, {
         atOdataType: "#microsoft.graph.aadUserConversationMember",
         roles: ["owner"]
@@ -960,13 +960,13 @@ isolated function test_updatePrimaryChannelMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countPrimaryChannelMembers() returns error? {
+isolated function testCountPrimaryChannelMembers() returns error? {
     string response = check teams->countPrimaryChannelMembers(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_addPrimaryChannelMembers() returns error? {
+isolated function testAddPrimaryChannelMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->addPrimaryChannelMembers(teamId, {
         values: [
             {
@@ -980,19 +980,19 @@ isolated function test_addPrimaryChannelMembers() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_removePrimaryChannelMembers() returns error? {
+isolated function testRemovePrimaryChannelMembers() returns error? {
     ActionResultPartCollectionResponse response = check teams->removePrimaryChannelMembers(teamId, {});
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listPrimaryChannelMessages() returns error? {
+isolated function testListPrimaryChannelMessages() returns error? {
     ChatMessageCollectionResponse response = check teams->listPrimaryChannelMessages(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createPrimaryChannelMessage() returns error? {
+isolated function testCreatePrimaryChannelMessage() returns error? {
     ChatMessage response = check teams->createPrimaryChannelMessage(teamId, {
         body: {
             contentType: "html",
@@ -1003,19 +1003,19 @@ isolated function test_createPrimaryChannelMessage() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelMessage() returns error? {
+isolated function testGetPrimaryChannelMessage() returns error? {
     ChatMessage response = check teams->getPrimaryChannelMessage(teamId, messageId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelMessage() returns error? {
+isolated function testDeletePrimaryChannelMessage() returns error? {
     error? response = teams->deletePrimaryChannelMessage(teamId, messageId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelMessage() returns error? {
+isolated function testUpdatePrimaryChannelMessage() returns error? {
     http:Response response = check teams->updatePrimaryChannelMessage(teamId, messageId, {
         body: {
             contentType: "html",
@@ -1026,13 +1026,13 @@ isolated function test_updatePrimaryChannelMessage() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listPrimaryChannelMessageHostedContents() returns error? {
+isolated function testListPrimaryChannelMessageHostedContents() returns error? {
     ChatMessageHostedContentCollectionResponse response = check teams->listPrimaryChannelMessageHostedContents(teamId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createPrimaryChannelMessageHostedContent() returns error? {
+isolated function testCreatePrimaryChannelMessageHostedContent() returns error? {
     ChatMessageHostedContent response = check teams->createPrimaryChannelMessageHostedContent(teamId, messageId, {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
@@ -1041,19 +1041,19 @@ isolated function test_createPrimaryChannelMessageHostedContent() returns error?
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelMessageHostedContent() returns error? {
+isolated function testGetPrimaryChannelMessageHostedContent() returns error? {
     ChatMessageHostedContent response = check teams->getPrimaryChannelMessageHostedContent(teamId, messageId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelMessageHostedContent() returns error? {
+isolated function testDeletePrimaryChannelMessageHostedContent() returns error? {
     error? response = teams->deletePrimaryChannelMessageHostedContent(teamId, messageId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelMessageHostedContent() returns error? {
+isolated function testUpdatePrimaryChannelMessageHostedContent() returns error? {
     // NOTE: "test-id" is not a real hostedContent id (would require chaining from a prior
     // createPrimaryChannelMessageHostedContent call); this call is expected to 404 against the live API.
     ChatMessageHostedContent response = check teams->updatePrimaryChannelMessageHostedContent(teamId, messageId, "test-id", {
@@ -1064,61 +1064,61 @@ isolated function test_updatePrimaryChannelMessageHostedContent() returns error?
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelMessageHostedContentValue() returns error? {
+isolated function testGetPrimaryChannelMessageHostedContentValue() returns error? {
     byte[] response = check teams->getPrimaryChannelMessageHostedContentValue(teamId, messageId, "test-id");
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelMessageHostedContentValue() returns error? {
+isolated function testUpdatePrimaryChannelMessageHostedContentValue() returns error? {
     error? response = teams->updatePrimaryChannelMessageHostedContentValue(teamId, messageId, "test-id", "mock-content".toBytes());
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelMessageHostedContentValue() returns error? {
+isolated function testDeletePrimaryChannelMessageHostedContentValue() returns error? {
     error? response = teams->deletePrimaryChannelMessageHostedContentValue(teamId, messageId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countPrimaryChannelMessageHostedContents() returns error? {
+isolated function testCountPrimaryChannelMessageHostedContents() returns error? {
     string response = check teams->countPrimaryChannelMessageHostedContents(teamId, messageId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_setReactionPrimaryChannelMessage() returns error? {
+isolated function testSetReactionPrimaryChannelMessage() returns error? {
     error? response = teams->setReactionPrimaryChannelMessage(teamId, messageId, {reactionType: "like"});
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_softDeletePrimaryChannelMessage() returns error? {
+isolated function testSoftDeletePrimaryChannelMessage() returns error? {
     error? response = teams->softDeletePrimaryChannelMessage(teamId, messageId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_undoSoftDeletePrimaryChannelMessage() returns error? {
+isolated function testUndoSoftDeletePrimaryChannelMessage() returns error? {
     error? response = teams->undoSoftDeletePrimaryChannelMessage(teamId, messageId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_unsetReactionPrimaryChannelMessage() returns error? {
+isolated function testUnsetReactionPrimaryChannelMessage() returns error? {
     error? response = teams->unsetReactionPrimaryChannelMessage(teamId, messageId, {});
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listPrimaryChannelMessageReplies() returns error? {
+isolated function testListPrimaryChannelMessageReplies() returns error? {
     ChatMessageCollectionResponse response = check teams->listPrimaryChannelMessageReplies(teamId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createPrimaryChannelMessageReply() returns error? {
+isolated function testCreatePrimaryChannelMessageReply() returns error? {
     ChatMessage response = check teams->createPrimaryChannelMessageReply(teamId, messageId, {
         body: {
             contentType: "html",
@@ -1129,19 +1129,19 @@ isolated function test_createPrimaryChannelMessageReply() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelMessageReply() returns error? {
+isolated function testGetPrimaryChannelMessageReply() returns error? {
     ChatMessage response = check teams->getPrimaryChannelMessageReply(teamId, messageId, replyId);
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelMessageReply() returns error? {
+isolated function testDeletePrimaryChannelMessageReply() returns error? {
     error? response = teams->deletePrimaryChannelMessageReply(teamId, messageId, replyId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelMessageReply() returns error? {
+isolated function testUpdatePrimaryChannelMessageReply() returns error? {
     http:Response response = check teams->updatePrimaryChannelMessageReply(teamId, messageId, replyId, {
         body: {
             contentType: "html",
@@ -1152,13 +1152,13 @@ isolated function test_updatePrimaryChannelMessageReply() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listPrimaryChannelMessageReplyHostedContents() returns error? {
+isolated function testListPrimaryChannelMessageReplyHostedContents() returns error? {
     ChatMessageHostedContentCollectionResponse response = check teams->listPrimaryChannelMessageReplyHostedContents(teamId, messageId, replyId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createPrimaryChannelMessageReplyHostedContent() returns error? {
+isolated function testCreatePrimaryChannelMessageReplyHostedContent() returns error? {
     ChatMessageHostedContent response = check teams->createPrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, {
         contentBytes: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         contentType: "image/png"
@@ -1167,19 +1167,19 @@ isolated function test_createPrimaryChannelMessageReplyHostedContent() returns e
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelMessageReplyHostedContent() returns error? {
+isolated function testGetPrimaryChannelMessageReplyHostedContent() returns error? {
     ChatMessageHostedContent response = check teams->getPrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelMessageReplyHostedContent() returns error? {
+isolated function testDeletePrimaryChannelMessageReplyHostedContent() returns error? {
     error? response = teams->deletePrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelMessageReplyHostedContent() returns error? {
+isolated function testUpdatePrimaryChannelMessageReplyHostedContent() returns error? {
     // NOTE: "test-id" is not a real hostedContent id (would require chaining from a prior
     // createPrimaryChannelMessageReplyHostedContent call); expected to 404 against the live API.
     ChatMessageHostedContent response = check teams->updatePrimaryChannelMessageReplyHostedContent(teamId, messageId, replyId, "test-id", {
@@ -1190,67 +1190,67 @@ isolated function test_updatePrimaryChannelMessageReplyHostedContent() returns e
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelMessageReplyHostedContentValue() returns error? {
+isolated function testGetPrimaryChannelMessageReplyHostedContentValue() returns error? {
     byte[] response = check teams->getPrimaryChannelMessageReplyHostedContentValue(teamId, messageId, replyId, "test-id");
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelMessageReplyHostedContentValue() returns error? {
+isolated function testUpdatePrimaryChannelMessageReplyHostedContentValue() returns error? {
     error? response = teams->updatePrimaryChannelMessageReplyHostedContentValue(teamId, messageId, replyId, "test-id", "mock-content".toBytes());
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelMessageReplyHostedContentValue() returns error? {
+isolated function testDeletePrimaryChannelMessageReplyHostedContentValue() returns error? {
     error? response = teams->deletePrimaryChannelMessageReplyHostedContentValue(teamId, messageId, replyId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countPrimaryChannelMessageReplyHostedContents() returns error? {
+isolated function testCountPrimaryChannelMessageReplyHostedContents() returns error? {
     string response = check teams->countPrimaryChannelMessageReplyHostedContents(teamId, messageId, replyId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_setReactionPrimaryChannelMessageReply() returns error? {
+isolated function testSetReactionPrimaryChannelMessageReply() returns error? {
     error? response = teams->setReactionPrimaryChannelMessageReply(teamId, messageId, replyId, {reactionType: "like"});
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_softDeletePrimaryChannelMessageReply() returns error? {
+isolated function testSoftDeletePrimaryChannelMessageReply() returns error? {
     error? response = teams->softDeletePrimaryChannelMessageReply(teamId, messageId, replyId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_undoSoftDeletePrimaryChannelMessageReply() returns error? {
+isolated function testUndoSoftDeletePrimaryChannelMessageReply() returns error? {
     error? response = teams->undoSoftDeletePrimaryChannelMessageReply(teamId, messageId, replyId);
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_unsetReactionPrimaryChannelMessageReply() returns error? {
+isolated function testUnsetReactionPrimaryChannelMessageReply() returns error? {
     error? response = teams->unsetReactionPrimaryChannelMessageReply(teamId, messageId, replyId, {});
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countPrimaryChannelMessageReplies() returns error? {
+isolated function testCountPrimaryChannelMessageReplies() returns error? {
     string response = check teams->countPrimaryChannelMessageReplies(teamId, messageId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelMessageRepliesDelta() returns error? {
+isolated function testGetPrimaryChannelMessageRepliesDelta() returns error? {
     ChatMessageDeltaCollectionResponse response = check teams->getPrimaryChannelMessageRepliesDelta(teamId, messageId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_replyWithQuotePrimaryChannelMessageReplies() returns error? {
+isolated function testReplyWithQuotePrimaryChannelMessageReplies() returns error? {
     ChatMessage quoteReply = {
         body: {
             contentType: "html",
@@ -1265,19 +1265,19 @@ isolated function test_replyWithQuotePrimaryChannelMessageReplies() returns erro
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countPrimaryChannelMessages() returns error? {
+isolated function testCountPrimaryChannelMessages() returns error? {
     string response = check teams->countPrimaryChannelMessages(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelMessagesDelta() returns error? {
+isolated function testGetPrimaryChannelMessagesDelta() returns error? {
     ChatMessageDeltaCollectionResponse response = check teams->getPrimaryChannelMessagesDelta(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_replyWithQuotePrimaryChannelMessages() returns error? {
+isolated function testReplyWithQuotePrimaryChannelMessages() returns error? {
     ChatMessage quoteReply = {
         body: {
             contentType: "html",
@@ -1292,13 +1292,13 @@ isolated function test_replyWithQuotePrimaryChannelMessages() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listPrimaryChannelTabs() returns error? {
+isolated function testListPrimaryChannelTabs() returns error? {
     TeamsTabCollectionResponse response = check teams->listPrimaryChannelTabs(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createPrimaryChannelTab() returns error? {
+isolated function testCreatePrimaryChannelTab() returns error? {
     TeamsTab response = check teams->createPrimaryChannelTab(teamId, {
         displayName: "Wiki",
         "teamsApp@odata.bind": "https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/com.microsoft.teamspace.tab.wiki",
@@ -1308,19 +1308,19 @@ isolated function test_createPrimaryChannelTab() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelTab() returns error? {
+isolated function testGetPrimaryChannelTab() returns error? {
     TeamsTab response = check teams->getPrimaryChannelTab(teamId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deletePrimaryChannelTab() returns error? {
+isolated function testDeletePrimaryChannelTab() returns error? {
     error? response = teams->deletePrimaryChannelTab(teamId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updatePrimaryChannelTab() returns error? {
+isolated function testUpdatePrimaryChannelTab() returns error? {
     // NOTE: "test-id" is not a real tab id (would require chaining from a prior
     // createPrimaryChannelTab call); this call is expected to 404 against the live API.
     TeamsTab response = check teams->updatePrimaryChannelTab(teamId, "test-id", {
@@ -1330,25 +1330,25 @@ isolated function test_updatePrimaryChannelTab() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getPrimaryChannelTabTeamsApp() returns error? {
+isolated function testGetPrimaryChannelTabTeamsApp() returns error? {
     TeamsApp response = check teams->getPrimaryChannelTabTeamsApp(teamId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countPrimaryChannelTabs() returns error? {
+isolated function testCountPrimaryChannelTabs() returns error? {
     string response = check teams->countPrimaryChannelTabs(teamId);
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_listTags() returns error? {
+isolated function testListTags() returns error? {
     TeamworkTagCollectionResponse response = check teams->listTags(teamId);
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
-isolated function test_createTag() returns error? {
+isolated function testCreateTag() returns error? {
     TeamworkTag response = check teams->createTag(teamId, {
         displayName: "Connector Test Tag",
         "members": [
@@ -1359,19 +1359,19 @@ isolated function test_createTag() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getTag() returns error? {
+isolated function testGetTag() returns error? {
     TeamworkTag response = check teams->getTag(teamId, "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteTag() returns error? {
+isolated function testDeleteTag() returns error? {
     error? response = teams->deleteTag(teamId, "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateTag() returns error? {
+isolated function testUpdateTag() returns error? {
     // NOTE: "test-id" is not a real tag id (would require chaining from a prior createTag call);
     // this call is expected to 404 against the live API.
     TeamworkTag response = check teams->updateTag(teamId, "test-id", {
@@ -1381,13 +1381,13 @@ isolated function test_updateTag() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_listTagMembers() returns error? {
+isolated function testListTagMembers() returns error? {
     TeamworkTagMemberCollectionResponse response = check teams->listTagMembers(teamId, "test-id");
     test:assertTrue(response.value is anydata[]);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_createTagMember() returns error? {
+isolated function testCreateTagMember() returns error? {
     // NOTE: "test-id" is not a real tag id (would require chaining from a prior createTag call);
     // this call is expected to 404 against the live API.
     TeamworkTagMember response = check teams->createTagMember(teamId, "test-id", {
@@ -1397,19 +1397,19 @@ isolated function test_createTagMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_getTagMember() returns error? {
+isolated function testGetTagMember() returns error? {
     TeamworkTagMember response = check teams->getTagMember(teamId, "test-id", "test-id");
     test:assertTrue(response.id is string);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_deleteTagMember() returns error? {
+isolated function testDeleteTagMember() returns error? {
     error? response = teams->deleteTagMember(teamId, "test-id", "test-id");
     test:assertTrue(response is ());
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_updateTagMember() returns error? {
+isolated function testUpdateTagMember() returns error? {
     // NOTE: "test-id" is not a real tag/member id (would require chaining from prior create
     // calls); this call is expected to 404 against the live API.
     TeamworkTagMember response = check teams->updateTagMember(teamId, "test-id", "test-id", {
@@ -1419,13 +1419,13 @@ isolated function test_updateTagMember() returns error? {
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countTagMembers() returns error? {
+isolated function testCountTagMembers() returns error? {
     string response = check teams->countTagMembers(teamId, "test-id");
     test:assertTrue(response.length() > 0);
 }
 
 @test:Config {groups: ["mock_tests"]}
-isolated function test_countTags() returns error? {
+isolated function testCountTags() returns error? {
     string response = check teams->countTags(teamId);
     test:assertTrue(response.length() > 0);
 }
