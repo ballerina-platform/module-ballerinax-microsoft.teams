@@ -44,7 +44,7 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request
     # + payload - The team to create
-    # + return - Created entity 
+    # + return - The HTTP response 
     remote isolated function createTeam(Team payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams`;
         http:Request request = new;
@@ -85,7 +85,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - New property values 
-    # + return - Success 
+    # + return - The HTTP response 
     remote isolated function updateTeam(string teamId, Team payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}`;
         http:Request request = new;
@@ -157,7 +157,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - The channel to create
-    # + return - The created channel
+    # + return - The HTTP response 
     remote isolated function createChannel(string teamId, Channel payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels`;
         http:Request request = new;
@@ -201,7 +201,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + payload - The channel properties to update
-    # + return - Success 
+    # + return - The HTTP response 
     remote isolated function updateChannel(string teamId, string channelId, Channel payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}`;
         http:Request request = new;
@@ -282,7 +282,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
-    # + return - Success 
+    # + return - The updated member 
     remote isolated function updateChannelAllMember(string teamId, string channelId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
@@ -313,7 +313,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function addChannelAllMembers(string teamId, string channelId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers/add`;
         http:Request request = new;
@@ -331,7 +331,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function removeChannelAllMembers(string teamId, string channelId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/allMembers/remove`;
         http:Request request = new;
@@ -418,7 +418,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + payload - New media content 
-    # + return - Success 
+    # + return - The uploaded file 
     remote isolated function updateChannelFilesFolderContent(string teamId, string channelId, byte[] payload, map<string|string[]> headers = {}) returns DriveItem|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/filesFolder/content`;
         http:Request request = new;
@@ -510,7 +510,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
-    # + return - Success 
+    # + return - The updated member 
     remote isolated function updateChannelMember(string teamId, string channelId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
@@ -541,7 +541,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function addChannelMembers(string teamId, string channelId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members/add`;
         http:Request request = new;
@@ -559,7 +559,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function removeChannelMembers(string teamId, string channelId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/members/remove`;
         http:Request request = new;
@@ -639,7 +639,7 @@ public isolated client class Client {
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + payload - The message properties to update
-    # + return - Success 
+    # + return - The HTTP response 
     remote isolated function updateChannelMessage(string teamId, string channelId, string chatMessageId, ChatMessage payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}`;
         http:Request request = new;
@@ -724,7 +724,7 @@ public isolated client class Client {
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content properties to update
-    # + return - Success 
+    # + return - The updated hosted content 
     remote isolated function updateChannelMessageHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageHostedContentId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         http:Request request = new;
@@ -932,7 +932,7 @@ public isolated client class Client {
     # + chatMessageId1 - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + payload - The message properties to update
-    # + return - Success 
+    # + return - The HTTP response 
     remote isolated function updateChannelMessageReply(string teamId, string channelId, string chatMessageId, string chatMessageId1, ChatMessage payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
         http:Request request = new;
@@ -1022,7 +1022,7 @@ public isolated client class Client {
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content properties to update
-    # + return - Success 
+    # + return - The updated hosted content 
     remote isolated function updateChannelMessageReplyHostedContent(string teamId, string channelId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         http:Request request = new;
@@ -1183,7 +1183,7 @@ public isolated client class Client {
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Success 
+    # + return - Retrieved collection 
     remote isolated function getChannelMessageRepliesDelta(string teamId, string channelId, string chatMessageId, map<string|string[]> headers = {}, *GetChannelMessageRepliesDeltaQueries queries) returns ChatMessageDeltaCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/delta()`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$orderby": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1202,7 +1202,7 @@ public isolated client class Client {
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The created reply message 
     remote isolated function replyWithQuoteChannelMessageReplies(string teamId, string channelId, string chatMessageId, ReplyWithQuoteRequest payload, map<string|string[]> headers = {}) returns ChatMessageResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/${getEncodedUri(chatMessageId)}/replies/replyWithQuote`;
         http:Request request = new;
@@ -1230,7 +1230,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Success 
+    # + return - Retrieved collection 
     remote isolated function getChannelMessagesDelta(string teamId, string channelId, map<string|string[]> headers = {}, *GetChannelMessagesDeltaQueries queries) returns ChatMessageDeltaCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/delta()`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$orderby": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1248,7 +1248,7 @@ public isolated client class Client {
     # + channelId - The unique identifier of channel
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The created reply message 
     remote isolated function replyWithQuoteChannelMessages(string teamId, string channelId, ReplyWithQuoteRequest payload, map<string|string[]> headers = {}) returns ChatMessageResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/messages/replyWithQuote`;
         http:Request request = new;
@@ -1329,7 +1329,7 @@ public isolated client class Client {
     # + teamsTabId - The unique identifier of teamsTab
     # + headers - Headers to be sent with the request 
     # + payload - The tab properties to update
-    # + return - Success 
+    # + return - The updated tab 
     remote isolated function updateChannelTab(string teamId, string channelId, string teamsTabId, TeamsTab payload, map<string|string[]> headers = {}) returns TeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/${getEncodedUri(channelId)}/tabs/${getEncodedUri(teamsTabId)}`;
         http:Request request = new;
@@ -1383,7 +1383,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Success 
+    # + return - Retrieved collection 
     remote isolated function getAllChannelMessages(string teamId, map<string|string[]> headers = {}, *GetAllChannelMessagesQueries queries) returns ChatMessageCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/getAllMessages()`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$orderby": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1396,7 +1396,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Success 
+    # + return - Retrieved collection 
     remote isolated function getAllRetainedChannelMessages(string teamId, map<string|string[]> headers = {}, *GetAllRetainedChannelMessagesQueries queries) returns ChatMessageCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/channels/getAllRetainedMessages()`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$orderby": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -1509,7 +1509,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
-    # + return - Success 
+    # + return - The updated member 
     remote isolated function updateMember(string teamId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
@@ -1538,7 +1538,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function addMembers(string teamId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members/add`;
         http:Request request = new;
@@ -1555,7 +1555,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function removeMembers(string teamId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/members/remove`;
         http:Request request = new;
@@ -1615,7 +1615,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - The channel properties to update
-    # + return - Success 
+    # + return - The HTTP response 
     remote isolated function updatePrimaryChannel(string teamId, Channel payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel`;
         http:Request request = new;
@@ -1691,7 +1691,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
-    # + return - Success 
+    # + return - The updated member 
     remote isolated function updatePrimaryChannelAllMember(string teamId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
@@ -1720,7 +1720,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function addPrimaryChannelAllMembers(string teamId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers/add`;
         http:Request request = new;
@@ -1737,7 +1737,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function removePrimaryChannelAllMembers(string teamId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/allMembers/remove`;
         http:Request request = new;
@@ -1818,7 +1818,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - New media content 
-    # + return - Success 
+    # + return - The uploaded file 
     remote isolated function updatePrimaryChannelFilesFolderContent(string teamId, byte[] payload, map<string|string[]> headers = {}) returns DriveItem|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/filesFolder/content`;
         http:Request request = new;
@@ -1904,7 +1904,7 @@ public isolated client class Client {
     # + conversationMemberId - The unique identifier of conversationMember
     # + headers - Headers to be sent with the request 
     # + payload - The member properties to update
-    # + return - Success 
+    # + return - The updated member 
     remote isolated function updatePrimaryChannelMember(string teamId, string conversationMemberId, ConversationMember payload, map<string|string[]> headers = {}) returns ConversationMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members/${getEncodedUri(conversationMemberId)}`;
         http:Request request = new;
@@ -1933,7 +1933,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function addPrimaryChannelMembers(string teamId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members/add`;
         http:Request request = new;
@@ -1950,7 +1950,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The result for each member 
     remote isolated function removePrimaryChannelMembers(string teamId, AddMembersRequest payload, map<string|string[]> headers = {}) returns ActionResultPartCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/members/remove`;
         http:Request request = new;
@@ -2025,7 +2025,7 @@ public isolated client class Client {
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + payload - The message properties to update
-    # + return - Success 
+    # + return - The HTTP response 
     remote isolated function updatePrimaryChannelMessage(string teamId, string chatMessageId, ChatMessage payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}`;
         http:Request request = new;
@@ -2105,7 +2105,7 @@ public isolated client class Client {
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content properties to update
-    # + return - Success 
+    # + return - The updated hosted content 
     remote isolated function updatePrimaryChannelMessageHostedContent(string teamId, string chatMessageId, string chatMessageHostedContentId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         http:Request request = new;
@@ -2300,7 +2300,7 @@ public isolated client class Client {
     # + chatMessageId1 - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + payload - The message properties to update
-    # + return - Success 
+    # + return - The HTTP response 
     remote isolated function updatePrimaryChannelMessageReply(string teamId, string chatMessageId, string chatMessageId1, ChatMessage payload, map<string|string[]> headers = {}) returns http:Response|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}`;
         http:Request request = new;
@@ -2385,7 +2385,7 @@ public isolated client class Client {
     # + chatMessageHostedContentId - The unique identifier of chatMessageHostedContent
     # + headers - Headers to be sent with the request 
     # + payload - The hosted content properties to update
-    # + return - Success 
+    # + return - The updated hosted content 
     remote isolated function updatePrimaryChannelMessageReplyHostedContent(string teamId, string chatMessageId, string chatMessageId1, string chatMessageHostedContentId, ChatMessageHostedContent payload, map<string|string[]> headers = {}) returns ChatMessageHostedContent|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/${getEncodedUri(chatMessageId1)}/hostedContents/${getEncodedUri(chatMessageHostedContentId)}`;
         http:Request request = new;
@@ -2536,7 +2536,7 @@ public isolated client class Client {
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Success 
+    # + return - Retrieved collection 
     remote isolated function getPrimaryChannelMessageRepliesDelta(string teamId, string chatMessageId, map<string|string[]> headers = {}, *GetPrimaryChannelMessageRepliesDeltaQueries queries) returns ChatMessageDeltaCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/delta()`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$orderby": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -2554,7 +2554,7 @@ public isolated client class Client {
     # + chatMessageId - The unique identifier of chatMessage
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The created reply message 
     remote isolated function replyWithQuotePrimaryChannelMessageReplies(string teamId, string chatMessageId, ReplyWithQuoteRequest payload, map<string|string[]> headers = {}) returns ChatMessageResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/${getEncodedUri(chatMessageId)}/replies/replyWithQuote`;
         http:Request request = new;
@@ -2580,7 +2580,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Success 
+    # + return - Retrieved collection 
     remote isolated function getPrimaryChannelMessagesDelta(string teamId, map<string|string[]> headers = {}, *GetPrimaryChannelMessagesDeltaQueries queries) returns ChatMessageDeltaCollectionResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/delta()`;
         map<Encoding> queryParamEncoding = {"$select": {style: FORM, explode: false}, "$orderby": {style: FORM, explode: false}, "$expand": {style: FORM, explode: false}};
@@ -2597,7 +2597,7 @@ public isolated client class Client {
     # + teamId - The unique identifier of team
     # + headers - Headers to be sent with the request 
     # + payload - Action parameters 
-    # + return - Success 
+    # + return - The created reply message 
     remote isolated function replyWithQuotePrimaryChannelMessages(string teamId, ReplyWithQuoteRequest payload, map<string|string[]> headers = {}) returns ChatMessageResponse|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/messages/replyWithQuote`;
         http:Request request = new;
@@ -2673,7 +2673,7 @@ public isolated client class Client {
     # + teamsTabId - The unique identifier of teamsTab
     # + headers - Headers to be sent with the request 
     # + payload - The tab properties to update
-    # + return - Success 
+    # + return - The updated tab 
     remote isolated function updatePrimaryChannelTab(string teamId, string teamsTabId, TeamsTab payload, map<string|string[]> headers = {}) returns TeamsTab|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/primaryChannel/tabs/${getEncodedUri(teamsTabId)}`;
         http:Request request = new;
@@ -2772,7 +2772,7 @@ public isolated client class Client {
     # + teamworkTagId - The unique identifier of teamworkTag
     # + headers - Headers to be sent with the request 
     # + payload - The tag properties to update
-    # + return - Success 
+    # + return - The updated tag 
     remote isolated function updateTag(string teamId, string teamworkTagId, TeamworkTag payload, map<string|string[]> headers = {}) returns TeamworkTag|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}`;
         http:Request request = new;
@@ -2850,7 +2850,7 @@ public isolated client class Client {
     # + teamworkTagMemberId - The unique identifier of teamworkTagMember
     # + headers - Headers to be sent with the request 
     # + payload - The tag member properties to update
-    # + return - Success 
+    # + return - The updated tag member 
     remote isolated function updateTagMember(string teamId, string teamworkTagId, string teamworkTagMemberId, TeamworkTagMember payload, map<string|string[]> headers = {}) returns TeamworkTagMember|error {
         string resourcePath = string `/teams/${getEncodedUri(teamId)}/tags/${getEncodedUri(teamworkTagId)}/members/${getEncodedUri(teamworkTagMemberId)}`;
         http:Request request = new;

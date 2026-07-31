@@ -1,6 +1,6 @@
 _Author_: Ballerina \
 _Created_: 2026-07-15 \
-_Updated_: 2026-07-27 \
+_Updated_: 2026-07-31 \
 _Edition_: Swan Lake
 
 # Sanitation for OpenAPI specification
@@ -293,12 +293,14 @@ These changes are done in order to improve the overall usability, and as workaro
       ```yaml
       responses:
         2XX:
-          description: Any Response
+          description: The HTTP response
           content:
             '*/*':
               schema:
                 description: Any type of entity body
       ```
+
+      The `2XX` `description` is `The HTTP response` (rather than an entity phrase), so the generated `# + return -` doc reflects that these operations return the raw `http:Response` — see item 12.
 
       and the corresponding remote methods in `ballerina/client.bal` now return **`http:Response`** (a straight pass-through of `self.clientEp->post/patch(...)`). The `4XX`/`5XX` error responses are unchanged. Callers inspect the raw response — status code, `Location` header (for the async id), and body when present. Two now-unused post-generation helpers that had previously worked around this (`validateResponse`, `asyncCreatedId`/`idAfterSegment` in `ballerina/utils.bal`) were removed.
     - Scope: `docs/spec/teams-endpoints.yaml`, `docs/spec/aligned_ballerina_openapi.json`, `ballerina/client.bal`, `ballerina/utils.bal`. Tests (`ballerina/tests/test.bal`) and the affected examples were updated to consume `http:Response`.
@@ -314,6 +316,26 @@ These changes are done in order to improve the overall usability, and as workaro
       - **Collision handling:** in the aligned JSON, `MicrosoftGraphChatMessageCollectionResponse` was byte-for-byte identical to the already-existing `ChatMessageCollectionResponse` schema (`*BaseCollectionPaginationCountResponse` + a `ChatMessage[] value?` field). Stripping the prefix would have produced a duplicate key, so the prefixed schema was **removed** and its `$ref`s repointed to `ChatMessageCollectionResponse` (108 schemas remain). The raw YAML has no such duplicate, so no merge was needed there.
     - Scope: `docs/spec/aligned_ballerina_openapi.json` and `docs/spec/teams-endpoints.yaml`. In both, only the schema/response component names and their `$ref`s were changed; the `#microsoft.graph.*` `@odata.type` payload discriminator values and all descriptions were left untouched, so the wire format is unchanged. The corresponding types across `ballerina/types.bal`, `ballerina/client.bal`, `ballerina/tests/test.bal`, and `examples/*/main.bal` are the prefix-free names. The `MicrosoftGraph*` names referenced in items 5 and 8 above therefore now denote their unprefixed forms.
     - Reason: Shorter, cleaner type names in the public API. Because the rename is applied to the spec, regenerating the client reproduces the prefix-free types (verified by regeneration — the generated types are prefix-free and match the committed sources); no post-generation re-application is required.
+
+12. **Describe the return value on operations labeled with the generic `Success` response description**
+    - Original: Microsoft Graph's OData→OpenAPI metadata labels many success responses with the bare description `Success`. `bal openapi` copies each response `description` verbatim into the generated `# + return -` doc, so 35 operations that actually return a **typed body** carried the uninformative `Success` — which didn't match the return type. The item-6 doc rewrite only replaced the "navigation property" boilerplate, so operations already labeled `Success` were skipped, even when they return an entity/collection.
+    - Updated: Rewrote the success-response `description` for those 35 operations in **both** `docs/spec/aligned_ballerina_openapi.json` and `docs/spec/teams-endpoints.yaml`, and the matching `# + return -` doc line in `ballerina/client.bal`:
+
+      | Operations | Return type | New description |
+      |---|---|---|
+      | 5 `update*Member` | `ConversationMember` | The updated member |
+      | 4 `update*HostedContent` | `ChatMessageHostedContent` | The updated hosted content |
+      | 2 `update*Tab` | `TeamsTab` | The updated tab |
+      | `updateTag` | `TeamworkTag` | The updated tag |
+      | `updateTagMember` | `TeamworkTagMember` | The updated tag member |
+      | `getAllChannelMessages`, `getAllRetainedChannelMessages`, 4 `*Delta` | chat message collections | Retrieved collection |
+      | 4 `replyWithQuote*` | `ChatMessageResponse` | The created reply message |
+      | 10 `add*`/`remove*` members | `ActionResultPartCollectionResponse` | The result for each member |
+      | 2 `update*FilesFolderContent` | `DriveItem` | The uploaded file |
+
+      Operations that return no body (`error?` — every `delete*`, `setReaction`/`unsetReaction`, `softDelete`/`undoSoftDelete`, and `sendActivityNotification`) **keep** `Success`, which correctly describes a no-content (HTTP 204) success. The 9 `http:Response`-returning async operations (item 10) had their `2XX` description set to `The HTTP response` (was `Any Response`), so their `# + return -` doc reflects the raw `http:Response` they return instead of the previous `Success`/`Created entity`/`The created channel`.
+    - Scope: `docs/spec/aligned_ballerina_openapi.json`, `docs/spec/teams-endpoints.yaml`, `ballerina/client.bal`. Only response `description` text and the corresponding `# + return -` doc lines changed (35 per file); schemas, types, and status codes are untouched. In `teams-endpoints.yaml` the operations were matched by path + method (that file keeps the original dotted operationIds and kebab-case path params).
+    - Reason: The generic `Success` gave no indication of what a call returns and contradicted the typed return. Because the change lives in the spec `description` fields, regenerating the client reproduces the descriptive return docs — no post-generation re-application required.
 
 ## OpenAPI cli command
 

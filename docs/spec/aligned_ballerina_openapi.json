@@ -41,7 +41,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Any Response",
+            "description": "The HTTP response",
             "content": {
               "*/*": {
                 "schema": {
@@ -184,7 +184,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Any Response",
+            "description": "The HTTP response",
             "content": {
               "*/*": {
                 "schema": {
@@ -579,7 +579,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Any Response",
+            "description": "The HTTP response",
             "content": {
               "*/*": {
                 "schema": {
@@ -741,7 +741,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Any Response",
+            "description": "The HTTP response",
             "content": {
               "*/*": {
                 "schema": {
@@ -1063,7 +1063,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated member",
             "content": {
               "application/json": {
                 "schema": {
@@ -1204,7 +1204,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -1285,7 +1285,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -1790,7 +1790,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The uploaded file",
             "content": {
               "application/json": {
                 "schema": {
@@ -2162,7 +2162,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated member",
             "content": {
               "application/json": {
                 "schema": {
@@ -2303,7 +2303,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -2384,7 +2384,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -2730,7 +2730,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Any Response",
+            "description": "The HTTP response",
             "content": {
               "*/*": {
                 "schema": {
@@ -3081,7 +3081,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated hosted content",
             "content": {
               "application/json": {
                 "schema": {
@@ -3959,7 +3959,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Any Response",
+            "description": "The HTTP response",
             "content": {
               "*/*": {
                 "schema": {
@@ -4334,7 +4334,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated hosted content",
             "content": {
               "application/json": {
                 "schema": {
@@ -5145,7 +5145,7 @@
         ],
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Retrieved collection",
             "content": {
               "application/json": {
                 "schema": {
@@ -5237,7 +5237,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The created reply message",
             "content": {
               "application/json": {
                 "schema": {
@@ -5434,7 +5434,7 @@
         ],
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Retrieved collection",
             "content": {
               "application/json": {
                 "schema": {
@@ -5514,7 +5514,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The created reply message",
             "content": {
               "application/json": {
                 "schema": {
@@ -5860,7 +5860,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated tab",
             "content": {
               "application/json": {
                 "schema": {
@@ -6214,7 +6214,7 @@
         ],
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Retrieved collection",
             "content": {
               "application/json": {
                 "schema": {
@@ -6334,7 +6334,7 @@
         ],
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Retrieved collection",
             "content": {
               "application/json": {
                 "schema": {
@@ -6895,7 +6895,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated member",
             "content": {
               "application/json": {
                 "schema": {
@@ -7009,7 +7009,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -7078,7 +7078,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -7292,7 +7292,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Any Response",
+            "description": "The HTTP response",
             "content": {
               "*/*": {
                 "schema": {
@@ -7586,7 +7586,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated member",
             "content": {
               "application/json": {
                 "schema": {
@@ -7703,7 +7703,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -7772,7 +7772,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -8205,7 +8205,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The uploaded file",
             "content": {
               "application/json": {
                 "schema": {
@@ -8530,7 +8530,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated member",
             "content": {
               "application/json": {
                 "schema": {
@@ -8647,7 +8647,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -8716,7 +8716,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The result for each member",
             "content": {
               "application/json": {
                 "schema": {
@@ -9020,7 +9020,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Any Response",
+            "description": "The HTTP response",
             "content": {
               "*/*": {
                 "schema": {
@@ -9343,7 +9343,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated hosted content",
             "content": {
               "application/json": {
                 "schema": {
@@ -10108,7 +10108,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Any Response",
+            "description": "The HTTP response",
             "content": {
               "*/*": {
                 "schema": {
@@ -10455,7 +10455,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated hosted content",
             "content": {
               "application/json": {
                 "schema": {
@@ -11166,7 +11166,7 @@
         ],
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Retrieved collection",
             "content": {
               "application/json": {
                 "schema": {
@@ -11246,7 +11246,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The created reply message",
             "content": {
               "application/json": {
                 "schema": {
@@ -11419,7 +11419,7 @@
         ],
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "Retrieved collection",
             "content": {
               "application/json": {
                 "schema": {
@@ -11487,7 +11487,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The created reply message",
             "content": {
               "application/json": {
                 "schema": {
@@ -11786,7 +11786,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated tab",
             "content": {
               "application/json": {
                 "schema": {
@@ -12251,7 +12251,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated tag",
             "content": {
               "application/json": {
                 "schema": {
@@ -12584,7 +12584,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "Success",
+            "description": "The updated tag member",
             "content": {
               "application/json": {
                 "schema": {
