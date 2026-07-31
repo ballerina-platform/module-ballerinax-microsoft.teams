@@ -41,7 +41,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "The HTTP response",
+            "description": "Any Response",
             "content": {
               "*/*": {
                 "schema": {
@@ -184,7 +184,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "The HTTP response",
+            "description": "Any Response",
             "content": {
               "*/*": {
                 "schema": {
@@ -579,7 +579,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "The HTTP response",
+            "description": "Any Response",
             "content": {
               "*/*": {
                 "schema": {
@@ -741,7 +741,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "The HTTP response",
+            "description": "Any Response",
             "content": {
               "*/*": {
                 "schema": {
@@ -2730,7 +2730,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "The HTTP response",
+            "description": "Any Response",
             "content": {
               "*/*": {
                 "schema": {
@@ -3959,7 +3959,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "The HTTP response",
+            "description": "Any Response",
             "content": {
               "*/*": {
                 "schema": {
@@ -7292,7 +7292,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "The HTTP response",
+            "description": "Any Response",
             "content": {
               "*/*": {
                 "schema": {
@@ -9020,7 +9020,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "The HTTP response",
+            "description": "Any Response",
             "content": {
               "*/*": {
                 "schema": {
@@ -10108,7 +10108,7 @@
         },
         "responses": {
           "2XX": {
-            "description": "The HTTP response",
+            "description": "Any Response",
             "content": {
               "*/*": {
                 "schema": {

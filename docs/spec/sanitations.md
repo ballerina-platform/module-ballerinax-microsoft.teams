@@ -293,14 +293,12 @@ These changes are done in order to improve the overall usability, and as workaro
       ```yaml
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
                 description: Any type of entity body
       ```
-
-      The `2XX` `description` is `The HTTP response` (rather than an entity phrase), so the generated `# + return -` doc reflects that these operations return the raw `http:Response` — see item 12.
 
       and the corresponding remote methods in `ballerina/client.bal` now return **`http:Response`** (a straight pass-through of `self.clientEp->post/patch(...)`). The `4XX`/`5XX` error responses are unchanged. Callers inspect the raw response — status code, `Location` header (for the async id), and body when present. Two now-unused post-generation helpers that had previously worked around this (`validateResponse`, `asyncCreatedId`/`idAfterSegment` in `ballerina/utils.bal`) were removed.
     - Scope: `docs/spec/teams-endpoints.yaml`, `docs/spec/aligned_ballerina_openapi.json`, `ballerina/client.bal`, `ballerina/utils.bal`. Tests (`ballerina/tests/test.bal`) and the affected examples were updated to consume `http:Response`.
@@ -333,7 +331,7 @@ These changes are done in order to improve the overall usability, and as workaro
       | 10 `add*`/`remove*` members | `ActionResultPartCollectionResponse` | The result for each member |
       | 2 `update*FilesFolderContent` | `DriveItem` | The uploaded file |
 
-      Operations that return no body (`error?` — every `delete*`, `setReaction`/`unsetReaction`, `softDelete`/`undoSoftDelete`, and `sendActivityNotification`) **keep** `Success`, which correctly describes a no-content (HTTP 204) success. The 9 `http:Response`-returning async operations (item 10) had their `2XX` description set to `The HTTP response` (was `Any Response`), so their `# + return -` doc reflects the raw `http:Response` they return instead of the previous `Success`/`Created entity`/`The created channel`.
+      Operations that return no body (`error?` — every `delete*`, `setReaction`/`unsetReaction`, `softDelete`/`undoSoftDelete`, and `sendActivityNotification`) **keep** `Success`, which correctly describes a no-content (HTTP 204) success.
     - Scope: `docs/spec/aligned_ballerina_openapi.json`, `docs/spec/teams-endpoints.yaml`, `ballerina/client.bal`. Only response `description` text and the corresponding `# + return -` doc lines changed (35 per file); schemas, types, and status codes are untouched. In `teams-endpoints.yaml` the operations were matched by path + method (that file keeps the original dotted operationIds and kebab-case path params).
     - Reason: The generic `Success` gave no indication of what a call returns and contradicted the typed return. Because the change lives in the spec `description` fields, regenerating the client reproduces the descriptive return docs — no post-generation re-application required.
 

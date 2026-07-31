@@ -45,7 +45,7 @@ paths:
         required: true
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
@@ -117,7 +117,7 @@ paths:
         required: true
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
@@ -377,7 +377,7 @@ paths:
         required: true
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
@@ -457,7 +457,7 @@ paths:
         required: true
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
@@ -1748,7 +1748,7 @@ paths:
         required: true
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
@@ -2519,7 +2519,7 @@ paths:
         required: true
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
@@ -4702,7 +4702,7 @@ paths:
         required: true
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
@@ -5826,7 +5826,7 @@ paths:
         required: true
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
@@ -6511,7 +6511,7 @@ paths:
         required: true
       responses:
         2XX:
-          description: The HTTP response
+          description: Any Response
           content:
             '*/*':
               schema:
