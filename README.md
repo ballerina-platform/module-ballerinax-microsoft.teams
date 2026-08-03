@@ -1,10 +1,8 @@
 # Ballerina Microsoft Teams connector
 
 [![Build](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/actions/workflows/ci.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/actions/workflows/ci.yml)
-[![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/actions/workflows/build-with-bal-test-native.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/actions/workflows/build-with-bal-test-native.yml)
-[![codecov](https://codecov.io/gh/ballerina-platform/module-ballerinax-microsoft.teams/branch/main/graph/badge.svg)](https://codecov.io/gh/ballerina-platform/module-ballerinax-microsoft.teams)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-microsoft.teams.svg)](https://github.com/ballerina-platform/module-ballerinax-microsoft.teams/commits/main)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/microsoft.teams.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%2Fmicrosoft.teams)
 
 ## Overview
 
