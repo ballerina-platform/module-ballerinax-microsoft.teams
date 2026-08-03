@@ -1,34 +1,43 @@
 # Examples
 
-This directory contains a collection of sample code examples written in Ballerina. These examples demonstrate various
-use cases of the module. You can follow the instructions below to build and run these examples.
+The `ballerinax/microsoft.teams` connector provides practical examples illustrating usage in various scenarios.
 
-## Running an Example
+| Example | Description |
+|---------|-------------|
+| [`team-and-channel-setup`](./team-and-channel-setup) | Provision a new team and set up a channel in it, handling Graph's asynchronous operations. |
+| [`channel-message-thread`](./channel-message-thread) | Post a root message to a channel, reply to it, and list the thread. |
+| [`channel-member-management`](./channel-member-management) | Add a member to a channel, list the members, read one back, and remove them. |
+| [`team-tag-management`](./team-tag-management) | Create a teamwork tag on a team, list its tags, read one back, and delete it. |
+| [`primary-channel-messaging`](./primary-channel-messaging) | Post to a team's primary channel, react to the message, and list recent messages. |
 
-Execute the following commands to build an example from the source.
+## Prerequisites
 
-* To build an example
+1. Build and push the connector to your local Ballerina repository:
+   ```bash
+   cd ballerina
+   bal pack && bal push --repository=local
+   ```
 
-  `bal build <example-name>`
+2. Obtain OAuth2 credentials for a Microsoft 365 account by [registering an application](https://learn.microsoft.com/en-us/graph/auth-register-app-v2) in Microsoft Entra ID and granting the required Microsoft Graph permissions.
 
+3. For each example, create a `Config.toml` in the example directory with the required credentials. All examples require the OAuth2 credentials and the tenant id (this connector's app registration is single-tenant, so the token endpoint must be tenant-specific — the `/common` endpoint is rejected). Some examples also need resource identifiers:
+   ```toml
+   clientId = "<client-id>"
+   clientSecret = "<client-secret>"
+   refreshToken = "<refresh-token>"
+   tenantId = "<tenant-id>"
 
-* To run an example
+   # Required by all examples EXCEPT team-and-channel-setup (which creates its own team)
+   teamId = "<team-id>"
+   # Required by channel-message-thread and channel-member-management
+   channelId = "<channel-id>"
+   # Required by channel-member-management (user to add) and team-tag-management (tag member)
+   userId = "<user-object-id>"
+   ```
 
-  `bal run <example-name>`
+## Running an example
 
-## Building the Examples with the Local Module
-
-**Warning**: Because of the absence of support for reading local repositories for single Ballerina files, the bala of
-the module is manually written to the central repository as a workaround. Consequently, the bash script may modify your
-local Ballerina repositories.
-
-Execute the following commands to build all the examples against the changes you have made to the module locally.
-
-* To build all the examples
-
-  `./build.sh build`
-
-
-* To run all the examples
-
-  `./build.sh run`
+```bash
+cd examples/<example-name>
+bal run
+```

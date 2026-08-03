@@ -1,6 +1,6 @@
-// Copyright (c) 2021 WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com).
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -15,120 +15,202 @@
 // under the License.
 
 import ballerina/http;
+import ballerina/url;
 
-isolated function createUrl(string[] pathParameters, string? queryParameters = ()) returns string|error {
-    string url = EMPTY_STRING;
-    if (pathParameters.length() > ZERO) {
-        foreach string element in pathParameters {
-            if (!element.startsWith(FORWARD_SLASH)) {
-                url = url + FORWARD_SLASH;
-            }
-            url += element;
-        }
-    }
-    if (queryParameters is string) {
-        url = url + QUESTION_MARK + queryParameters;
-    }
-    return url;
+type SimpleBasicType string|boolean|int|float|decimal;
+
+# Represents encoding mechanism details.
+type Encoding record {
+    # Defines how multiple values are delimited
+    string style = FORM;
+    # Specifies whether arrays and objects should generate as separate fields
+    boolean explode = true;
+    # Specifies the custom content type
+    string contentType?;
+    # Specifies the custom headers
+    map<any> headers?;
+};
+
+enum EncodingStyle {
+    DEEPOBJECT, FORM, SPACEDELIMITED, PIPEDELIMITED
 }
 
-isolated function appendQueryOption(string queryParameter, string connectingString) returns string|error {
-    string url = EMPTY_STRING;
-    int? indexOfEqual = queryParameter.indexOf(EQUAL_SIGN);
-    if (indexOfEqual is int) {
-        string queryOptionName = queryParameter.substring(ZERO, indexOfEqual);
-        string queryOptionValue = queryParameter.substring(indexOfEqual);
-        if (queryOptionName.startsWith(DOLLAR_SIGN)) {
-            if (validateOdataSystemQueryOption(queryOptionName.substring(1), queryOptionValue)) {
-                url += connectingString + queryParameter;
+final Encoding & readonly defaultEncoding = {};
+
+# Serialize the record according to the deepObject style.
+#
+# + parent - Parent record name
+# + anyRecord - Record to be serialized
+# + return - Serialized record as a string
+isolated function getDeepObjectStyleRequest(string parent, record {} anyRecord) returns string {
+    string[] recordArray = [];
+    foreach [string, anydata] [key, value] in anyRecord.entries() {
+        if value is SimpleBasicType {
+            recordArray.push(parent + "[" + key + "]" + "=" + getEncodedUri(value.toString()));
+        } else if value is SimpleBasicType[] {
+            recordArray.push(getSerializedArray(parent + "[" + key + "]" + "[]", value, DEEPOBJECT, true));
+        } else if value is record {} {
+            string nextParent = parent + "[" + key + "]";
+            recordArray.push(getDeepObjectStyleRequest(nextParent, value));
+        } else if value is record {}[] {
+            string nextParent = parent + "[" + key + "]";
+            recordArray.push(getSerializedRecordArray(nextParent, value, DEEPOBJECT));
+        }
+        recordArray.push("&");
+    }
+    _ = recordArray.pop();
+    return string:'join("", ...recordArray);
+}
+
+# Serialize the record according to the form style.
+#
+# + parent - Parent record name
+# + anyRecord - Record to be serialized
+# + explode - Specifies whether arrays and objects should generate separate parameters
+# + return - Serialized record as a string
+isolated function getFormStyleRequest(string parent, record {} anyRecord, boolean explode = true) returns string {
+    string[] recordArray = [];
+    if explode {
+        foreach [string, anydata] [key, value] in anyRecord.entries() {
+            if value is SimpleBasicType {
+                recordArray.push(key, "=", getEncodedUri(value.toString()));
+            } else if value is SimpleBasicType[] {
+                recordArray.push(getSerializedArray(key, value, explode = explode));
+            } else if value is record {} {
+                recordArray.push(getFormStyleRequest(parent, value, explode));
+            }
+            recordArray.push("&");
+        }
+        _ = recordArray.pop();
+    } else {
+        foreach [string, anydata] [key, value] in anyRecord.entries() {
+            if value is SimpleBasicType {
+                recordArray.push(key, ",", getEncodedUri(value.toString()));
+            } else if value is SimpleBasicType[] {
+                recordArray.push(getSerializedArray(key, value, explode = false));
+            } else if value is record {} {
+                recordArray.push(getFormStyleRequest(parent, value, explode));
+            }
+            recordArray.push(",");
+        }
+        _ = recordArray.pop();
+    }
+    return string:'join("", ...recordArray);
+}
+
+# Serialize arrays.
+#
+# + arrayName - Name of the field with arrays
+# + anyArray - Array to be serialized
+# + style - Defines how multiple values are delimited
+# + explode - Specifies whether arrays and objects should generate separate parameters
+# + return - Serialized array as a string
+isolated function getSerializedArray(string arrayName, anydata[] anyArray, string style = "form", boolean explode = true) returns string {
+    string key = arrayName;
+    string[] arrayValues = [];
+    if anyArray.length() > 0 {
+        if style == FORM && !explode {
+            arrayValues.push(key, "=");
+            foreach anydata i in anyArray {
+                arrayValues.push(getEncodedUri(i.toString()), ",");
+            }
+        } else if style == SPACEDELIMITED && !explode {
+            arrayValues.push(key, "=");
+            foreach anydata i in anyArray {
+                arrayValues.push(getEncodedUri(i.toString()), "%20");
+            }
+        } else if style == PIPEDELIMITED && !explode {
+            arrayValues.push(key, "=");
+            foreach anydata i in anyArray {
+                arrayValues.push(getEncodedUri(i.toString()), "|");
+            }
+        } else if style == DEEPOBJECT {
+            foreach anydata i in anyArray {
+                arrayValues.push(key, "[]", "=", getEncodedUri(i.toString()), "&");
+            }
+        } else {
+            foreach anydata i in anyArray {
+                arrayValues.push(key, "=", getEncodedUri(i.toString()), "&");
+            }
+        }
+        _ = arrayValues.pop();
+    }
+    return string:'join("", ...arrayValues);
+}
+
+# Serialize the array of records according to the form style.
+#
+# + parent - Parent record name
+# + value - Array of records to be serialized
+# + style - Defines how multiple values are delimited
+# + explode - Specifies whether arrays and objects should generate separate parameters
+# + return - Serialized record as a string
+isolated function getSerializedRecordArray(string parent, record {}[] value, string style = FORM, boolean explode = true) returns string {
+    string[] serializedArray = [];
+    if style == DEEPOBJECT {
+        int arayIndex = 0;
+        foreach var recordItem in value {
+            serializedArray.push(getDeepObjectStyleRequest(parent + "[" + arayIndex.toString() + "]", recordItem), "&");
+            arayIndex = arayIndex + 1;
+        }
+    } else {
+        if !explode {
+            serializedArray.push(parent, "=");
+        }
+        foreach var recordItem in value {
+            serializedArray.push(getFormStyleRequest(parent, recordItem, explode), ",");
+        }
+    }
+    _ = serializedArray.pop();
+    return string:'join("", ...serializedArray);
+}
+
+# Get Encoded URI for a given value.
+#
+# + value - Value to be encoded
+# + return - Encoded string
+isolated function getEncodedUri(anydata value) returns string {
+    string|error encoded = url:encode(value.toString(), "UTF8");
+    if encoded is string {
+        return encoded;
+    } else {
+        return value.toString();
+    }
+}
+
+# Generate query path with query parameter.
+#
+# + queryParam - Query parameter map
+# + encodingMap - Details on serialization mechanism
+# + return - Returns generated Path or error at failure of client initialization
+isolated function getPathForQueryParam(map<anydata> queryParam, map<Encoding> encodingMap = {}) returns string|error {
+    map<anydata> queriesMap = http:getQueryMap(queryParam);
+    string[] param = [];
+    if queriesMap.length() > 0 {
+        param.push("?");
+        foreach var [key, value] in queriesMap.entries() {
+            if value is () {
+                _ = queriesMap.remove(key);
+                continue;
+            }
+            Encoding encodingData = encodingMap.hasKey(key) ? encodingMap.get(key) : defaultEncoding;
+            if value is SimpleBasicType {
+                param.push(key, "=", getEncodedUri(value.toString()));
+            } else if value is SimpleBasicType[] {
+                param.push(getSerializedArray(key, value, encodingData.style, encodingData.explode));
+            } else if value is record {} {
+                if encodingData.style == DEEPOBJECT {
+                    param.push(getDeepObjectStyleRequest(key, value));
+                } else {
+                    param.push(getFormStyleRequest(key, value, encodingData.explode));
+                }
             } else {
-                return error(INVALID_QUERY_PARAMETER);
+                param.push(key, "=", value.toString());
             }
-        } else {
-            // non odata query parameters
-            url += connectingString + queryParameter;
+            param.push("&");
         }
-    } else {
-        return error(INVALID_QUERY_PARAMETER);
+        _ = param.pop();
     }
-    return url;
-}
-
-isolated function validateOdataSystemQueryOption(string queryOptionName, string queryOptionValue) returns boolean {
-    boolean isValid = false;
-    string[] characterArray = [];
-    if (queryOptionName is SystemQueryOption) {
-        isValid = true;
-    } else {
-        return false;
-    }
-    foreach string character in queryOptionValue {
-        if (matchOpening(character)) {
-            characterArray.push(character);
-        } else if (matchClosing(character)) {
-            _ = characterArray.pop();
-        }
-    }
-    if (characterArray.length() == ZERO){
-        isValid = true;
-    }
-    return isValid;
-}
-
-isolated function handleResponse(http:Response httpResponse) returns map<json>|error {
-    if (httpResponse.statusCode is http:STATUS_ACCEPTED|http:STATUS_OK|http:STATUS_CREATED) {
-        json jsonResponse = check httpResponse.getJsonPayload();
-        return <map<json>>jsonResponse;
-    } else if (httpResponse.statusCode is http:STATUS_NO_CONTENT) {
-        return {};
-    }
-    json errorPayload = check httpResponse.getJsonPayload();
-    string message = errorPayload.toString();
-    return error(message);
-}
-
-isolated function handleAsyncResponse(http:Client httpClient, http:Response httpResponse) returns string|error {
-    if (httpResponse.statusCode is http:STATUS_ACCEPTED) {
-        string locationHeader = check httpResponse.getHeader(http:LOCATION);
-        return check getasyncJobStatus(httpClient, locationHeader); 
-    }
-    json errorPayload = check httpResponse.getJsonPayload();
-    string message = errorPayload.toString();
-    return error(message);
-}
-
-isolated function getasyncJobStatus(http:Client httpClient, string monitorUrl) returns string|error {
-    http:Response response = check httpClient->get(monitorUrl);
-    if (response.statusCode is http:STATUS_OK|http:STATUS_ACCEPTED|http:REDIRECT_SEE_OTHER_303) {
-        json jsonResponse = check response.getJsonPayload();
-        TeamsAsyncOperation asyncStatus = check jsonResponse.cloneWithType(TeamsAsyncOperation);
-        if (asyncStatus.status == SUCCEEDED) {
-            return asyncStatus.targetResourceId;
-        } else if (asyncStatus.status == FAILED) {
-            return error("", code = "");
-        } else {
-            return check getasyncJobStatus(httpClient, monitorUrl);
-        }
-    }
-    json errorPayload = check response.getJsonPayload();
-    string message = errorPayload.toString();
-    return error(message);
-}
-
-isolated function matchOpening(string value) returns boolean {
-    match value {
-        OPEN_BRACKET|OPEN_SQURAE_BRACKET|OPEN_CURLY_BRACKET|SINGLE_QUOTE_O|DOUBLE_QUOTE_O => {
-            return true;
-        }
-    }
-    return false;
-}
-
-isolated function matchClosing(string value) returns boolean {
-    match value {
-        CLOSE_BRACKET|CLOSE_SQURAE_BRACKET|CLOSE_CURLY_BRACKET|SINGLE_QUOTE_C|DOUBLE_QUOTE_C => {
-            return true;
-        }
-    }
-    return false;
+    string restOfPath = string:'join("", ...param);
+    return restOfPath;
 }

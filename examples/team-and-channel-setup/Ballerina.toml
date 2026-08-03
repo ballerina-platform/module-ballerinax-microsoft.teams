@@ -1,0 +1,8 @@
+[package]
+org = "ballerinax"
+name = "team_and_channel_setup"
+version = "0.1.0"
+distribution = "2201.12.0"
+
+[build-options]
+observabilityIncluded = true
