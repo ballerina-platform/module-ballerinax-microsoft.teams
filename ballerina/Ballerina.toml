@@ -8,3 +8,6 @@ authors = ["Ballerina"]
 keywords = ["Communication/Team Chat", "Cost/Paid", "Vendor/Microsoft", "Area/Communication", "Type/Connector"]
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-microsoft.teams"
+
+[build-options]
+observabilityIncluded = true
